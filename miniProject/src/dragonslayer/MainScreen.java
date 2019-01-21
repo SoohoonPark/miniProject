@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 public class MainScreen extends JFrame {
 	// 이미지(메인배경이미지, 타이틀이미지, 아이콘이미지)
 	private Image mainimage = Toolkit.getDefaultToolkit().createImage("resource/images/title/mainimage.png");
-	private Image titleimage = Toolkit.getDefaultToolkit().createImage("resource/images/title/titleimage.jpg");
+	private Image titleimage = Toolkit.getDefaultToolkit().createImage("resource/images/title/titleimg.png");
 	private Image iconimage = Toolkit.getDefaultToolkit().createImage("resource/images/title/titleicon.png");
 
 	// 버튼(게임시작,게임종료)
@@ -41,18 +41,18 @@ public class MainScreen extends JFrame {
 		mainimageLabel.setBounds(0, 0, 700, 525);
 
 		JLabel titleimageLabel = new JLabel(new ImageIcon(titleimage));
-		titleimageLabel.setBounds(0, 0, 302, 182);
+		titleimageLabel.setBounds(470, 185, 220, 67);
 
 		// 게임시작,게임종료 버튼이 들어갈 JPanel
 		JPanel buttonPanel = new JPanel(null);
-		buttonPanel.setBounds(400, 200, 120, 240);
+		buttonPanel.setBounds(520, 250, 120, 130);
 		buttonPanel.setOpaque(false); // 패널 배경 투명
 
 		btnGamestart = new JButton("게임시작");
-		btnGamestart.setBounds(5, 10, 100, 50);
+		btnGamestart.setBounds(10, 10, 100, 50);
 
 		btnGameQuit = new JButton("게임종료");
-		btnGameQuit.setBounds(5, 70, 100, 50);
+		btnGameQuit.setBounds(10, 70, 100, 50);
 
 		buttonPanel.add(btnGamestart);
 		buttonPanel.add(btnGameQuit);
