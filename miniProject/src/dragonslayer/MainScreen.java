@@ -54,6 +54,7 @@ public class MainScreen extends JFrame {
 		btnGameQuit = new JButton("게임종료");
 		btnGameQuit.setBounds(10, 70, 100, 50);
 
+		// 패널에 버튼 add
 		buttonPanel.add(btnGamestart);
 		buttonPanel.add(btnGameQuit);
 
