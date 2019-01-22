@@ -2,6 +2,8 @@ package dragonslayer;
 
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -14,9 +16,10 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 public class MainScreen extends JFrame {
 	// 이미지(메인배경이미지, 타이틀이미지, 아이콘이미지)
-	private Image mainimage = Toolkit.getDefaultToolkit().createImage("resource/images/title/mainimage.png");
+	private Image mainimage = Toolkit.getDefaultToolkit().createImage("resource/images/background/mainimage.png");
 	private Image titleimage = Toolkit.getDefaultToolkit().createImage("resource/images/title/titleimg.png");
 	private Image iconimage = Toolkit.getDefaultToolkit().createImage("resource/images/title/titleicon.png");
+	private Image btnstart = Toolkit.getDefaultToolkit().createImage("resource/images/button/btnstart.png");
 
 	// 버튼(게임시작,게임종료)
 	private JButton btnGamestart, btnGameQuit;
@@ -48,11 +51,19 @@ public class MainScreen extends JFrame {
 		buttonPanel.setBounds(520, 250, 120, 130);
 		buttonPanel.setOpaque(false); // 패널 배경 투명
 
-		btnGamestart = new JButton("게임시작");
-		btnGamestart.setBounds(10, 10, 100, 50);
+		btnGamestart = new JButton(new ImageIcon(btnstart));
+		btnGamestart.setBounds(10, 10, 130, 50);
 
 		btnGameQuit = new JButton("게임종료");
 		btnGameQuit.setBounds(10, 70, 100, 50);
+		btnGameQuit.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 
 		// 패널에 버튼 add
 		buttonPanel.add(btnGamestart);
