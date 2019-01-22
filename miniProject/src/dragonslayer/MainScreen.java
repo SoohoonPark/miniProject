@@ -1,6 +1,5 @@
 package dragonslayer;
 
-import java.awt.Color;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -13,7 +12,6 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.border.LineBorder;
 
 // 프로그램을 처음 실행 시 출력되는 화면(메인화면)
 @SuppressWarnings("serial")
