@@ -6,7 +6,8 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -15,31 +16,32 @@ import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.border.LineBorder;
 
 @SuppressWarnings("serial")
 public class MakeCharacter extends JFrame{
 	private Image backgroundimg = Toolkit.getDefaultToolkit().createImage("resource/images/background/charactermakebackground.png");
 	private Image iconimg = Toolkit.getDefaultToolkit().createImage("resource/images/title/titleicon.png");
-	private Image characterstart = Toolkit.getDefaultToolkit().createImage("resource/images/button/buttonstart.png");
-	private Image charactercancel = Toolkit.getDefaultToolkit().createImage("resource/images/button/buttoncancel.png");
+	
+	private Image btncharstart = Toolkit.getDefaultToolkit().createImage("resource/images/button/MakeCharacterButtons/make_btnstart.png");
+	private Image btncharstart_pressed = Toolkit.getDefaultToolkit().createImage("resource/images/button/MakeCharacterButtons/make_btnstart_pressed.png");
+	private Image btncharcancel = Toolkit.getDefaultToolkit().createImage("resource/images/button/MakeCharacterButtons/make_btncancel.png");
+	private Image btncharcancel_pressed = Toolkit.getDefaultToolkit().createImage("resource/images/button/MakeCharacterButtons/make_btncancel_pressed.png");
+	
 	private static JTextField txtname; // 캐릭터명 입력란
 	private static JButton btnStart, btnCancel; // 시작버튼, 취소버튼
-	private final static int STR = 10;
-	private final static int DEX = 10;
-	private final static int INT = 10;
-	private final static int HP = 100;
-	private final static int MP = 50;
+	private final static int STR = 10, DEX = 10, INT = 10, HP = 100, MP = 50; // 다음 화면으로 넘길 상수값
 	
 	public MakeCharacter() {
+		System.out.println("[info] MakeCharacter() 실행");
 		createMakeCharacterWindow();
 	}
 	
 	void createMakeCharacterWindow() {
-		setTitle("캐릭터 생성");
+		setTitle("Dragon slayer");
 		setSize(400, 600);
 		setIconImage(iconimg);
 		getContentPane().setBackground(Color.BLACK);
+		setLocationRelativeTo(null); // 현재 모니터 정중앙에 프레임 출력
 		setLayout(null);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -54,7 +56,6 @@ public class MakeCharacter extends JFrame{
 		JPanel inputnamePanel = new JPanel(null);
 		inputnamePanel.setBounds(75, 140, 260, 40);
 		inputnamePanel.setOpaque(false);
-		inputnamePanel.setBorder(new LineBorder(Color.BLACK));
 		
 		JLabel lblname = new JLabel("캐릭터명");
 		lblname.setBounds(20, 10, 100, 20);
@@ -69,7 +70,6 @@ public class MakeCharacter extends JFrame{
 		
 		JPanel characterstatPanel = new JPanel(null);
 		characterstatPanel.setBounds(75, 190, 260, 140);
-		characterstatPanel.setBorder(new LineBorder(Color.BLACK));
 		characterstatPanel.setOpaque(false);
 		
 		JLabel lblstr = new JLabel("STR 10");
@@ -105,42 +105,56 @@ public class MakeCharacter extends JFrame{
 		
 		JPanel buttonPanel = new JPanel(null);
 		buttonPanel.setBounds(75, 350, 260, 80);
-		buttonPanel.setBorder(new LineBorder(Color.BLACK));
 		buttonPanel.setOpaque(false);
 		
-		btnStart = new JButton(new ImageIcon(characterstart));
-		btnStart.setSize(100, 50);
+		btnStart = new JButton(new ImageIcon(btncharstart));
 		btnStart.setBounds(10, 10, 100, 50);
+		btnStart.setBorderPainted(false);
 		btnStart.setContentAreaFilled(false);
 		btnStart.setFocusPainted(false);
 		btnStart.setOpaque(false);
+		btnStart.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				btnStart.setIcon(new ImageIcon(btncharstart_pressed));
+			}
+			public void mouseExited(MouseEvent e) {
+				btnStart.setIcon(new ImageIcon(btncharstart));
+			}
+		});
 		btnStart.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(!(txtname.getText().isEmpty()) && txtname.getText().length() <= 6) {
-					JOptionPane.showMessageDialog(btnStart, "캐릭터를 생성하였습니다.");
-					System.out.println("게임을 시작합니다.");
+					JOptionPane.showMessageDialog(null, "캐릭터를 생성하였습니다.");
+					new GameScreen(txtname.getText(), STR, DEX, INT, HP, MP);
+					dispose();
 				} else {
 					JOptionPane.showMessageDialog(btnStart, "캐릭터 명을 다시 입력하세요.");
 				}
 			}
 		});
 		
-		btnCancel = new JButton(new ImageIcon(charactercancel));
-		btnCancel.setSize(100, 50);
+		btnCancel = new JButton(new ImageIcon(btncharcancel));
 		btnCancel.setBounds(140, 10, 100, 50);
+		btnCancel.setBorderPainted(false);
 		btnCancel.setContentAreaFilled(false);
 		btnCancel.setFocusPainted(false);
 		btnCancel.setOpaque(false);
+		btnCancel.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				btnCancel.setIcon(new ImageIcon(btncharcancel_pressed));
+			}
+			public void mouseExited(MouseEvent e) {
+				btnCancel.setIcon(new ImageIcon(btncharcancel));
+			}
+		});	
 		btnCancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(btnCancel, "메인화면으로 돌아갑니다.");
+				JOptionPane.showMessageDialog(null, "메인화면으로 돌아갑니다.");
 				System.out.println("취소하였습니다.");
 				new MainScreen();
 				dispose();
-				
-				
 			}
 		});
 	
