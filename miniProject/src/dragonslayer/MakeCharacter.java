@@ -16,7 +16,6 @@ import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.border.LineBorder;
 
 @SuppressWarnings("serial")
 public class MakeCharacter extends JFrame{
@@ -38,7 +37,7 @@ public class MakeCharacter extends JFrame{
 	}
 	
 	void createMakeCharacterWindow() {
-		setTitle("캐릭터 생성");
+		setTitle("Dragon slayer");
 		setSize(400, 600);
 		setIconImage(iconimg);
 		getContentPane().setBackground(Color.BLACK);
@@ -57,7 +56,6 @@ public class MakeCharacter extends JFrame{
 		JPanel inputnamePanel = new JPanel(null);
 		inputnamePanel.setBounds(75, 140, 260, 40);
 		inputnamePanel.setOpaque(false);
-		inputnamePanel.setBorder(new LineBorder(Color.BLACK));
 		
 		JLabel lblname = new JLabel("캐릭터명");
 		lblname.setBounds(20, 10, 100, 20);
@@ -72,7 +70,6 @@ public class MakeCharacter extends JFrame{
 		
 		JPanel characterstatPanel = new JPanel(null);
 		characterstatPanel.setBounds(75, 190, 260, 140);
-		characterstatPanel.setBorder(new LineBorder(Color.BLACK));
 		characterstatPanel.setOpaque(false);
 		
 		JLabel lblstr = new JLabel("STR 10");
@@ -108,7 +105,6 @@ public class MakeCharacter extends JFrame{
 		
 		JPanel buttonPanel = new JPanel(null);
 		buttonPanel.setBounds(75, 350, 260, 80);
-		buttonPanel.setBorder(new LineBorder(Color.BLACK));
 		buttonPanel.setOpaque(false);
 		
 		btnStart = new JButton(new ImageIcon(btncharstart));
@@ -130,7 +126,8 @@ public class MakeCharacter extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				if(!(txtname.getText().isEmpty()) && txtname.getText().length() <= 6) {
 					JOptionPane.showMessageDialog(null, "캐릭터를 생성하였습니다.");
-					System.out.println("게임을 시작합니다.");
+					new GameScreen(txtname.getText(), STR, DEX, INT, HP, MP);
+					dispose();
 				} else {
 					JOptionPane.showMessageDialog(btnStart, "캐릭터 명을 다시 입력하세요.");
 				}
