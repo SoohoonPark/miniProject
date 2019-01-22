@@ -1,9 +1,13 @@
 package dragonslayer;
 
+import java.awt.Image;
+import java.awt.Toolkit;
+
 import javax.swing.JFrame;
 
 @SuppressWarnings("serial")
 public class GameScreen extends JFrame{
+	private final static Image ICONIMAGE = Toolkit.getDefaultToolkit().createImage("resource/images/title/titleicon.png");
 	private String c_name;
 	private static int c_lv, c_str, c_dex, c_int, c_hp, c_mp, c_exp, c_next_exp;
 	
@@ -25,6 +29,7 @@ public class GameScreen extends JFrame{
 	void createGameScreen() {
 		setTitle("Dragon Slayer");
 		setSize(800, 500);
+		setIconImage(ICONIMAGE);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
