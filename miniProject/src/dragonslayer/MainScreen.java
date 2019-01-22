@@ -23,6 +23,7 @@ public class MainScreen extends JFrame {
 	private Image titleimage = Toolkit.getDefaultToolkit().createImage("resource/images/title/titleimg.png");
 	private Image iconimage = Toolkit.getDefaultToolkit().createImage("resource/images/title/titleicon.png");
 	
+	// 버튼 이미지
 	private Image btnimgstart = Toolkit.getDefaultToolkit().createImage("resource/images/button/MainScreenButtons/main_btnstart.png");
 	private Image btnimgstart_pressed = Toolkit.getDefaultToolkit().createImage("resource/images/button/MainScreenButtons/main_btnstart_pressed.png");
 	private Image btnimgquit = Toolkit.getDefaultToolkit().createImage("resource/images/button/MainScreenButtons/main_btnquit.png");
@@ -75,6 +76,8 @@ public class MainScreen extends JFrame {
 				btnGamestart.setIcon(new ImageIcon(btnimgstart));
 			}
 		});
+		
+		// 마우스 액션 리스너 add
 		btnGamestart.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -100,6 +103,7 @@ public class MainScreen extends JFrame {
 				btnGameQuit.setIcon(new ImageIcon(btnimgquit));
 			}
 		});
+		
 		btnGameQuit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
