@@ -1,16 +1,18 @@
 package dragonslayer;
 
 import java.awt.Color;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
@@ -19,12 +21,15 @@ import javax.swing.border.LineBorder;
 public class MakeCharacter extends JFrame{
 	private Image backgroundimg = Toolkit.getDefaultToolkit().createImage("resource/images/background/charactermakebackground.png");
 	private Image iconimg = Toolkit.getDefaultToolkit().createImage("resource/images/title/titleicon.png");
+	private Image characterstart = Toolkit.getDefaultToolkit().createImage("resource/images/button/buttonstart.png");
+	private Image charactercancel = Toolkit.getDefaultToolkit().createImage("resource/images/button/buttoncancel.png");
 	private static JTextField txtname; // 캐릭터명 입력란
 	private static JButton btnStart, btnCancel; // 시작버튼, 취소버튼
-	
-	public static void main(String[] args) {
-		new MakeCharacter();
-	}
+	private final static int STR = 10;
+	private final static int DEX = 10;
+	private final static int INT = 10;
+	private final static int HP = 100;
+	private final static int MP = 50;
 	
 	public MakeCharacter() {
 		createMakeCharacterWindow();
@@ -103,12 +108,42 @@ public class MakeCharacter extends JFrame{
 		buttonPanel.setBorder(new LineBorder(Color.BLACK));
 		buttonPanel.setOpaque(false);
 		
-		btnStart = new JButton("시작하기");
+		btnStart = new JButton(new ImageIcon(characterstart));
 		btnStart.setSize(100, 50);
+		btnStart.setBounds(10, 10, 100, 50);
+		btnStart.setContentAreaFilled(false);
+		btnStart.setFocusPainted(false);
+		btnStart.setOpaque(false);
+		btnStart.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(!(txtname.getText().isEmpty()) && txtname.getText().length() <= 6) {
+					JOptionPane.showMessageDialog(btnStart, "캐릭터를 생성하였습니다.");
+					System.out.println("게임을 시작합니다.");
+				} else {
+					JOptionPane.showMessageDialog(btnStart, "캐릭터 명을 다시 입력하세요.");
+				}
+			}
+		});
 		
-		btnCancel = new JButton("취소하기");
+		btnCancel = new JButton(new ImageIcon(charactercancel));
 		btnCancel.setSize(100, 50);
-		
+		btnCancel.setBounds(140, 10, 100, 50);
+		btnCancel.setContentAreaFilled(false);
+		btnCancel.setFocusPainted(false);
+		btnCancel.setOpaque(false);
+		btnCancel.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(btnCancel, "메인화면으로 돌아갑니다.");
+				System.out.println("취소하였습니다.");
+				new MainScreen();
+				dispose();
+				
+				
+			}
+		});
+	
 		buttonPanel.add(btnStart);
 		buttonPanel.add(btnCancel);
 		
