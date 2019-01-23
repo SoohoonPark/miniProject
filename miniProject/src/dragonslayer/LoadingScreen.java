@@ -1,7 +1,6 @@
 package dragonslayer;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
 
@@ -12,10 +11,11 @@ import javax.swing.JLayeredPane;
 import javax.swing.JProgressBar;
 import javax.swing.UIManager;
 
+@SuppressWarnings("serial")
 public class LoadingScreen extends JFrame {
 	private Image loading = Toolkit.getDefaultToolkit().createImage("resource/images/background/LoadingScreen.png");
 	private Image iconimage = Toolkit.getDefaultToolkit().createImage("resource/images/title/titleicon.png");
-	private static JProgressBar loadingbar = new JProgressBar(0, 100);
+	private JProgressBar loadingbar;
 	private String name;
 	private final static int STR = 10, DEX = 10, INT = 10, HP = 100, MP = 50; 
 	public LoadingScreen(String n) {
@@ -38,6 +38,11 @@ public class LoadingScreen extends JFrame {
 		JLabel mainimageLabel = new JLabel(new ImageIcon(loading));
 		mainimageLabel.setBounds(0, 0, 900, 506);
 		
+		UIManager.put("ProgressBar.background", Color.WHITE);
+		UIManager.put("ProgressBar.foreground", Color.BLUE);
+		UIManager.put("ProgressBar.selectionBackground", Color.BLACK);
+		UIManager.put("ProgressBar.selectionForeground", Color.YELLOW);
+		loadingbar = new JProgressBar(0, 100);
 		loadingbar.setBounds(600, 400, 250, 20);
 		loadingbar.setValue(0);
 		loadingbar.setStringPainted(true);
@@ -59,10 +64,14 @@ public class LoadingScreen extends JFrame {
 						Thread.sleep(100);
 						loading+=2;
 						loadingbar.setValue(loading);
+						UIManager.put("ProgressBar.foreground", Color.BLUE);
+						loadingbar.setString(String.valueOf(loading)+" %");
 						if(loading == 100) {
+							Thread.sleep(500);
 							new GameScreen(name, STR, DEX, INT, HP, MP);
 							dispose();
 							Thread.currentThread().interrupt();
+							System.out.println("[info] loading Thread is interrupted!");
 						}
 					}catch(Exception e) {
 						System.out.println("[Error] 스레드 에러");
