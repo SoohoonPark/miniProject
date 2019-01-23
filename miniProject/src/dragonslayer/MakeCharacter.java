@@ -39,6 +39,7 @@ public class MakeCharacter extends JFrame{
 	}
 	
 	void createMakeCharacterWindow() {
+		System.out.println("[info] createMakeCharacterWindow() ½ÇÇà");
 		setTitle("Dragon slayer");
 		setSize(400, 600);
 		setIconImage(iconimg);
@@ -114,7 +115,6 @@ public class MakeCharacter extends JFrame{
 		btnStart.setBorderPainted(false);
 		btnStart.setContentAreaFilled(false);
 		btnStart.setFocusPainted(false);
-		btnStart.setOpaque(false);
 		btnStart.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				btnStart.setIcon(new ImageIcon(btncharstart_pressed));
@@ -141,7 +141,6 @@ public class MakeCharacter extends JFrame{
 		btnCancel.setBorderPainted(false);
 		btnCancel.setContentAreaFilled(false);
 		btnCancel.setFocusPainted(false);
-		btnCancel.setOpaque(false);
 		btnCancel.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				btnCancel.setIcon(new ImageIcon(btncharcancel_pressed));
