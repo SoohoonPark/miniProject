@@ -21,8 +21,9 @@ public class LoadingScreen extends JFrame {
 	public LoadingScreen(String n) {
 		this.name = n;
 		CreateLoadingScreen();
-				
+		loadingbarThread();
 	}
+	
 	public void CreateLoadingScreen() {
 		setTitle("Dragon Slayer");
 		setSize(900, 506);
@@ -45,18 +46,30 @@ public class LoadingScreen extends JFrame {
 		layer.add(loadingbar, new Integer(2));
 		
 		setVisible(true);
-		showloading();
 	}
-	public void showloading() {
-		int i = 0;
-		while(i <= 100) {
-			loadingbar.setValue(i);
-			i = i + 4;
-			try {Thread.sleep(150);}catch(Exception e){}
-		}
-		if(i == 100) {
-			new GameScreen(name, STR, DEX, INT, HP, MP);
-			dispose();
-		}
+	
+	void loadingbarThread() {
+		Thread loading = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				System.out.println("[info] loading Thread start!");
+				int loading = 0;
+				while(!Thread.currentThread().isInterrupted()) {
+					try {
+						Thread.sleep(100);
+						loading+=2;
+						loadingbar.setValue(loading);
+						if(loading == 100) {
+							new GameScreen(name, STR, DEX, INT, HP, MP);
+							dispose();
+							Thread.currentThread().interrupt();
+						}
+					}catch(Exception e) {
+						System.out.println("[Error] 스레드 에러");
+					}
+				}
+			}
+		});
+		loading.start();
 	}
 }
