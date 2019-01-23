@@ -50,6 +50,9 @@ public class GameScreen extends JFrame{
 		JLabel mainbackgroundimgLabel = new JLabel(new ImageIcon(MAINBACKGROUND));
 		mainbackgroundimgLabel.setBounds(5, 5, 1020, 638);
 		
+		// 게임진행 화면
+		
+		
 		layer.add(mainbackgroundimgLabel, new Integer(1));
 		setVisible(true);
 	}
