@@ -1,7 +1,6 @@
 package dragonslayer;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
 
@@ -11,13 +10,19 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JProgressBar;
 import javax.swing.UIManager;
+import javax.swing.border.LineBorder;
 
+@SuppressWarnings("serial")
 public class LoadingScreen extends JFrame {
 	private Image loading = Toolkit.getDefaultToolkit().createImage("resource/images/background/LoadingScreen.png");
 	private Image iconimage = Toolkit.getDefaultToolkit().createImage("resource/images/title/titleicon.png");
-	private static JProgressBar loadingbar = new JProgressBar(0, 100);
+	private JProgressBar loadingbar;
 	private String name;
 	private final static int STR = 10, DEX = 10, INT = 10, HP = 100, MP = 50; 
+	
+	public static void main(String[] args) {
+		new LoadingScreen("test");
+	}
 	public LoadingScreen(String n) {
 		this.name = n;
 		CreateLoadingScreen();
@@ -39,9 +44,15 @@ public class LoadingScreen extends JFrame {
 		JLabel mainimageLabel = new JLabel(new ImageIcon(loading));
 		mainimageLabel.setBounds(0, 0, 900, 506);
 		
-		loadingbar.setBounds(600, 400, 250, 20);
+		UIManager.put("ProgressBar.background", Color.BLACK); // bar가 채워지기 전 배경 색
+		UIManager.put("ProgressBar.foreground", Color.ORANGE); // bar가 채워진 후 배경 색
+		UIManager.put("ProgressBar.selectionBackground", Color.GRAY); // bar가 채워지기 전 글자 색
+		UIManager.put("ProgressBar.selectionForeground", Color.GRAY); // bar가 채워진 후 글자 색
+		loadingbar = new JProgressBar(0, 100);
+		loadingbar.setBounds(600, 400, 250, 15);
+		loadingbar.setBorder(new LineBorder(Color.WHITE));
 		loadingbar.setValue(0);
-		loadingbar.setStringPainted(true);
+		loadingbar.setStringPainted(false);
 		
 		layer.add(mainimageLabel, new Integer(1));
 		layer.add(loadingbar, new Integer(2));
@@ -65,6 +76,8 @@ public class LoadingScreen extends JFrame {
 							new GameScreen(name, STR, DEX, INT, HP, MP);
 							dispose();
 							Thread.currentThread().interrupt();	// loadingbar가 100이 되면 스레드 정지
+							Thread.currentThread().interrupt();
+							System.out.println("[info] loading Thread is interrupted!");
 						}
 					}catch(Exception e) {
 						System.out.println("[Error] 스레드 에러");
