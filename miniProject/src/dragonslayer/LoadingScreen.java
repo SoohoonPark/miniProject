@@ -76,7 +76,6 @@ public class LoadingScreen extends JFrame {
 							new GameScreen(name, STR, DEX, INT, HP, MP);
 							dispose();
 							Thread.currentThread().interrupt();	// loadingbar가 100이 되면 스레드 정지
-							Thread.currentThread().interrupt();
 							System.out.println("[info] loading Thread is interrupted!");
 						}
 					}catch(Exception e) {

@@ -81,7 +81,6 @@ public class MainScreen extends JFrame {
 		btnGamestart.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("게임을 시작합니다.");
 				new MakeCharacter();
 				dispose();	// 반납하기
 			}
