@@ -126,7 +126,7 @@ public class MakeCharacter extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				if(!(txtname.getText().isEmpty()) && txtname.getText().length() <= 6) {
 					JOptionPane.showMessageDialog(null, "캐릭터를 생성하였습니다.");
-					new GameScreen(txtname.getText(), STR, DEX, INT, HP, MP);
+					new LoadingScreen(txtname.getText());
 					dispose();
 				} else {
 					JOptionPane.showMessageDialog(btnStart, "캐릭터 명을 다시 입력하세요.");
