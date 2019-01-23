@@ -36,6 +36,7 @@ public class LoadingScreen extends JFrame {
 		setResizable(false);			// 화면 크기 조정 방지 명령어
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setIconImage(iconimage);
+		setVisible(true);
 		
 		// 레이어 패널 생성
 		JLayeredPane layer = getLayeredPane();
@@ -56,7 +57,7 @@ public class LoadingScreen extends JFrame {
 		layer.add(mainimageLabel, new Integer(1));
 		layer.add(loadingbar, new Integer(2));
 		
-		setVisible(true);
+		
 	}
 	
 	void loadingbarThread() {
@@ -74,6 +75,7 @@ public class LoadingScreen extends JFrame {
 							Thread.sleep(500);
 							new GameScreen(name, STR, DEX, INT, HP, MP);
 							dispose();
+							Thread.currentThread().interrupt();	// loadingbar가 100이 되면 스레드 정지
 							Thread.currentThread().interrupt();
 							System.out.println("[info] loading Thread is interrupted!");
 						}
