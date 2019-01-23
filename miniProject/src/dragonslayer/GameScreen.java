@@ -8,6 +8,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 
 @SuppressWarnings("serial")
 public class GameScreen extends JFrame{
@@ -51,7 +52,8 @@ public class GameScreen extends JFrame{
 		mainbackgroundimgLabel.setBounds(5, 5, 1020, 638);
 		
 		// 게임진행 화면
-		
+		int a = JOptionPane.showOptionDialog(null, "test", "test", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[] {"응","아니"}, null);
+		System.out.println(a);
 		
 		layer.add(mainbackgroundimgLabel, new Integer(1));
 		setVisible(true);
