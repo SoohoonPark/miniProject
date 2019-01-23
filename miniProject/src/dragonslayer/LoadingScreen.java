@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JProgressBar;
 import javax.swing.UIManager;
+import javax.swing.border.LineBorder;
 
 @SuppressWarnings("serial")
 public class LoadingScreen extends JFrame {
@@ -18,6 +19,10 @@ public class LoadingScreen extends JFrame {
 	private JProgressBar loadingbar;
 	private String name;
 	private final static int STR = 10, DEX = 10, INT = 10, HP = 100, MP = 50; 
+	
+	public static void main(String[] args) {
+		new LoadingScreen("test");
+	}
 	public LoadingScreen(String n) {
 		this.name = n;
 		CreateLoadingScreen();
@@ -38,14 +43,15 @@ public class LoadingScreen extends JFrame {
 		JLabel mainimageLabel = new JLabel(new ImageIcon(loading));
 		mainimageLabel.setBounds(0, 0, 900, 506);
 		
-		UIManager.put("ProgressBar.background", Color.WHITE);
-		UIManager.put("ProgressBar.foreground", Color.BLUE);
-		UIManager.put("ProgressBar.selectionBackground", Color.BLACK);
-		UIManager.put("ProgressBar.selectionForeground", Color.YELLOW);
+		UIManager.put("ProgressBar.background", Color.BLACK); // bar가 채워지기 전 배경 색
+		UIManager.put("ProgressBar.foreground", Color.ORANGE); // bar가 채워진 후 배경 색
+		UIManager.put("ProgressBar.selectionBackground", Color.GRAY); // bar가 채워지기 전 글자 색
+		UIManager.put("ProgressBar.selectionForeground", Color.GRAY); // bar가 채워진 후 글자 색
 		loadingbar = new JProgressBar(0, 100);
-		loadingbar.setBounds(600, 400, 250, 20);
+		loadingbar.setBounds(600, 400, 250, 15);
+		loadingbar.setBorder(new LineBorder(Color.WHITE));
 		loadingbar.setValue(0);
-		loadingbar.setStringPainted(true);
+		loadingbar.setStringPainted(false);
 		
 		layer.add(mainimageLabel, new Integer(1));
 		layer.add(loadingbar, new Integer(2));
@@ -64,8 +70,6 @@ public class LoadingScreen extends JFrame {
 						Thread.sleep(100);
 						loading+=2;
 						loadingbar.setValue(loading);
-						UIManager.put("ProgressBar.foreground", Color.BLUE);
-						loadingbar.setString(String.valueOf(loading)+" %");
 						if(loading == 100) {
 							Thread.sleep(500);
 							new GameScreen(name, STR, DEX, INT, HP, MP);
