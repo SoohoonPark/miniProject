@@ -7,10 +7,11 @@ import java.awt.Toolkit;
 import javax.swing.JPanel;
 
 public class BackgroundImagePanel extends JPanel{
-	private Image backgroundimg = Toolkit.getDefaultToolkit().createImage("resource/images/background/battlebackground_1_resize.png");
+	private Image backgroundimg;
 
-	public BackgroundImagePanel() {
-		setSize(backgroundimg.getWidth(null), backgroundimg.getHeight(null));
+	public BackgroundImagePanel(Image img) {
+		this.backgroundimg = img;
+		setSize(img.getWidth(null), img.getHeight(null));
 		setLayout(null);
 	}
 
