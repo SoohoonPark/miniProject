@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -17,10 +16,8 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextPane;
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 
@@ -40,10 +37,16 @@ public class GameScreen extends JFrame{
 	private final static Image BTNSEARCH = Toolkit.getDefaultToolkit().createImage("resource/images/button/GameScreen/button_search.png");
 	private final static Image BTNSEARCH_PRESS = Toolkit.getDefaultToolkit().createImage("resource/images/button/GameScreen/button_search_pressed.png");
 	private final static Image BTNEQUIP = Toolkit.getDefaultToolkit().createImage("resource/images/button/GameScreen/button_equip.png");
+	private final static Image BTNEQUIP_PRESS = Toolkit.getDefaultToolkit().createImage("resource/images/button/GameScreen/button_equip_pressed.png");
 	private final static Image BTNSKILL = Toolkit.getDefaultToolkit().createImage("resource/images/button/GameScreen/button_skill.png");
+	private final static Image BTNSKILL_PRESS = Toolkit.getDefaultToolkit().createImage("resource/images/button/GameScreen/button_skill_pressed.png");
 	private final static Image BTNSTAT = Toolkit.getDefaultToolkit().createImage("resource/images/button/GameScreen/button_stat.png");
+	private final static Image BTNSTAT_PRESS = Toolkit.getDefaultToolkit().createImage("resource/images/button/GameScreen/button_stat_pressed.png");
 	private final static Image BTNINVEN = Toolkit.getDefaultToolkit().createImage("resource/images/button/GameScreen/button_inventory.png");
+	private final static Image BTNINVEN_PRESS = Toolkit.getDefaultToolkit().createImage("resource/images/button/GameScreen/button_inventory_pressed.png");
 	private final static Image BTNQUIT = Toolkit.getDefaultToolkit().createImage("resource/images/button/GameScreen/button_quitgame.png");
+	private final static Image BTNQUIT_PRESS = Toolkit.getDefaultToolkit().createImage("resource/images/button/GameScreen/button_quitgame_pressed.png");
+	private final static Image LOGO = Toolkit.getDefaultToolkit().createImage("resource/images/background/logo.png");
 	
 	private static String c_name; // 캐릭터명
 	private static int c_lv, c_str, c_dex, c_int, c_hp, c_mp, c_exp, c_next_exp; // 캐릭터 스탯 관련 정보 (스탯창 열었을때 보여줌)
@@ -132,6 +135,11 @@ public class GameScreen extends JFrame{
 		ButtonPanel.setBounds(520, 380, 440, 190);
 		ButtonPanel.setBorder(new LineBorder(Color.GRAY));
 		
+		JLabel logoLabel = new JLabel(new ImageIcon(LOGO));
+		logoLabel.setBounds(335, 100, 105, 97);
+
+		ButtonPanel.add(logoLabel);
+				
 		// 탐색 버튼을 눌렸을 때
 		buttonsearch = new JButton(new ImageIcon(BTNSEARCH));
 		buttonsearch.setBounds(5, 5, 100, 79);
@@ -198,24 +206,118 @@ public class GameScreen extends JFrame{
 		});
 		ButtonPanel.add(buttonattack);
 		
-		buttoninven = new JButton("가방");
+		buttoninven = new JButton(new ImageIcon(BTNINVEN));
 		buttoninven.setBounds(225, 5, 100, 79);
+		buttoninven.setBorderPainted(false);
+		buttoninven.setFocusPainted(false);
+		buttoninven.setContentAreaFilled(false);
+		buttoninven.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				buttoninven.setIcon(new ImageIcon(BTNINVEN_PRESS));
+			}
+			public void mouseReleased(MouseEvent e) {
+				buttoninven.setIcon(new ImageIcon(BTNINVEN));
+			}
+			public void mouseExited(MouseEvent e) {
+				buttoninven.setIcon(new ImageIcon(BTNINVEN));
+			}
+		});
+		buttoninven.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		ButtonPanel.add(buttoninven);
 		
-		buttonequip = new JButton("장비");
+		buttonequip = new JButton(new ImageIcon(BTNEQUIP));
 		buttonequip.setBounds(5, 100, 100, 79);
+		buttonequip.setBorderPainted(false);
+		buttonequip.setFocusPainted(false);
+		buttonequip.setContentAreaFilled(false);
+		buttonequip.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				buttonequip.setIcon(new ImageIcon(BTNEQUIP_PRESS));
+			}
+			public void mouseReleased(MouseEvent e) {
+				buttonequip.setIcon(new ImageIcon(BTNEQUIP));
+			}
+			public void mouseExited(MouseEvent e) {
+				buttonequip.setIcon(new ImageIcon(BTNEQUIP));
+			}
+		});
+		buttonequip.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		ButtonPanel.add(buttonequip);
 		
-		buttonstat = new JButton("스텟");
+		buttonstat = new JButton(new ImageIcon(BTNSTAT));
 		buttonstat.setBounds(115, 100, 100, 79);
+		buttonstat.setBorderPainted(false);
+		buttonstat.setFocusPainted(false);
+		buttonstat.setContentAreaFilled(false);
+		buttonstat.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				buttonstat.setIcon(new ImageIcon(BTNSTAT_PRESS));
+			}
+			public void mouseReleased(MouseEvent e) {
+				buttonstat.setIcon(new ImageIcon(BTNSTAT));
+			}
+			public void mouseExited(MouseEvent e) {
+				buttonstat.setIcon(new ImageIcon(BTNSTAT));
+			}
+		});
+		buttonstat.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		ButtonPanel.add(buttonstat);
 		
-		buttonskill = new JButton("스킬");
+		buttonskill = new JButton(new ImageIcon(BTNSKILL));
 		buttonskill.setBounds(225, 100, 100, 79);
+		buttonskill.setBorderPainted(false);
+		buttonskill.setFocusPainted(false);
+		buttonskill.setContentAreaFilled(false);
+		buttonskill.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				buttonskill.setIcon(new ImageIcon(BTNSKILL_PRESS));
+			}
+			public void mouseReleased(MouseEvent e) {
+				buttonskill.setIcon(new ImageIcon(BTNSKILL));
+			}
+			public void mouseExited(MouseEvent e) {
+				buttonskill.setIcon(new ImageIcon(BTNSKILL));
+			}
+		});
 		ButtonPanel.add(buttonskill);
 		
-		buttonexit = new JButton("게임종료");
+		buttonexit = new JButton(new ImageIcon(BTNQUIT));
 		buttonexit.setBounds(335, 5, 100, 79);
+		buttonexit.setBorderPainted(false);
+		buttonexit.setFocusPainted(false);
+		buttonexit.setContentAreaFilled(false);
+		buttonexit.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				buttonexit.setIcon(new ImageIcon(BTNQUIT_PRESS));
+			}
+			public void mouseReleased(MouseEvent e) {
+				buttonexit.setIcon(new ImageIcon(BTNQUIT));
+			}
+			public void mouseExited(MouseEvent e) {
+				buttonexit.setIcon(new ImageIcon(BTNQUIT));
+			}
+		});
 		buttonexit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -232,7 +334,6 @@ public class GameScreen extends JFrame{
 				}
 			}
 		});
-		
 		ButtonPanel.add(buttonexit);
 		
 		layer.add(mainbackgroundimgLabel, new Integer(1));
