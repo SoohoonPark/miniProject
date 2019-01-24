@@ -20,4 +20,3 @@ public class BackgroundImagePanel extends JPanel{
 		g.drawImage(backgroundimg, 0, 0, null);
 	}
 }
-
