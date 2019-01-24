@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
@@ -27,6 +28,8 @@ public class GameScreen extends JFrame{
 	private final static Image MAINBACKGROUND = Toolkit.getDefaultToolkit().createImage("resource/images/background/gamescreenmainbackground.png");
 	// 전투배경
 	private final static Image BATTLEBACKGROUND = Toolkit.getDefaultToolkit().createImage("resource/images/background/battlebackground.png");
+	// 이벤트 배경
+	private final static Image EVENTBACKGROUND1 = Toolkit.getDefaultToolkit().createImage("resource/images/background/Event1_resize.png");
 	// 플레이어 이미지(모험가)
 	private final static Image PLAYERBEGINNER = Toolkit.getDefaultToolkit().createImage("resource/images/player/playercharacter_beginner.png");
 	// 로그(Log) 패널 배경(테두리)
@@ -54,8 +57,8 @@ public class GameScreen extends JFrame{
 	private static int c_lv, c_str, c_dex, c_int, c_hp, c_mp, c_exp, c_next_exp; // 캐릭터 스탯 관련 정보 (스탯창 열었을때 보여줌)
 	private static Boolean battle = false; // 전투 발생을 알려주는 변수. 전투 발생 시 true로 전환(기본값 false)
 	private static JButton buttonsearch, buttonattack, buttoninven, buttonequip, buttonstat, buttonskill, buttonexit;
-	private static JLabel mainbackgroundimgLabel; // 메인 배경 테두리 라벨
-	private static JPanel CharacterPanel,MonsterPanel; // 캐릭터 이미지가 출력되는 패널, 몹 이미지가 출력되는 패널
+	private static JLabel mainbackgroundimgLabel, GameScreenimgLabel; // 이미지 라벨들
+	private static JPanel GameScreenPanel,CharacterPanel,MonsterPanel; // 캐릭터 이미지가 출력되는 패널, 몹 이미지가 출력되는 패널
 	private static JTextArea logarea;
 	private static JScrollPane logscroll;
 	private static JProgressBar playerHpbar, playerMpbar, MonsterHpbar;
@@ -95,14 +98,13 @@ public class GameScreen extends JFrame{
 		mainbackgroundimgLabel = new JLabel(new ImageIcon(MAINBACKGROUND));
 		mainbackgroundimgLabel.setBounds(5, 5, 1020, 638);
 		
-		// 게임진행 화면
-		BackgroundImagePanel GameScreenPanel = new BackgroundImagePanel(BATTLEBACKGROUND);
-		GameScreenPanel.setBounds(40, 35, 950, 300);
-		GameScreenPanel.setBorder(new LineBorder(Color.WHITE));
-				
+		// 게임진행 이미지 라벨
+		GameScreenimgLabel = new JLabel(new ImageIcon(BATTLEBACKGROUND));
+		GameScreenimgLabel.setBounds(40, 35, 950, 300);
+		
 		// 캐릭터 이미지 출력되는 패널(체력/마나 막대 + 캐릭터 이미지)
 		CharacterPanel = new JPanel(null);
-		CharacterPanel.setBounds(650,5, 200, 290);
+		CharacterPanel.setBounds(650,40, 200, 290);
 		CharacterPanel.setBorder(new LineBorder(Color.BLUE));
 		CharacterPanel.setOpaque(false);
 		
@@ -133,14 +135,12 @@ public class GameScreen extends JFrame{
 		CharacterPanel.add(playerHpbar);
 		CharacterPanel.add(playerMpbar);
 		CharacterPanel.add(characterLabel); // 캐릭터 패널에 캐릭터 이미지 추가
-		GameScreenPanel.add(CharacterPanel); // 게임화면패널에 캐릭터 패널 추가
 		
 		// 몹 이미지 출력 패널(몹 체력 막대 + 몹 이미지)
 		MonsterPanel = new JPanel(null);
-		MonsterPanel.setBounds(60, 10, 350, 285);
+		MonsterPanel.setBounds(60, 40, 350, 290);
 		MonsterPanel.setBorder(new LineBorder(Color.RED));
 		MonsterPanel.setOpaque(false);
-		GameScreenPanel.add(MonsterPanel);
 		
 		// 로그(log)가 출력되는 패널
 		BackgroundImagePanel LogPanel = new BackgroundImagePanel(LOGBACKGROUND);
@@ -161,7 +161,6 @@ public class GameScreen extends JFrame{
 		BackgroundImagePanel ButtonPanel = new BackgroundImagePanel(BUTTONBACKGROUND);
 		ButtonPanel.setBounds(520, 380, 440, 190);
 		ButtonPanel.setOpaque(false);
-		ButtonPanel.setBorder(new LineBorder(Color.white));
 		
 		// 탐색 버튼을 눌렸을 때
 		buttonsearch = new JButton(new ImageIcon(BTNSEARCH));
@@ -371,9 +370,11 @@ public class GameScreen extends JFrame{
 		ButtonPanel.add(logoLabel);
 		
 		layer.add(mainbackgroundimgLabel, new Integer(1));
-		layer.add(GameScreenPanel, new Integer(2));
-		layer.add(LogPanel,new Integer(3));
-		layer.add(ButtonPanel,new Integer(3));
+		layer.add(GameScreenimgLabel, new Integer(2));
+		layer.add(CharacterPanel, new Integer(3));
+		layer.add(MonsterPanel, new Integer(3));
+		layer.add(LogPanel,new Integer(4));
+		layer.add(ButtonPanel,new Integer(4));
 		
 		setVisible(true);
 	}

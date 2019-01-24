@@ -19,4 +19,8 @@ public class BackgroundImagePanel extends JPanel{
 	protected void paintComponent(Graphics g) {
 		g.drawImage(backgroundimg, 0, 0, null);
 	}
+	
+	public void setBackgroundImg(Image img) {
+		this.backgroundimg = img;
+	}
 }
