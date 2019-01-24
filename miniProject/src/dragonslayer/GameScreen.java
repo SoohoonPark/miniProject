@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
@@ -29,8 +30,10 @@ public class GameScreen extends JFrame{
 	private final static Image BATTLEBACKGROUND = Toolkit.getDefaultToolkit().createImage("resource/images/background/battlebackground.png");
 	// 플레이어 이미지(모험가)
 	private final static Image PLAYERBEGINNER = Toolkit.getDefaultToolkit().createImage("resource/images/player/playercharacter_beginner.png");
-	// 로그(Log) 배경
-	private final static Image LOGBACKGROUND = Toolkit.getDefaultToolkit().createImage("resource/images/background/LogBorderimage_1_resize.png");
+	// 로그(Log) 패널 배경(테두리)
+	private final static Image LOGBACKGROUND = Toolkit.getDefaultToolkit().createImage("resource/images/background/LogPanelBorder.png");
+	// 버튼 패널 배경(테두리)
+	private final static Image BUTTONBACKGROUND = Toolkit.getDefaultToolkit().createImage("resource/images/background/ButtonPanelBorder.png");
 	// 버튼 이미지들(탐색,공격,가방....)
 	private final static Image BTNATK = Toolkit.getDefaultToolkit().createImage("resource/images/button/GameScreen/button_attack.png");
 	private final static Image BTNATK_PRESS = Toolkit.getDefaultToolkit().createImage("resource/images/button/GameScreen/button_attack_pressed.png");
@@ -56,6 +59,7 @@ public class GameScreen extends JFrame{
 	private static JPanel CharacterPanel,MonsterPanel; // 캐릭터 이미지가 출력되는 패널, 몹 이미지가 출력되는 패널
 	private static JTextArea logarea;
 	private static JScrollPane logscroll;
+	private static JProgressBar playerHpbar, playerMpbar, MonsterHpbar;
 	
 	public static void main(String[] args) {
 		new GameScreen("test", 1, 1, 1, 1, 1);
@@ -103,11 +107,34 @@ public class GameScreen extends JFrame{
 		CharacterPanel.setBorder(new LineBorder(Color.BLUE));
 		CharacterPanel.setOpaque(false);
 		
+		// 캐릭터 이미지 출력하는 Label
 		JLabel characterLabel = new JLabel(new ImageIcon(PLAYERBEGINNER));
 		characterLabel.setBounds(30, 60, 150, 226);
 		
-		CharacterPanel.add(characterLabel);
-		GameScreenPanel.add(CharacterPanel);
+		UIManager.put("ProgressBar.selectionBackground", Color.BLACK); // bar가 채워지기 전 글자 색
+		UIManager.put("ProgressBar.selectionForeground", Color.BLACK); // bar가 채워진 후 글자 색
+		playerHpbar = new JProgressBar(0,100); // 플레이어 캐릭터 체력바
+		playerHpbar.setBorderPainted(false);
+		playerHpbar.setBackground(Color.WHITE);
+		playerHpbar.setForeground(Color.RED);
+		playerHpbar.setValue(60);
+		playerHpbar.setBounds(10, 10, 180, 15);
+		playerHpbar.setStringPainted(true);
+		playerHpbar.setString(0+"/"+c_hp);
+		
+		playerMpbar = new JProgressBar(0, 100); // 플레이어 캐릭터 마나바
+		playerMpbar.setBorderPainted(false);
+		playerMpbar.setBackground(Color.WHITE);
+		playerMpbar.setForeground(Color.BLUE);
+		playerMpbar.setValue(60);
+		playerMpbar.setBounds(10, 26, 180, 15);
+		playerMpbar.setStringPainted(true);
+		playerMpbar.setString(0+"/"+c_hp);
+		
+		CharacterPanel.add(playerHpbar);
+		CharacterPanel.add(playerMpbar);
+		CharacterPanel.add(characterLabel); // 캐릭터 패널에 캐릭터 이미지 추가
+		GameScreenPanel.add(CharacterPanel); // 게임화면패널에 캐릭터 패널 추가
 		
 		// 몹 이미지 출력 패널(몹 체력 막대 + 몹 이미지)
 		MonsterPanel = new JPanel(null);
@@ -119,6 +146,7 @@ public class GameScreen extends JFrame{
 		// 로그(log)가 출력되는 패널
 		BackgroundImagePanel LogPanel = new BackgroundImagePanel(LOGBACKGROUND);
 		LogPanel.setBounds(50, 350, 450, 250);
+		LogPanel.setOpaque(false);
 		
 		logarea = new JTextArea();
 		logarea.setEditable(false);
@@ -131,18 +159,14 @@ public class GameScreen extends JFrame{
 		LogPanel.add(logscroll);
 		
 		// 버튼들이 출력되는 패널
-		JPanel ButtonPanel = new JPanel(null);
+		BackgroundImagePanel ButtonPanel = new BackgroundImagePanel(BUTTONBACKGROUND);
 		ButtonPanel.setBounds(520, 380, 440, 190);
-		ButtonPanel.setBorder(new LineBorder(Color.GRAY));
+		ButtonPanel.setOpaque(false);
+		ButtonPanel.setBorder(new LineBorder(Color.white));
 		
-		JLabel logoLabel = new JLabel(new ImageIcon(LOGO));
-		logoLabel.setBounds(335, 100, 105, 97);
-
-		ButtonPanel.add(logoLabel);
-				
 		// 탐색 버튼을 눌렸을 때
 		buttonsearch = new JButton(new ImageIcon(BTNSEARCH));
-		buttonsearch.setBounds(5, 5, 100, 79);
+		buttonsearch.setBounds(20, 10, 100, 79);
 		buttonsearch.setBorderPainted(false);
 		buttonsearch.setFocusPainted(false);
 		buttonsearch.setContentAreaFilled(false);
@@ -165,14 +189,20 @@ public class GameScreen extends JFrame{
 				case 1:
 					battle = true; // 전투 발생 시 true로 전환, 해당 변수는 전투가 종료되면 다시 false로 바뀜
 					System.out.println("[info] 전투 발생");
+					CharacterPanel.setVisible(true);
+					MonsterPanel.setVisible(true);
 					writeLog("\ntest2");
 					break;
 				case 2:
 					System.out.println("[info] 아이템 획득");
+					CharacterPanel.setVisible(true);
+					MonsterPanel.setVisible(false);
 					writeLog("\ntest1");
 					break;
 				case 3:
 					System.out.println("[info] 특수 이벤트 발생");
+					CharacterPanel.setVisible(false);
+					MonsterPanel.setVisible(false);
 					writeLog("\ntest3");
 					break;
 				}
@@ -181,7 +211,7 @@ public class GameScreen extends JFrame{
 		ButtonPanel.add(buttonsearch);
 		
 		buttonattack = new JButton(new ImageIcon(BTNATK));
-		buttonattack.setBounds(115, 5, 100, 79);
+		buttonattack.setBounds(120, 10, 100, 79);
 		buttonattack.setBorderPainted(false);
 		buttonattack.setFocusPainted(false);
 		buttonattack.setContentAreaFilled(false);
@@ -207,7 +237,7 @@ public class GameScreen extends JFrame{
 		ButtonPanel.add(buttonattack);
 		
 		buttoninven = new JButton(new ImageIcon(BTNINVEN));
-		buttoninven.setBounds(225, 5, 100, 79);
+		buttoninven.setBounds(220, 10, 100, 79);
 		buttoninven.setBorderPainted(false);
 		buttoninven.setFocusPainted(false);
 		buttoninven.setContentAreaFilled(false);
@@ -233,7 +263,7 @@ public class GameScreen extends JFrame{
 		ButtonPanel.add(buttoninven);
 		
 		buttonequip = new JButton(new ImageIcon(BTNEQUIP));
-		buttonequip.setBounds(5, 100, 100, 79);
+		buttonequip.setBounds(20, 100, 100, 79);
 		buttonequip.setBorderPainted(false);
 		buttonequip.setFocusPainted(false);
 		buttonequip.setContentAreaFilled(false);
@@ -259,7 +289,7 @@ public class GameScreen extends JFrame{
 		ButtonPanel.add(buttonequip);
 		
 		buttonstat = new JButton(new ImageIcon(BTNSTAT));
-		buttonstat.setBounds(115, 100, 100, 79);
+		buttonstat.setBounds(120, 100, 100, 79);
 		buttonstat.setBorderPainted(false);
 		buttonstat.setFocusPainted(false);
 		buttonstat.setContentAreaFilled(false);
@@ -285,7 +315,7 @@ public class GameScreen extends JFrame{
 		ButtonPanel.add(buttonstat);
 		
 		buttonskill = new JButton(new ImageIcon(BTNSKILL));
-		buttonskill.setBounds(225, 100, 100, 79);
+		buttonskill.setBounds(220, 100, 100, 79);
 		buttonskill.setBorderPainted(false);
 		buttonskill.setFocusPainted(false);
 		buttonskill.setContentAreaFilled(false);
@@ -303,7 +333,7 @@ public class GameScreen extends JFrame{
 		ButtonPanel.add(buttonskill);
 		
 		buttonexit = new JButton(new ImageIcon(BTNQUIT));
-		buttonexit.setBounds(335, 5, 100, 79);
+		buttonexit.setBounds(320, 10, 100, 79);
 		buttonexit.setBorderPainted(false);
 		buttonexit.setFocusPainted(false);
 		buttonexit.setContentAreaFilled(false);
@@ -335,6 +365,11 @@ public class GameScreen extends JFrame{
 			}
 		});
 		ButtonPanel.add(buttonexit);
+		
+		JLabel logoLabel = new JLabel(new ImageIcon(LOGO));
+		logoLabel.setBounds(320, 90, 105, 97);
+
+		ButtonPanel.add(logoLabel);
 		
 		layer.add(mainbackgroundimgLabel, new Integer(1));
 		layer.add(GameScreenPanel, new Integer(2));
