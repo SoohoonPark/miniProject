@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 
@@ -21,6 +22,8 @@ import javax.swing.border.LineBorder;
 public class GameScreen extends JFrame{
 	private final static Image ICONIMAGE = Toolkit.getDefaultToolkit().createImage("resource/images/title/titleicon.png");
 	private final static Image MAINBACKGROUND = Toolkit.getDefaultToolkit().createImage("resource/images/background/gamescreenmainbackground.png");
+	// 전투배경
+	private final static Image BATTLEBACKGROUND = Toolkit.getDefaultToolkit().createImage("resource/images/background/battlebackground_1_resize.png");
 	private static String c_name; // 캐릭터명
 	private static int c_lv, c_str, c_dex, c_int, c_hp, c_mp, c_exp, c_next_exp; // 캐릭터 스탯 관련 정보 (스탯창 열었을때 보여줌)
 	private static Boolean battle = false; // 전투 발생을 알려주는 변수. 전투 발생 시 true로 전환(기본값 false)
@@ -64,8 +67,7 @@ public class GameScreen extends JFrame{
 		mainbackgroundimgLabel.setBounds(5, 5, 1020, 638);
 		
 		// 게임진행 화면
-
-		JPanel GameScreenPanel = new JPanel(null);
+		BackgroundImagePanel GameScreenPanel = new BackgroundImagePanel();
 		GameScreenPanel.setBounds(40, 35, 950, 300);
 		GameScreenPanel.setBorder(new LineBorder(Color.WHITE));
 				
@@ -73,12 +75,18 @@ public class GameScreen extends JFrame{
 		CharacterPanel = new JPanel(null);
 		CharacterPanel.setBounds(60, 70, 200, 225);
 		CharacterPanel.setBorder(new LineBorder(Color.BLUE));
+		CharacterPanel.setOpaque(false);
+		
+		JProgressBar characterHP = new JProgressBar();
+		characterHP.setBounds(10, 10, 100, 20);
+		
 		GameScreenPanel.add(CharacterPanel);
 		
 		// 몹 이미지 출력 패널(몹 체력 막대 + 몹 이미지)
 		MonsterPanel = new JPanel(null);
 		MonsterPanel.setBounds(550, 45, 350, 250);
 		MonsterPanel.setBorder(new LineBorder(Color.RED));
+		MonsterPanel.setOpaque(false);
 		GameScreenPanel.add(MonsterPanel);
 		
 		// 로그(log)가 출력되는 패널
