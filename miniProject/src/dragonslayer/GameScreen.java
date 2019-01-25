@@ -33,7 +33,7 @@ public class GameScreen extends JFrame{
 	// 플레이어 이미지(모험가)
 	private final static Image PLAYERBEGINNER = Toolkit.getDefaultToolkit().createImage("resource/images/player/playercharacter_beginner.png");
 	// 몹 이미지들
-	private final static Image HATCHLING = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/2_2_Hatchling_resize.png");
+	private final static Image HATCHLING = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/2.2_Hatchling_resize.png");
 	// 로그(Log) 패널 배경(테두리)
 	private final static Image LOGBACKGROUND = Toolkit.getDefaultToolkit().createImage("resource/images/background/LogPanelBorder.png");
 	// 버튼 패널 배경(테두리)
@@ -146,7 +146,8 @@ public class GameScreen extends JFrame{
 		MonsterPanel.setOpaque(false);
 		
 		monsterimgLabel = new JLabel(new ImageIcon(HATCHLING));
-		monsterimgLabel.setBounds(0, 40, 280, 300);
+		monsterimgLabel.setBounds(10, 25, 330, 290);
+		monsterimgLabel.setBorder(new LineBorder(Color.CYAN));
 		MonsterPanel.add(monsterimgLabel);
 		
 		// 로그(log)가 출력되는 패널
