@@ -32,6 +32,8 @@ public class GameScreen extends JFrame{
 	private final static Image EVENTBACKGROUND1 = Toolkit.getDefaultToolkit().createImage("resource/images/background/Event1_resize.png");
 	// 플레이어 이미지(모험가)
 	private final static Image PLAYERBEGINNER = Toolkit.getDefaultToolkit().createImage("resource/images/player/playercharacter_beginner.png");
+	// 몹 이미지들
+	private final static Image HATCHLING = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/2_2_Hatchling_resize.png");
 	// 로그(Log) 패널 배경(테두리)
 	private final static Image LOGBACKGROUND = Toolkit.getDefaultToolkit().createImage("resource/images/background/LogPanelBorder.png");
 	// 버튼 패널 배경(테두리)
@@ -57,7 +59,7 @@ public class GameScreen extends JFrame{
 	private static int c_lv, c_str, c_dex, c_int, c_hp, c_mp, c_exp, c_next_exp; // 캐릭터 스탯 관련 정보 (스탯창 열었을때 보여줌)
 	private static Boolean battle = false; // 전투 발생을 알려주는 변수. 전투 발생 시 true로 전환(기본값 false)
 	private static JButton buttonsearch, buttonattack, buttoninven, buttonequip, buttonstat, buttonskill, buttonexit;
-	private static JLabel mainbackgroundimgLabel, GameScreenimgLabel; // 이미지 라벨들
+	private static JLabel mainbackgroundimgLabel, GameScreenimgLabel, monsterimgLabel; // 이미지 라벨들
 	private static JPanel GameScreenPanel,CharacterPanel,MonsterPanel; // 캐릭터 이미지가 출력되는 패널, 몹 이미지가 출력되는 패널
 	private static JTextArea logarea;
 	private static JScrollPane logscroll;
@@ -113,7 +115,6 @@ public class GameScreen extends JFrame{
 		JLabel characterLabel = new JLabel(new ImageIcon(PLAYERBEGINNER));
 		characterLabel.setBounds(30, 70, 150, 226);
 		
-		
 		UIManager.put("ProgressBar.selectionBackground", Color.BLACK); // bar가 채워지기 전 글자 색
 		UIManager.put("ProgressBar.selectionForeground", Color.BLACK); // bar가 채워진 후 글자 색
 		playerHpbar = new JProgressBar(0,100); // 플레이어 캐릭터 체력바
@@ -143,6 +144,10 @@ public class GameScreen extends JFrame{
 		MonsterPanel.setBounds(60, 40, 350, 320);
 		MonsterPanel.setBorder(new LineBorder(Color.RED));
 		MonsterPanel.setOpaque(false);
+		
+		monsterimgLabel = new JLabel(new ImageIcon(HATCHLING));
+		monsterimgLabel.setBounds(0, 40, 280, 300);
+		MonsterPanel.add(monsterimgLabel);
 		
 		// 로그(log)가 출력되는 패널
 		BackgroundImagePanel LogPanel = new BackgroundImagePanel(LOGBACKGROUND);
