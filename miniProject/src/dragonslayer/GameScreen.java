@@ -27,7 +27,7 @@ public class GameScreen extends JFrame{
 	private final static Image ICONIMAGE = Toolkit.getDefaultToolkit().createImage("resource/images/title/titleicon.png");
 	private final static Image MAINBACKGROUND = Toolkit.getDefaultToolkit().createImage("resource/images/background/gamescreenmainbackground.png");
 	// 전투배경
-	private final static Image BATTLEBACKGROUND = Toolkit.getDefaultToolkit().createImage("resource/images/background/battlebackground.png");
+	private final static Image BATTLEBACKGROUND = Toolkit.getDefaultToolkit().createImage("resource/images/background/battlebackground_resize.png");
 	// 이벤트 배경
 	private final static Image EVENTBACKGROUND1 = Toolkit.getDefaultToolkit().createImage("resource/images/background/Event1_resize.png");
 	// 플레이어 이미지(모험가)
@@ -100,17 +100,18 @@ public class GameScreen extends JFrame{
 		
 		// 게임진행 이미지 라벨
 		GameScreenimgLabel = new JLabel(new ImageIcon(BATTLEBACKGROUND));
-		GameScreenimgLabel.setBounds(40, 35, 950, 300);
+		GameScreenimgLabel.setBounds(40, 35, 950, 330);
+		GameScreenimgLabel.setBorder(new LineBorder(Color.WHITE));
 		
 		// 캐릭터 이미지 출력되는 패널(체력/마나 막대 + 캐릭터 이미지)
 		CharacterPanel = new JPanel(null);
-		CharacterPanel.setBounds(650,40, 200, 290);
+		CharacterPanel.setBounds(650,60, 200, 300);
 		CharacterPanel.setBorder(new LineBorder(Color.BLUE));
 		CharacterPanel.setOpaque(false);
 		
 		// 캐릭터 이미지 출력하는 Label
 		JLabel characterLabel = new JLabel(new ImageIcon(PLAYERBEGINNER));
-		characterLabel.setBounds(30, 60, 150, 226);
+		characterLabel.setBounds(30, 70, 150, 226);
 		
 		UIManager.put("ProgressBar.selectionBackground", Color.BLACK); // bar가 채워지기 전 글자 색
 		UIManager.put("ProgressBar.selectionForeground", Color.BLACK); // bar가 채워진 후 글자 색
@@ -138,13 +139,13 @@ public class GameScreen extends JFrame{
 		
 		// 몹 이미지 출력 패널(몹 체력 막대 + 몹 이미지)
 		MonsterPanel = new JPanel(null);
-		MonsterPanel.setBounds(60, 40, 350, 290);
+		MonsterPanel.setBounds(60, 40, 350, 320);
 		MonsterPanel.setBorder(new LineBorder(Color.RED));
 		MonsterPanel.setOpaque(false);
 		
 		// 로그(log)가 출력되는 패널
 		BackgroundImagePanel LogPanel = new BackgroundImagePanel(LOGBACKGROUND);
-		LogPanel.setBounds(50, 350, 450, 250);
+		LogPanel.setBounds(50, 370, 450, 250);
 		LogPanel.setOpaque(false);
 		
 		logarea = new JTextArea();
@@ -159,7 +160,7 @@ public class GameScreen extends JFrame{
 		
 		// 버튼들이 출력되는 패널
 		BackgroundImagePanel ButtonPanel = new BackgroundImagePanel(BUTTONBACKGROUND);
-		ButtonPanel.setBounds(520, 380, 440, 190);
+		ButtonPanel.setBounds(520, 400, 440, 190);
 		ButtonPanel.setOpaque(false);
 		
 		// 탐색 버튼을 눌렸을 때
