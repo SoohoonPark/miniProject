@@ -92,6 +92,8 @@ public class GameScreen extends JFrame{
 		getContentPane().setBackground(Color.BLACK);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
+		System.out.println(getLocation().getX());
+		System.out.println(getLocation().getY());
 		
 		// 레이어 설정
 		JLayeredPane layer = getLayeredPane();
@@ -262,7 +264,7 @@ public class GameScreen extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				new InventoryScreen();
 				
 			}
 		});
@@ -288,7 +290,7 @@ public class GameScreen extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				new EquipmentScreen();
 				
 			}
 		});
