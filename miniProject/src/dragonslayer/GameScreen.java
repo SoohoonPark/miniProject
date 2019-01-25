@@ -113,6 +113,7 @@ public class GameScreen extends JFrame{
 		JLabel characterLabel = new JLabel(new ImageIcon(PLAYERBEGINNER));
 		characterLabel.setBounds(30, 70, 150, 226);
 		
+		
 		UIManager.put("ProgressBar.selectionBackground", Color.BLACK); // bar가 채워지기 전 글자 색
 		UIManager.put("ProgressBar.selectionForeground", Color.BLACK); // bar가 채워진 후 글자 색
 		playerHpbar = new JProgressBar(0,100); // 플레이어 캐릭터 체력바
