@@ -85,6 +85,7 @@ public class GameScreen extends JFrame{
 	}
 	
 	void createGameScreen() {
+		
 		setTitle("Dragon Slayer");
 		setSize(1040, 680);
 		setIconImage(ICONIMAGE);
@@ -159,7 +160,7 @@ public class GameScreen extends JFrame{
 		logarea.setEditable(false);
 		logarea.setForeground(Color.WHITE);
 		logarea.setBackground(Color.BLACK);
-		logarea.setText("게임 시작");
+		logarea.setText("게임 시작\n");
 		logscroll = new JScrollPane(logarea);
 		logscroll.setBorder(new LineBorder(Color.BLACK));
 		logscroll.setBounds(25, 20, 400, 210);
@@ -374,7 +375,7 @@ public class GameScreen extends JFrame{
 		
 		JLabel logoLabel = new JLabel(new ImageIcon(LOGO));
 		logoLabel.setBounds(320, 90, 105, 97);
-
+		
 		ButtonPanel.add(logoLabel);
 		
 		layer.add(mainbackgroundimgLabel, new Integer(1));
@@ -385,6 +386,9 @@ public class GameScreen extends JFrame{
 		layer.add(ButtonPanel,new Integer(4));
 		
 		setVisible(true);
+		
+		System.out.println(getLocation().getX());
+		System.out.println(getLocation().getY());
 	}
 	
 	// 1 ~ 3 랜덤 숫자 발생시키는 메소드
