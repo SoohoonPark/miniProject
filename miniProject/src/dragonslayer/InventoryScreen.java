@@ -3,12 +3,15 @@ package dragonslayer;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
 
+@SuppressWarnings("serial")
 public class InventoryScreen extends JFrame {
 	private Image iconimage = Toolkit.getDefaultToolkit().createImage("resource/images/title/titleicon.png");
 	
@@ -34,14 +37,23 @@ public class InventoryScreen extends JFrame {
 		invenlist.setBounds(20, 30, 230, 250);
 		invenlist.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
 		
-        
 		add(use);
 		add(drop);
 		add(invenlist);
 		
+		// 해당 프레임이 닫힐 때 실행되는 windowListener
+		addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				// 해당 프레임이 닫힐 때 GameScreen의 '가방' 버튼을 활성화시킴.
+				GameScreen.getInvenbutton().setEnabled(true);
+			}
+		});
+		
 		setVisible(true);
 	}
-	public static void main(String[] args) {
-		new InventoryScreen();
-	}
+	
+	
+//	public static void main(String[] args) {
+//		new InventoryScreen();
+//	}
 }

@@ -60,10 +60,10 @@ public class GameScreen extends JFrame{
 	private static Boolean battle = false; // 전투 발생을 알려주는 변수. 전투 발생 시 true로 전환(기본값 false)
 	private static JButton buttonsearch, buttonattack, buttoninven, buttonequip, buttonstat, buttonskill, buttonexit;
 	private static JLabel mainbackgroundimgLabel, GameScreenimgLabel, monsterimgLabel; // 이미지 라벨들
-	private static JPanel GameScreenPanel,CharacterPanel,MonsterPanel; // 캐릭터 이미지가 출력되는 패널, 몹 이미지가 출력되는 패널
+	private static JPanel CharacterPanel,MonsterPanel; // 캐릭터 이미지가 출력되는 패널, 몹 이미지가 출력되는 패널
 	private static JTextArea logarea;
 	private static JScrollPane logscroll;
-	private static JProgressBar playerHpbar, playerMpbar, MonsterHpbar;
+	private static JProgressBar playerHpbar, playerMpbar, MonsterHpbar; // 플레이어 체력막대,마나막대, 몹 체력막대
 	
 	public static void main(String[] args) {
 		new GameScreen("test", 1, 1, 1, 1, 1);
@@ -92,8 +92,6 @@ public class GameScreen extends JFrame{
 		getContentPane().setBackground(Color.BLACK);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
-		System.out.println(getLocation().getX());
-		System.out.println(getLocation().getY());
 		
 		// 레이어 설정
 		JLayeredPane layer = getLayeredPane();
@@ -150,6 +148,12 @@ public class GameScreen extends JFrame{
 		monsterimgLabel = new JLabel(new ImageIcon(HATCHLING));
 		monsterimgLabel.setBounds(10, 25, 330, 290);
 		monsterimgLabel.setBorder(new LineBorder(Color.CYAN));
+		
+		MonsterHpbar = new JProgressBar(0,100);
+		MonsterHpbar.setBorderPainted(false);
+		MonsterHpbar.setBackground(Color.WHITE);
+		MonsterHpbar.setForeground(Color.RED);
+		
 		MonsterPanel.add(monsterimgLabel);
 		
 		// 로그(log)가 출력되는 패널
@@ -183,9 +187,6 @@ public class GameScreen extends JFrame{
 				buttonsearch.setIcon(new ImageIcon(BTNSEARCH_PRESS));
 			}
 			public void mouseReleased(MouseEvent e) {
-				buttonsearch.setIcon(new ImageIcon(BTNSEARCH));
-			}
-			public void mouseExited(MouseEvent e) {
 				buttonsearch.setIcon(new ImageIcon(BTNSEARCH));
 			}
 		});
@@ -230,9 +231,6 @@ public class GameScreen extends JFrame{
 			public void mouseReleased(MouseEvent e) {
 				buttonattack.setIcon(new ImageIcon(BTNATK));
 			}
-			public void mouseExited(MouseEvent e) {
-				buttonattack.setIcon(new ImageIcon(BTNATK));
-			}
 		});
 		buttonattack.addActionListener(new ActionListener() {
 			
@@ -256,16 +254,13 @@ public class GameScreen extends JFrame{
 			public void mouseReleased(MouseEvent e) {
 				buttoninven.setIcon(new ImageIcon(BTNINVEN));
 			}
-			public void mouseExited(MouseEvent e) {
-				buttoninven.setIcon(new ImageIcon(BTNINVEN));
-			}
 		});
 		buttoninven.addActionListener(new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// 중복 클릭을 통한 여러 창 띄우는걸 방지하기 위해 해당 버튼을 클릭하면 버튼 비활성화.
+				buttoninven.setEnabled(false);
 				new InventoryScreen();
-				
 			}
 		});
 		ButtonPanel.add(buttoninven);
@@ -282,16 +277,11 @@ public class GameScreen extends JFrame{
 			public void mouseReleased(MouseEvent e) {
 				buttonequip.setIcon(new ImageIcon(BTNEQUIP));
 			}
-			public void mouseExited(MouseEvent e) {
-				buttonequip.setIcon(new ImageIcon(BTNEQUIP));
-			}
 		});
 		buttonequip.addActionListener(new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				new EquipmentScreen();
-				
 			}
 		});
 		ButtonPanel.add(buttonequip);
@@ -308,12 +298,8 @@ public class GameScreen extends JFrame{
 			public void mouseReleased(MouseEvent e) {
 				buttonstat.setIcon(new ImageIcon(BTNSTAT));
 			}
-			public void mouseExited(MouseEvent e) {
-				buttonstat.setIcon(new ImageIcon(BTNSTAT));
-			}
 		});
 		buttonstat.addActionListener(new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
@@ -334,9 +320,6 @@ public class GameScreen extends JFrame{
 			public void mouseReleased(MouseEvent e) {
 				buttonskill.setIcon(new ImageIcon(BTNSKILL));
 			}
-			public void mouseExited(MouseEvent e) {
-				buttonskill.setIcon(new ImageIcon(BTNSKILL));
-			}
 		});
 		ButtonPanel.add(buttonskill);
 		
@@ -350,9 +333,6 @@ public class GameScreen extends JFrame{
 				buttonexit.setIcon(new ImageIcon(BTNQUIT_PRESS));
 			}
 			public void mouseReleased(MouseEvent e) {
-				buttonexit.setIcon(new ImageIcon(BTNQUIT));
-			}
-			public void mouseExited(MouseEvent e) {
 				buttonexit.setIcon(new ImageIcon(BTNQUIT));
 			}
 		});
@@ -399,5 +379,25 @@ public class GameScreen extends JFrame{
 	void writeLog(String text) {
 		logarea.append(text);
 		logarea.moveCaretPosition(logarea.getText().length());
+	}
+	
+	// 가방 버튼 리턴(InventoryScreen 에서 사용)
+	public static JButton getInvenbutton() {
+		return buttoninven;
+	}
+	
+	// 장비 버튼 리턴(EquipmentScreen 에서 사용)
+	public static JButton getEquipbutton() {
+		return buttonequip;
+	}
+	
+	// 스킬 버튼 리턴(SkillScreen 에서 사용)
+	public static JButton getSkillbutton() {
+		return buttonskill;
+	}
+	
+	// 스텟 버튼 리턴(StatScreen 에서 사용)
+	public static JButton getStatbutton() {
+		return buttonstat;
 	}
 }
