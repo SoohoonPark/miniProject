@@ -24,7 +24,7 @@ public class DSDBConnection {
 		}catch(Exception e) {
 			System.out.println("[Error] 드라이버 로드 에러");
 		}
-		System.out.println("[info] DB Connect 완료 객체 반환");
+		System.out.println("[info] DB Connect 완료");
 		return conn;
 	}
 }

@@ -26,20 +26,45 @@ import javax.swing.border.LineBorder;
 
 @SuppressWarnings("serial")
 public class GameScreen extends JFrame{
+	/** 이미지 영역 **/
+	// 게임아이콘
 	private final static Image ICONIMAGE = Toolkit.getDefaultToolkit().createImage("resource/images/title/titleicon.png");
+	
+	// 게임배경화면(사각형 테두리)
 	private final static Image MAINBACKGROUND = Toolkit.getDefaultToolkit().createImage("resource/images/background/gamescreenmainbackground.png");
+	
 	// 전투배경
 	private final static Image BATTLEBACKGROUND = Toolkit.getDefaultToolkit().createImage("resource/images/background/battlebackground_resize.png");
+	
 	// 이벤트 배경
 	private final static Image EVENTBACKGROUND1 = Toolkit.getDefaultToolkit().createImage("resource/images/background/Event1_resize.png");
+	private final static Image EVENTBACKGROUND2 = null;
+	private final static Image EVENTBACKGROUND3 = null;
+	
 	// 플레이어 이미지(모험가)
 	private final static Image PLAYERBEGINNER = Toolkit.getDefaultToolkit().createImage("resource/images/player/playercharacter_beginner.png");
-	// 몹 이미지들
+	private final static Image PLAYERWARRIOR = null;
+	private final static Image PLAYERKNIGHT = null;
+	
+	// 몹 이미지들(초급)
+	private final static Image SKEL = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/low_grade/1_skel_warrior_resize.png");
+	private final static Image ORC = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/low_grade/2_orc_warrior_resize.png");
+	private final static Image GOLEM = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/low_grade/3_golem_resize.png");
+	
+	// 몹 이미지들(중급)
+	private final static Image SKELKING = null;
 	private final static Image HATCHLING = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/2.2_Hatchling_resize.png");
-	// 로그(Log) 패널 배경(테두리)
+	private final static Image LAGIA = null;
+	
+	// 몹 이미지들(고급)
+	private final static Image DRAKE = null;
+	private final static Image CHIMERA = null;
+	private final static Image ICEDRAGON = null;
+	
+	// 버튼 패널 & 로그 패널 배경(테두리)
 	private final static Image LOGBACKGROUND = Toolkit.getDefaultToolkit().createImage("resource/images/background/LogPanelBorder.png");
-	// 버튼 패널 배경(테두리)
 	private final static Image BUTTONBACKGROUND = Toolkit.getDefaultToolkit().createImage("resource/images/background/ButtonPanelBorder.png");
+	
 	// 버튼 이미지들(탐색,공격,가방....)
 	private final static Image BTNATK = Toolkit.getDefaultToolkit().createImage("resource/images/button/GameScreen/button_attack.png");
 	private final static Image BTNATK_PRESS = Toolkit.getDefaultToolkit().createImage("resource/images/button/GameScreen/button_attack_pressed.png");
@@ -57,11 +82,14 @@ public class GameScreen extends JFrame{
 	private final static Image BTNQUIT_PRESS = Toolkit.getDefaultToolkit().createImage("resource/images/button/GameScreen/button_quitgame_pressed.png");
 	private final static Image LOGO = Toolkit.getDefaultToolkit().createImage("resource/images/background/logo.png");
 	
+	/** 필드 영역 **/
 	private String c_name; // 캐릭터명
 	private int c_lv, c_str, c_dex, c_int, c_hp, c_mp, c_exp, c_next_exp; // 캐릭터 스탯 관련 정보 (스탯창 열었을때 보여줌)
 	private int current_user_hp, current_user_mp, current_monster_hp; // 현재 플레이어 체력 & 몹 체력
 	private Boolean battle = false; // 전투 발생을 알려주는 변수. 전투 발생 시 true로 전환(기본값 false)
-	private LinkedList<DSMonsters> monsters = null; // 몹정보가 저장돼있는 LinkedList
+	private LinkedList<DSMonsters> lowmonsters = null; // 초급몹정보가 저장돼있는 LinkedList
+	private LinkedList<DSMonsters> middlemonsters = null; // 중급몹정보가 저장돼있는 LinkedList
+	private LinkedList<DSMonsters> highmonsters = null; // 고급몹정보가 저장돼있는 LinkedList
 	
 	private static JButton buttonsearch, buttonattack, buttoninven, buttonequip, buttonstat, buttonskill, buttonexit;
 	private static JLabel mainbackgroundimgLabel, GameScreenimgLabel, monsterimgLabel; // 이미지 라벨들
@@ -72,6 +100,7 @@ public class GameScreen extends JFrame{
 	
 	private DSService service = DSService.getInstance();
 	
+	/** 메소드 영역 **/
 	public static void main(String[] args) {
 		new GameScreen("test", 1, 1, 1, 1, 1);
 	}
@@ -91,10 +120,18 @@ public class GameScreen extends JFrame{
 		
 		this.c_exp = 0; // 초기 경험치 보유량 0
 		this.c_next_exp = 50; // 다음 경험치 요구량 50
-		monsters = service.monsterData(); // 몹 정보 저장
-		if(!monsters.isEmpty()) {
-			System.out.println("[info] 몹 정보 가져오기 완료");
+		lowmonsters = service.monsterData("초급"); // 초급 몹 정보 저장
+//		middlemonsters = service.monsterData("중급"); // 중급 몹 정보 저장
+//		highmonsters = service.monsterData("고급"); // 고급 몹 정보 저장
+		if(!lowmonsters.isEmpty()) {
+			System.out.println("[info] 초급 몹 정보 가져오기 완료");
 		}
+//		if(!middlemonsters.isEmpty()) {
+//			System.out.println("[info] 중급 몹 정보 가져오기 완료");
+//		}
+//		if(!highmonsters.isEmpty()) {
+//			System.out.println("[info] 고급 몹 정보 가져오기 완료");
+//		}
 		System.out.println("[info] GameScreen() 필드 초기화 완료.");	
 		createGameScreen();
 	}
@@ -167,11 +204,16 @@ public class GameScreen extends JFrame{
 		monsterimgLabel.setBounds(10, 25, 330, 290);
 		monsterimgLabel.setBorder(new LineBorder(Color.CYAN));
 		
-		MonsterHpbar = new JProgressBar(0,100);
+		MonsterHpbar = new JProgressBar();
+		MonsterHpbar.setBounds(50, 2, 250, 20);
 		MonsterHpbar.setBorderPainted(false);
 		MonsterHpbar.setBackground(Color.WHITE);
 		MonsterHpbar.setForeground(Color.RED);
+		MonsterHpbar.setMinimum(0); // JProgressBar 최소값 0
+		MonsterHpbar.setStringPainted(true);
+		MonsterHpbar.setVisible(false); // setVisible 기본값은 false, 나중에 몹이 생성되면 그때 다시 true
 		
+		MonsterPanel.add(MonsterHpbar);
 		MonsterPanel.add(monsterimgLabel);
 		
 		// 로그(log)가 출력되는 패널
@@ -183,7 +225,7 @@ public class GameScreen extends JFrame{
 		logarea.setEditable(false);
 		logarea.setForeground(Color.WHITE);
 		logarea.setBackground(Color.BLACK);
-		logarea.setText("게임 시작");
+		logarea.setText("\n던전의 주인인 용을 무찌르고 당신의 가치를 증명하십시오.\n기사가 되기 위한 당신의 여정은 이제 시작입니다.\n\n");
 		logscroll = new JScrollPane(logarea);
 		logscroll.setBorder(new LineBorder(Color.BLACK));
 		logscroll.setBounds(25, 20, 400, 210);
@@ -213,18 +255,18 @@ public class GameScreen extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				// 1 ~ 3 분기 발생
 				switch(createRandom()) {
-				case 1:
+				case 1: // 전투 발생
 					battle = true; // 전투 발생 시 true로 전환, 해당 변수는 전투가 종료되면 다시 false로 바뀜
 					System.out.println("[info] 전투 발생");
-					writeLog("\ntest2");
+					createBattle(c_lv);
 					break;
 				case 2:
 					System.out.println("[info] 아이템 획득");
-					writeLog("\ntest1");
+					writeLog("test1\n");
 					break;
 				case 3:
 					System.out.println("[info] 특수 이벤트 발생");
-					writeLog("\ntest3");
+					writeLog("test3\n");
 					break;
 				}
 			}
@@ -412,5 +454,45 @@ public class GameScreen extends JFrame{
 	// 스텟 버튼 리턴(StatScreen 에서 사용)
 	public static JButton getStatbutton() {
 		return buttonstat;
+	}
+
+	// 전투 생성하는 메소드
+	public void createBattle(int level) {
+		if(level >= 1 && level <= 10) {
+			int swtichnum = createRandom()-1; // 0 ~ 2 랜덤
+			switch(swtichnum) {
+			case 0: // Skelwarrior
+				writeLog(lowmonsters.get(0).getM_name()+" 이/가 나타났다.\n");
+				current_monster_hp = lowmonsters.get(0).getM_hp(); // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
+				MonsterHpbar.setMaximum(lowmonsters.get(0).getM_hp()); // 체력바의 최대수치를 몹 체력으로 설정
+				MonsterHpbar.setValue(current_monster_hp);
+				MonsterHpbar.setString(String.valueOf(current_monster_hp));
+				MonsterHpbar.setVisible(true);
+				monsterimgLabel.setIcon(new ImageIcon(SKEL));
+				break;
+			case 1: // Orcwarrior
+				writeLog(lowmonsters.get(1).getM_name()+" 이/가 나타났다.\n");
+				current_monster_hp = lowmonsters.get(1).getM_hp(); // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
+				MonsterHpbar.setMaximum(lowmonsters.get(1).getM_hp()); // 체력바의 최대수치를 몹 체력으로 설정
+				MonsterHpbar.setValue(current_monster_hp);
+				MonsterHpbar.setString(String.valueOf(current_monster_hp));
+				MonsterHpbar.setVisible(true);
+				monsterimgLabel.setIcon(new ImageIcon(ORC));
+				break;
+			case 2: // Golem
+				writeLog(lowmonsters.get(2).getM_name()+" 이/가 나타났다.\n");
+				current_monster_hp = lowmonsters.get(2).getM_hp(); // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
+				MonsterHpbar.setMaximum(lowmonsters.get(2).getM_hp()); // 체력바의 최대수치를 몹 체력으로 설정
+				MonsterHpbar.setValue(current_monster_hp);
+				MonsterHpbar.setString(String.valueOf(current_monster_hp));
+				MonsterHpbar.setVisible(true);
+				monsterimgLabel.setIcon(new ImageIcon(GOLEM));
+				break;
+			}
+		}else if(level >=11 && level <= 20) {
+			System.out.println("[info] 캐릭터 등급 : 중급");
+		}else {
+			System.out.println("[info] 캐릭터 등급 : 고급");
+		}
 	}
 }
