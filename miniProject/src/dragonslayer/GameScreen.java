@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Arrays;
 import java.util.LinkedList;
 
 import javax.swing.ImageIcon;
@@ -103,9 +102,9 @@ public class GameScreen extends JFrame{
 	private DSService service = DSService.getInstance();
 	
 	/** 메소드 영역 **/
-	public static void main(String[] args) {
-		new GameScreen("test", 1, 1, 1, 1, 1);
-	}
+//	public static void main(String[] args) {
+//		new GameScreen("test", 1, 1, 1, 1, 1);
+//	}
 	
 	public GameScreen(String name, int s, int d, int i, int hp, int mp) {
 		System.out.println("[info] GameScreen() 호출");
@@ -229,7 +228,7 @@ public class GameScreen extends JFrame{
 		logarea.setForeground(Color.WHITE);
 		logarea.setBackground(Color.BLACK);
 		logarea.setText("게임 시작\n");
-		logarea.setText("\n축하합니다! 드디어 드래곤 레어를 발견하셨군요.\n사악한 드래곤을 무찌르고 최강의 드래곤 슬레이어가 되십시오.\n당신의 모험은 이제 시작입니다!!\n\n");
+		logarea.setText("\n모험이 시작되었습니다!\n사악한 드래곤을 무찌르고 최강의 드래곤 슬레이어가 되십시오.\n\n");
 		logscroll = new JScrollPane(logarea);
 		logscroll.setBorder(new LineBorder(Color.BLACK));
 		logscroll.setBounds(25, 20, 400, 210);
@@ -295,6 +294,7 @@ public class GameScreen extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				attack_player();
+				attack_monster();
 				
 			}
 		});
@@ -361,7 +361,7 @@ public class GameScreen extends JFrame{
 		buttonstat.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				new StatScreen(c_name,"모험가",1,1,1,1,1,1,1,50);
 				
 			}
 		});
@@ -478,6 +478,7 @@ public class GameScreen extends JFrame{
 		case 0: // Skelwarrior
 			writeLog(lowmonsters.get(0).getM_name()+" 이/가 나타났다.\n");
 			m_hp = lowmonsters.get(0).getM_hp();
+			m_name = lowmonsters.get(0).getM_name();
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(lowmonsters.get(0).getM_hp()); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp);
@@ -488,6 +489,7 @@ public class GameScreen extends JFrame{
 		case 1: // Orcwarrior
 			writeLog(lowmonsters.get(1).getM_name()+" 이/가 나타났다.\n");
 			m_hp = lowmonsters.get(1).getM_hp();
+			m_name = lowmonsters.get(1).getM_name();
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(lowmonsters.get(1).getM_hp()); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp);
@@ -498,6 +500,7 @@ public class GameScreen extends JFrame{
 		case 2: // Golem
 			writeLog(lowmonsters.get(2).getM_name()+" 이/가 나타났다.\n");
 			m_hp = lowmonsters.get(2).getM_hp();
+			m_name = lowmonsters.get(2).getM_name();
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(lowmonsters.get(2).getM_hp()); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp);
@@ -514,6 +517,7 @@ public class GameScreen extends JFrame{
 		case 0: // SkelKing
 			writeLog(lowmonsters.get(0).getM_name()+" 이/가 나타났다.\n");
 			m_hp = lowmonsters.get(0).getM_hp();
+			m_name = lowmonsters.get(0).getM_name();
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(lowmonsters.get(0).getM_hp()); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp);
@@ -523,6 +527,8 @@ public class GameScreen extends JFrame{
 			break;
 		case 1: // Hatchling
 			writeLog(lowmonsters.get(1).getM_name()+" 이/가 나타났다.\n");
+			m_hp = lowmonsters.get(1).getM_hp();
+			m_name = lowmonsters.get(1).getM_name();
 			current_monster_hp = lowmonsters.get(1).getM_hp(); // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(lowmonsters.get(1).getM_hp()); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp);
@@ -532,6 +538,8 @@ public class GameScreen extends JFrame{
 			break;
 		case 2: // Lagiacrus
 			writeLog(lowmonsters.get(2).getM_name()+" 이/가 나타났다.\n");
+			m_hp = lowmonsters.get(2).getM_hp();
+			m_name = lowmonsters.get(2).getM_name();
 			current_monster_hp = lowmonsters.get(2).getM_hp(); // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(lowmonsters.get(2).getM_hp()); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp);
@@ -548,6 +556,7 @@ public class GameScreen extends JFrame{
 		case 0: // Drake
 			writeLog(lowmonsters.get(0).getM_name()+" 이/가 나타났다.\n");
 			m_hp = lowmonsters.get(0).getM_hp();
+			m_name = lowmonsters.get(0).getM_name();
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(lowmonsters.get(0).getM_hp()); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp);
@@ -557,6 +566,8 @@ public class GameScreen extends JFrame{
 			break;
 		case 1: // Chimera
 			writeLog(lowmonsters.get(1).getM_name()+" 이/가 나타났다.\n");
+			m_hp = lowmonsters.get(1).getM_hp();
+			m_name = lowmonsters.get(1).getM_name();
 			current_monster_hp = lowmonsters.get(1).getM_hp(); // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(lowmonsters.get(1).getM_hp()); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp);
@@ -566,6 +577,8 @@ public class GameScreen extends JFrame{
 			break;
 		case 2: // IceDragon
 			writeLog(lowmonsters.get(2).getM_name()+" 이/가 나타났다.\n");
+			m_hp = lowmonsters.get(2).getM_hp();
+			m_name = lowmonsters.get(2).getM_name();
 			current_monster_hp = lowmonsters.get(2).getM_hp(); // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(lowmonsters.get(2).getM_hp()); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp);
@@ -578,13 +591,31 @@ public class GameScreen extends JFrame{
 	
 	// 플레이어 공격 메소드
 	public void attack_player() {
-		writeLog("'" + c_name + "' 의 공격!");
+		writeLog("'" + c_name + "' 의 공격!\n");
 		int damage = playeratk - monsterdef; // 데미지는 플레이어 공격력 - 몬스터 방어력
 		if(damage <= 0) { // 플레이어 공격력 - 몬스터 방어력의 결과가 0보다 작거나 같을 경우 (= 몬스터의 방어력이 플레이어 공격력보다 높을 경우)
 			damage = 1; // 최소 데미지 1이 적용되도록 설정함.
 			current_monster_hp -= damage; // damage 수치만큼 몬스터 현재 체력 감소
-			writeLog("'" + c_name + "' (은/는) " + m_name + " 에게 " + damage + " 의 피해를 입혔다!");
-			writeLog(m_name + "의 현재 남은 체력 " + current_monster_hp + " / " + m_hp + "\n");
+			writeLog("'" + c_name + "' (은/는) " + m_name + " 에게 " + damage + " 의 피해를 입혔다!\n");
+		} else {
+			int randomdamage = (int) (Math.random() * damage) + 1; // 1 ~ 플레이어 데미지 사이의 랜덤데미지 결정
+			current_monster_hp -= randomdamage; // randomdamage 수치만큼 몹 현재 체력 감소
+			writeLog("'" + c_name + "' (은/는) " + m_name + " 에게 " + randomdamage + " 의 피해를 입혔다!\n");
+		}
+	}
+	
+	// 몬스터 공격 메소드
+	public void attack_monster() {
+		writeLog("'" + m_name + "' 의 공격!\n");
+		int damage = monsteratk - playerdef; // 데미지는 몬스터 공격력 - 플레이어 방어력
+		if(damage <= 0) { // 몬스터 공격력 - 플레이어 방어력의 결과가 0보다 작거나 같을 경우 (= 플레이어의 방어력이 몬스터의 공격력보다 높을 경우)
+			damage = 1;
+			current_user_hp -= damage; // damage 수치만큼 플레이어 현재 체력 감소
+			writeLog("'" + m_name + "' (은/는) " + c_name + " 에게 " + damage + " 의 피해를 입혔다!\n");
+		} else {
+			int randomdamage = (int) (Math.random() * damage) + 1; // 1 ~ 몬스터 데미지 사이의 랜덤데미지 결정
+			current_user_hp -= randomdamage; // randomdamage 수치만큼 플레이어 현재 체력 감
+			writeLog("'" + m_name + "' (은/는) " + c_name + " 에게 " + randomdamage + " 의 피해를 입혔다!\n");
 		}
 	}
 }
