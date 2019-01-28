@@ -52,14 +52,14 @@ public class GameScreen extends JFrame{
 	private final static Image GOLEM = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/low_grade/3_golem_resize.png");
 	
 	// 몹 이미지들(중급)
-	private final static Image SKELKING = null;
-	private final static Image HATCHLING = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/2.2_Hatchling_resize.png");
-	private final static Image LAGIA = null;
+	private final static Image SKELKING = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/middle_grade/1_skel_king_resize.png");
+	private final static Image HATCHLING = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/middle_grade/2_Hatchling_resize.png");
+	private final static Image LAGIA = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/middle_grade/3_Lagiacrus_resize.png");
 	
 	// 몹 이미지들(고급)
-	private final static Image DRAKE = null;
-	private final static Image CHIMERA = null;
-	private final static Image ICEDRAGON = null;
+	private final static Image DRAKE = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/high_grade/1_Drake_resize.png");
+	private final static Image CHIMERA = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/high_grade/2_Chimera_resize.png");
+	private final static Image ICEDRAGON = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/high_grade/3_Ice_dragon_resize.png");
 	
 	// 버튼 패널 & 로그 패널 배경(테두리)
 	private final static Image LOGBACKGROUND = Toolkit.getDefaultToolkit().createImage("resource/images/background/LogPanelBorder.png");
@@ -179,7 +179,7 @@ public class GameScreen extends JFrame{
 		playerHpbar.setValue(current_user_hp); // 값은 현재 플레이어 체력
 		playerHpbar.setBounds(10, 10, 180, 15);
 		playerHpbar.setStringPainted(true);
-		playerHpbar.setString(current_user_hp+" / "+c_hp); // JProgressBar 안에 문자열 값 지정
+		playerHpbar.setString(current_user_hp+" / "+c_hp); // JProgressBar 안에 문자열 값 지정(현재 체력 / 총 체력)
 		
 		playerMpbar = new JProgressBar(0, c_mp); // 플레이어 캐릭터 마나바
 		playerMpbar.setBorderPainted(false);
@@ -201,7 +201,7 @@ public class GameScreen extends JFrame{
 		MonsterPanel.setBorder(new LineBorder(Color.RED));
 		MonsterPanel.setOpaque(false);
 		
-		monsterimgLabel = new JLabel(new ImageIcon(HATCHLING));
+		monsterimgLabel = new JLabel();
 		monsterimgLabel.setBounds(10, 25, 330, 290);
 		monsterimgLabel.setBorder(new LineBorder(Color.CYAN));
 		
@@ -255,6 +255,12 @@ public class GameScreen extends JFrame{
 		buttonsearch.addActionListener(new ActionListener() {
 			// 탐색 버튼을 눌렸을 시 3가지의 이벤트 중 무작위로 하나가 발생됨(전투,습득,특수이벤트)
 			public void actionPerformed(ActionEvent e) {
+				// battle이 true인 경우(전투 발생) 탐색불가. 전투 종료 후 탐색 재개 가능
+				if(battle) {
+					JLabel message = new JLabel("<html><p style='font-size:14pt; font-family:맑은 고딕;'>전투 중에는 탐색이 불가능합니다.</p></html>");
+					JOptionPane.showMessageDialog(null, message, "탐색", JOptionPane.WARNING_MESSAGE, null);
+					return;
+				}
 				// 1 ~ 3 분기 발생
 				switch(createRandom()) {
 				case 1: // 전투 발생
@@ -293,7 +299,11 @@ public class GameScreen extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				
+				if(!battle) {
+					JLabel message = new JLabel("<html><p style='font-size:14pt; font-family:맑은 고딕;'>적이 없으면 공격이 불가능합니다.</p></html>");
+					JOptionPane.showMessageDialog(null, message, "공격", JOptionPane.WARNING_MESSAGE, null);
+					return;
+				}
 			}
 		});
 		ButtonPanel.add(buttonattack);
