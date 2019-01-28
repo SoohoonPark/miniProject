@@ -32,6 +32,7 @@ public class MakeCharacter extends JFrame{
 	private static JTextField txtname; // 캐릭터명 입력란
 	private static JButton btnStart, btnCancel; // 시작버튼, 취소버튼
 //	private final static int STR = 10, DEX = 10, INT = 10, HP = 100, MP = 50; // 다음 화면으로 넘길 상수값
+//	private final static String JOB = "모험가";
 	
 	public MakeCharacter() {
 		System.out.println("[info] MakeCharacter() 실행");
