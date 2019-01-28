@@ -17,9 +17,11 @@ public class LoadingScreen extends JFrame {
 	private Image loading = Toolkit.getDefaultToolkit().createImage("resource/images/background/LoadingScreen.png");
 	private Image iconimage = Toolkit.getDefaultToolkit().createImage("resource/images/title/titleicon.png");
 	private JProgressBar loadingbar;
+	
 	private String name;
 	private final static int STR = 10, DEX = 10, INT = 10, HP = 100, MP = 50; 
 	private final static String JOB = "모험가";
+
 	
 //	public static void main(String[] args) {
 //		new LoadingScreen("test");
@@ -51,7 +53,7 @@ public class LoadingScreen extends JFrame {
 		UIManager.put("ProgressBar.selectionBackground", Color.GRAY); // bar가 채워지기 전 글자 색
 		UIManager.put("ProgressBar.selectionForeground", Color.GRAY); // bar가 채워진 후 글자 색
 		loadingbar = new JProgressBar(0, 100);
-		loadingbar.setBounds(600, 400, 250, 15);
+		loadingbar.setBounds(600, 400, 250, 18);
 		loadingbar.setBorder(new LineBorder(Color.WHITE));
 		loadingbar.setValue(0);
 		loadingbar.setStringPainted(true);
@@ -73,7 +75,7 @@ public class LoadingScreen extends JFrame {
 						loadingbar.setValue(loading);
 						if(loading == 100) {
 							Thread.sleep(500);
-							new GameScreen(name,JOB,STR,DEX,INT,HP,MP);
+							new GameScreen(name,JOB,STR,DEX,INT,HP,MP); // 게임스크린 클래스에 캐릭터명,직업,힘,민첩,지능,체력,마나 값을 넘김.
 							dispose();
 							Thread.currentThread().interrupt();	// loadingbar가 100이 되면 스레드 정지
 							System.out.println("[info] loading Thread is interrupted!");
