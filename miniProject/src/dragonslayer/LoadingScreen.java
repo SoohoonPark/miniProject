@@ -21,9 +21,10 @@ public class LoadingScreen extends JFrame {
 	private final static int STR = 10, DEX = 10, INT = 10, HP = 100, MP = 50; 
 	private final static String JOB = "¸ðÇè°¡";
 	
-	public static void main(String[] args) {
-		new LoadingScreen("test");
-	}
+//	public static void main(String[] args) {
+//		new LoadingScreen("test");
+//	}
+	
 	public LoadingScreen(String n) {
 		this.name = n;
 		CreateLoadingScreen();
@@ -53,12 +54,10 @@ public class LoadingScreen extends JFrame {
 		loadingbar.setBounds(600, 400, 250, 15);
 		loadingbar.setBorder(new LineBorder(Color.WHITE));
 		loadingbar.setValue(0);
-		loadingbar.setStringPainted(false);
+		loadingbar.setStringPainted(true);
 		
 		layer.add(mainimageLabel, new Integer(1));
 		layer.add(loadingbar, new Integer(2));
-		
-		
 	}
 	
 	void loadingbarThread() {
