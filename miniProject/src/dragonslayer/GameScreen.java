@@ -84,6 +84,7 @@ public class GameScreen extends JFrame{
 	/** 필드 영역 **/
 	private String c_name, m_name, c_job; // 캐릭터명 & 몬스터이름
 	private int c_lv, c_str, c_dex, c_int, c_hp, c_mp, c_exp, c_next_exp; // 캐릭터 스탯 관련 정보 (스탯창 열었을때 보여줌)
+	private int c_atk, c_def, m_Atk, m_Def; // 캐릭터 공격력&방어력, 몹 공격력&방어력
 	private int current_user_hp, current_user_mp, current_monster_hp, m_hp; // 현재 플레이어 체력 & 몹 체력 & 몹 최대체력
 	private Boolean battle = false; // 전투 발생을 알려주는 변수. 전투 발생 시 true로 전환(기본값 false)
 	private LinkedList<DSMonsters> lowmonsters = null; // 초급몹정보가 저장돼있는 LinkedList
@@ -102,25 +103,20 @@ public class GameScreen extends JFrame{
 	private DSService service = DSService.getInstance();
 	
 	/** 메소드 영역 **/
-
-
-//	public static void main(String[] args) {
-//		new GameScreen("test", 1, 1, 1, 1, 1);
-//	}
-
-	
 	public GameScreen(String name, String job, int s, int d, int i, int hp, int mp) {
 		System.out.println("[info] GameScreen() 호출");
 		this.c_name = name; // 캐릭터명
 		this.c_job = job; // 직업
 		this.c_lv = 1; // 1레벨
 		this.c_str = s; // 힘
+		this.c_atk = c_str/2; // 캐릭터 공격력은 힘/2
 		this.c_dex = d; // 민첩
+		this.c_def = c_dex/5; // 캐릭터 방어력은 민첩/5
 		this.c_int = i; // 지능
 		
 		this.c_hp = hp; // 체력
 		this.current_user_hp = c_hp; // 플레이어 현재 체력
-		this.c_mp = mp; // 마나
+		this.c_mp = mp+(c_int*2); // 마나는 기본 마나값 + 지능*2
 		this.current_user_mp = c_mp; // 플레이어 현재 마나
 		
 		this.c_exp = 0; // 초기 경험치 보유량 0
@@ -149,6 +145,8 @@ public class GameScreen extends JFrame{
 		setLocationRelativeTo(null);
 		getContentPane().setBackground(Color.BLACK);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		System.out.println(getLocation().x);
+		System.out.println(getLocation().y);
 		setResizable(false);
 		
 		// 레이어 설정
@@ -377,7 +375,8 @@ public class GameScreen extends JFrame{
 		buttonstat.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new StatScreen(c_name, c_job, c_lv, c_str, c_dex, c_int, c_str/2, c_dex/5, c_exp, c_next_exp);
+				new StatScreen(c_name, c_job, c_lv, c_str, c_dex, c_int, c_atk, c_def, c_exp, c_next_exp);
+				buttonstat.setEnabled(false);
 			}
 		});
 		ButtonPanel.add(buttonstat);
