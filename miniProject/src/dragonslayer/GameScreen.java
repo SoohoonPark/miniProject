@@ -378,7 +378,6 @@ public class GameScreen extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				new StatScreen(c_name, c_job, c_lv, c_str, c_dex, c_int, c_str/2, c_dex/5, c_exp, c_next_exp);
-				new StatScreen(c_name,"¸ðÇè°¡",1,1,1,1,1,1,1,50);
 			}
 		});
 		ButtonPanel.add(buttonstat);
