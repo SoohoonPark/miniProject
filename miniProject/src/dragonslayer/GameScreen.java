@@ -48,7 +48,7 @@ public class GameScreen extends JFrame{
 	
 	// 몹 이미지들(초급)
 	private final static Image SKEL = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/low_grade/1_skel_warrior_resize.png");
-	private final static Image ORC = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/low_grade/2_orc_warrior_resize.png");
+	private final static Image ORC = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/low_grade/2_orc_warrior_resized.png");
 	private final static Image GOLEM = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/low_grade/3_golem_resize.png");
 	
 	// 몹 이미지들(중급)
@@ -84,7 +84,7 @@ public class GameScreen extends JFrame{
 	
 	/** 필드 영역 **/
 	private String c_name; // 캐릭터명
-	private int c_lv, c_str, c_dex, c_int, c_hp, c_mp, c_exp, c_next_exp; // 캐릭터 스탯 관련 정보 (스탯창 열었을때 보여줌)
+	private int c_lv, c_str, c_dex, c_int, c_hp, c_mp, c_exp, c_next_exp, m_hp; // 캐릭터 스탯 관련 정보 (스탯창 열었을때 보여줌)
 	private int current_user_hp, current_user_mp, current_monster_hp; // 현재 플레이어 체력 & 몹 체력
 	private Boolean battle = false; // 전투 발생을 알려주는 변수. 전투 발생 시 true로 전환(기본값 false)
 	private LinkedList<DSMonsters> lowmonsters = null; // 초급몹정보가 저장돼있는 LinkedList
@@ -460,39 +460,107 @@ public class GameScreen extends JFrame{
 	public void createBattle(int level) {
 		if(level >= 1 && level <= 10) {
 			int swtichnum = createRandom()-1; // 0 ~ 2 랜덤
-			switch(swtichnum) {
-			case 0: // Skelwarrior
-				writeLog(lowmonsters.get(0).getM_name()+" 이/가 나타났다.\n");
-				current_monster_hp = lowmonsters.get(0).getM_hp(); // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
-				MonsterHpbar.setMaximum(lowmonsters.get(0).getM_hp()); // 체력바의 최대수치를 몹 체력으로 설정
-				MonsterHpbar.setValue(current_monster_hp);
-				MonsterHpbar.setString(String.valueOf(current_monster_hp));
-				MonsterHpbar.setVisible(true);
-				monsterimgLabel.setIcon(new ImageIcon(SKEL));
-				break;
-			case 1: // Orcwarrior
-				writeLog(lowmonsters.get(1).getM_name()+" 이/가 나타났다.\n");
-				current_monster_hp = lowmonsters.get(1).getM_hp(); // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
-				MonsterHpbar.setMaximum(lowmonsters.get(1).getM_hp()); // 체력바의 최대수치를 몹 체력으로 설정
-				MonsterHpbar.setValue(current_monster_hp);
-				MonsterHpbar.setString(String.valueOf(current_monster_hp));
-				MonsterHpbar.setVisible(true);
-				monsterimgLabel.setIcon(new ImageIcon(ORC));
-				break;
-			case 2: // Golem
-				writeLog(lowmonsters.get(2).getM_name()+" 이/가 나타났다.\n");
-				current_monster_hp = lowmonsters.get(2).getM_hp(); // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
-				MonsterHpbar.setMaximum(lowmonsters.get(2).getM_hp()); // 체력바의 최대수치를 몹 체력으로 설정
-				MonsterHpbar.setValue(current_monster_hp);
-				MonsterHpbar.setString(String.valueOf(current_monster_hp));
-				MonsterHpbar.setVisible(true);
-				monsterimgLabel.setIcon(new ImageIcon(GOLEM));
-				break;
-			}
+
 		}else if(level >=11 && level <= 20) {
 			System.out.println("[info] 캐릭터 등급 : 중급");
 		}else {
 			System.out.println("[info] 캐릭터 등급 : 고급");
+		}
+	}
+	public void monsterstatement_low level(int swtichnum) {
+		switch(swtichnum) {
+		case 0: // Skelwarrior
+			writeLog(lowmonsters.get(0).getM_name()+" 이/가 나타났다.\n");
+			m_hp = lowmonsters.get(0).getM_hp();
+			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
+			MonsterHpbar.setMaximum(lowmonsters.get(0).getM_hp()); // 체력바의 최대수치를 몹 체력으로 설정
+			MonsterHpbar.setValue(current_monster_hp);
+			MonsterHpbar.setString(String.valueOf(current_monster_hp)+" / "+m_hp);
+			MonsterHpbar.setVisible(true);
+			monsterimgLabel.setIcon(new ImageIcon(SKEL));
+			break;
+		case 1: // Orcwarrior
+			writeLog(lowmonsters.get(1).getM_name()+" 이/가 나타났다.\n");
+			current_monster_hp = lowmonsters.get(1).getM_hp(); // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
+			MonsterHpbar.setMaximum(lowmonsters.get(1).getM_hp()); // 체력바의 최대수치를 몹 체력으로 설정
+			MonsterHpbar.setValue(current_monster_hp);
+			MonsterHpbar.setString(String.valueOf(current_monster_hp));
+			MonsterHpbar.setVisible(true);
+			monsterimgLabel.setIcon(new ImageIcon(ORC));
+			break;
+		case 2: // Golem
+			writeLog(lowmonsters.get(2).getM_name()+" 이/가 나타났다.\n");
+			current_monster_hp = lowmonsters.get(2).getM_hp(); // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
+			MonsterHpbar.setMaximum(lowmonsters.get(2).getM_hp()); // 체력바의 최대수치를 몹 체력으로 설정
+			MonsterHpbar.setValue(current_monster_hp);
+			MonsterHpbar.setString(String.valueOf(current_monster_hp));
+			MonsterHpbar.setVisible(true);
+			monsterimgLabel.setIcon(new ImageIcon(GOLEM));
+			break;
+		}
+	}
+	public void monsterstatement_middle level(int swtichnum) {
+		switch(swtichnum) {
+		case 0: // Skelwarrior
+			writeLog(lowmonsters.get(0).getM_name()+" 이/가 나타났다.\n");
+			m_hp = lowmonsters.get(0).getM_hp();
+			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
+			MonsterHpbar.setMaximum(lowmonsters.get(0).getM_hp()); // 체력바의 최대수치를 몹 체력으로 설정
+			MonsterHpbar.setValue(current_monster_hp);
+			MonsterHpbar.setString(String.valueOf(current_monster_hp)+" / "+m_hp);
+			MonsterHpbar.setVisible(true);
+			monsterimgLabel.setIcon(new ImageIcon(SKEL));
+			break;
+		case 1: // Orcwarrior
+			writeLog(lowmonsters.get(1).getM_name()+" 이/가 나타났다.\n");
+			current_monster_hp = lowmonsters.get(1).getM_hp(); // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
+			MonsterHpbar.setMaximum(lowmonsters.get(1).getM_hp()); // 체력바의 최대수치를 몹 체력으로 설정
+			MonsterHpbar.setValue(current_monster_hp);
+			MonsterHpbar.setString(String.valueOf(current_monster_hp));
+			MonsterHpbar.setVisible(true);
+			monsterimgLabel.setIcon(new ImageIcon(ORC));
+			break;
+		case 2: // Golem
+			writeLog(lowmonsters.get(2).getM_name()+" 이/가 나타났다.\n");
+			current_monster_hp = lowmonsters.get(2).getM_hp(); // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
+			MonsterHpbar.setMaximum(lowmonsters.get(2).getM_hp()); // 체력바의 최대수치를 몹 체력으로 설정
+			MonsterHpbar.setValue(current_monster_hp);
+			MonsterHpbar.setString(String.valueOf(current_monster_hp));
+			MonsterHpbar.setVisible(true);
+			monsterimgLabel.setIcon(new ImageIcon(GOLEM));
+			break;
+		}
+	}
+	public void monsterstatement_high level(int swtichnum) {
+		switch(swtichnum) {
+		case 0: // Skelwarrior
+			writeLog(lowmonsters.get(0).getM_name()+" 이/가 나타났다.\n");
+			m_hp = lowmonsters.get(0).getM_hp();
+			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
+			MonsterHpbar.setMaximum(lowmonsters.get(0).getM_hp()); // 체력바의 최대수치를 몹 체력으로 설정
+			MonsterHpbar.setValue(current_monster_hp);
+			MonsterHpbar.setString(String.valueOf(current_monster_hp)+" / "+m_hp);
+			MonsterHpbar.setVisible(true);
+			monsterimgLabel.setIcon(new ImageIcon(SKEL));
+			break;
+		case 1: // Orcwarrior
+			writeLog(lowmonsters.get(1).getM_name()+" 이/가 나타났다.\n");
+			current_monster_hp = lowmonsters.get(1).getM_hp(); // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
+			MonsterHpbar.setMaximum(lowmonsters.get(1).getM_hp()); // 체력바의 최대수치를 몹 체력으로 설정
+			MonsterHpbar.setValue(current_monster_hp);
+			MonsterHpbar.setString(String.valueOf(current_monster_hp));
+			MonsterHpbar.setVisible(true);
+			monsterimgLabel.setIcon(new ImageIcon(ORC));
+			break;
+		case 2: // Golem
+			writeLog(lowmonsters.get(2).getM_name()+" 이/가 나타났다.\n");
+			current_monster_hp = lowmonsters.get(2).getM_hp(); // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
+			MonsterHpbar.setMaximum(lowmonsters.get(2).getM_hp()); // 체력바의 최대수치를 몹 체력으로 설정
+			MonsterHpbar.setValue(current_monster_hp);
+			MonsterHpbar.setString(String.valueOf(current_monster_hp));
+			MonsterHpbar.setVisible(true);
+			monsterimgLabel.setIcon(new ImageIcon(GOLEM));
+			break;
 		}
 	}
 }
