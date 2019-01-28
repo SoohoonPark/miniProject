@@ -60,8 +60,6 @@ public class StatScreen extends JFrame{
 		lbl_cJobLv.setBounds(20, 50, 240, 40);
 		namelvjob.add(lbl_cJobLv);
 		
-		
-		
 		layer.add(namelvjob, new Integer(1));
 		setVisible(true);
 	}
