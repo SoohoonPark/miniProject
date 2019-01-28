@@ -83,9 +83,9 @@ public class GameScreen extends JFrame{
 	private final static Image LOGO = Toolkit.getDefaultToolkit().createImage("resource/images/background/logo.png");
 	
 	/** 필드 영역 **/
-	private String c_name; // 캐릭터명
-	private int c_lv, c_str, c_dex, c_int, c_hp, c_mp, c_exp, c_next_exp, m_hp; // 캐릭터 스탯 관련 정보 (스탯창 열었을때 보여줌)
-	private int current_user_hp, current_user_mp, current_monster_hp; // 현재 플레이어 체력 & 몹 체력
+	private String c_name, m_name; // 캐릭터명 & 몬스터이름
+	private int c_lv, c_str, c_dex, c_int, c_hp, c_mp, c_exp, c_next_exp; // 캐릭터 스탯 관련 정보 (스탯창 열었을때 보여줌)
+	private int current_user_hp, current_user_mp, current_monster_hp, m_hp; // 현재 플레이어 체력 & 몹 체력 & 몹 최대체력
 	private Boolean battle = false; // 전투 발생을 알려주는 변수. 전투 발생 시 true로 전환(기본값 false)
 	private LinkedList<DSMonsters> lowmonsters = null; // 초급몹정보가 저장돼있는 LinkedList
 	private LinkedList<DSMonsters> middlemonsters = null; // 중급몹정보가 저장돼있는 LinkedList
@@ -98,6 +98,8 @@ public class GameScreen extends JFrame{
 	private static JScrollPane logscroll;
 	private static JProgressBar playerHpbar, playerMpbar, MonsterHpbar; // 플레이어 체력막대,마나막대, 몹 체력막대
 	
+	private static int playeratk, playerdef;	// 플레이어 공격력, 방어력
+	private static int monsteratk, monsterdef;	// 몬스터 공격력, 방어력
 	private DSService service = DSService.getInstance();
 	
 	/** 메소드 영역 **/
@@ -227,7 +229,7 @@ public class GameScreen extends JFrame{
 		logarea.setForeground(Color.WHITE);
 		logarea.setBackground(Color.BLACK);
 		logarea.setText("게임 시작\n");
-		logarea.setText("\n던전의 주인인 용을 무찌르고 당신의 가치를 증명하십시오.\n기사가 되기 위한 당신의 여정은 이제 시작입니다.\n\n");
+		logarea.setText("\n축하합니다! 드디어 드래곤 레어를 발견하셨군요.\n사악한 드래곤을 무찌르고 최강의 드래곤 슬레이어가 되십시오.\n당신의 모험은 이제 시작입니다!!\n\n");
 		logscroll = new JScrollPane(logarea);
 		logscroll.setBorder(new LineBorder(Color.BLACK));
 		logscroll.setBounds(25, 20, 400, 210);
@@ -292,7 +294,7 @@ public class GameScreen extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				attack_player();
 				
 			}
 		});
@@ -571,6 +573,18 @@ public class GameScreen extends JFrame{
 			MonsterHpbar.setVisible(true);
 			monsterimgLabel.setIcon(new ImageIcon(ICEDRAGON));
 			break;
+		}
+	}
+	
+	// 플레이어 공격 메소드
+	public void attack_player() {
+		writeLog("'" + c_name + "' 의 공격!");
+		int damage = playeratk - monsterdef; // 데미지는 플레이어 공격력 - 몬스터 방어력
+		if(damage <= 0) { // 플레이어 공격력 - 몬스터 방어력의 결과가 0보다 작거나 같을 경우 (= 몬스터의 방어력이 플레이어 공격력보다 높을 경우)
+			damage = 1; // 최소 데미지 1이 적용되도록 설정함.
+			current_monster_hp -= damage; // damage 수치만큼 몬스터 현재 체력 감소
+			writeLog("'" + c_name + "' (은/는) " + m_name + " 에게 " + damage + " 의 피해를 입혔다!");
+			writeLog(m_name + "의 현재 남은 체력 " + current_monster_hp + " / " + m_hp + "\n");
 		}
 	}
 }
