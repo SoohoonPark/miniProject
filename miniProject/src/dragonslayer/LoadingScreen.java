@@ -48,7 +48,7 @@ public class LoadingScreen extends JFrame {
 		UIManager.put("ProgressBar.selectionBackground", Color.GRAY); // bar가 채워지기 전 글자 색
 		UIManager.put("ProgressBar.selectionForeground", Color.GRAY); // bar가 채워진 후 글자 색
 		loadingbar = new JProgressBar(0, 100);
-		loadingbar.setBounds(600, 400, 250, 15);
+		loadingbar.setBounds(600, 400, 250, 18);
 		loadingbar.setBorder(new LineBorder(Color.WHITE));
 		loadingbar.setValue(0);
 		loadingbar.setStringPainted(true);

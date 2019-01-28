@@ -299,7 +299,6 @@ public class GameScreen extends JFrame{
 			}
 		});
 		buttonattack.addActionListener(new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
@@ -312,7 +311,6 @@ public class GameScreen extends JFrame{
 				// Timer 클래스를 통한 메소드 실행 딜레이를 줄 수가 있다.
 				Timer mAttack = new Timer();
 				TimerTask mAttackTask = new TimerTask() {
-					
 					@Override
 					public void run() {
 						// TODO Auto-generated method stub
@@ -547,10 +545,10 @@ public class GameScreen extends JFrame{
 		switch(swtichnum) {
 		case 0: // SkelKing
 			writeLog(middlemonsters.get(swtichnum).getM_name()+" 이/가 나타났다.\n");
-			m_hp = middlemonsters.get(swtichnum).getM_hp();
-			m_name = middlemonsters.get(swtichnum).getM_name();
-			monsteratk = middlemonsters.get(swtichnum).getM_atk();
-			monsterdef = middlemonsters.get(swtichnum).getM_def();
+			m_hp = middlemonsters.get(swtichnum).getM_hp(); // 몹 체력
+			m_name = middlemonsters.get(swtichnum).getM_name(); // 몹 이름
+			monsteratk = middlemonsters.get(swtichnum).getM_atk(); // 몹 공격력
+			monsterdef = middlemonsters.get(swtichnum).getM_def(); // 몹 방어력
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp);
@@ -603,6 +601,7 @@ public class GameScreen extends JFrame{
 			MonsterHpbar.setVisible(true);
 			monsterimgLabel.setIcon(new ImageIcon(DRAKE));
 			break;
+			
 		case 1: // Chimera
 			writeLog(highmonsters.get(swtichnum).getM_name()+" 이/가 나타났다.\n");
 			m_hp = highmonsters.get(swtichnum).getM_hp();
@@ -616,6 +615,7 @@ public class GameScreen extends JFrame{
 			MonsterHpbar.setVisible(true);
 			monsterimgLabel.setIcon(new ImageIcon(CHIMERA));
 			break;
+			
 		case 2: // IceDragon
 			writeLog(highmonsters.get(swtichnum).getM_name()+" 이/가 나타났다.\n");
 			m_hp = highmonsters.get(swtichnum).getM_hp();
