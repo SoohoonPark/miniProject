@@ -424,9 +424,6 @@ public class GameScreen extends JFrame{
 		layer.add(ButtonPanel,new Integer(4));
 		
 		setVisible(true);
-		
-		System.out.println(getLocation().getX());
-		System.out.println(getLocation().getY());
 	}
 	
 	// 1 ~ 3 랜덤 숫자 발생시키는 메소드
@@ -463,41 +460,13 @@ public class GameScreen extends JFrame{
 
 	// 전투 생성하는 메소드
 	public void createBattle(int level) {
+		int switchnum = createRandom()-1; // 0 ~ 2 랜덤
 		if(level >= 1 && level <= 10) {
-			int swtichnum = createRandom()-1; // 0 ~ 2 랜덤
-			switch(swtichnum) {
-			case 0: // Skelwarrior
-				writeLog(lowmonsters.get(0).getM_name()+" 이/가 나타났다.\n");
-				current_monster_hp = lowmonsters.get(0).getM_hp(); // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
-				MonsterHpbar.setMaximum(lowmonsters.get(0).getM_hp()); // 체력바의 최대수치를 몹 체력으로 설정
-				MonsterHpbar.setValue(current_monster_hp);
-				MonsterHpbar.setString(String.valueOf(current_monster_hp));
-				MonsterHpbar.setVisible(true);
-				monsterimgLabel.setIcon(new ImageIcon(SKEL));
-				break;
-			case 1: // Orcwarrior
-				writeLog(lowmonsters.get(1).getM_name()+" 이/가 나타났다.\n");
-				current_monster_hp = lowmonsters.get(1).getM_hp(); // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
-				MonsterHpbar.setMaximum(lowmonsters.get(1).getM_hp()); // 체력바의 최대수치를 몹 체력으로 설정
-				MonsterHpbar.setValue(current_monster_hp);
-				MonsterHpbar.setString(String.valueOf(current_monster_hp));
-				MonsterHpbar.setVisible(true);
-				monsterimgLabel.setIcon(new ImageIcon(ORC));
-				break;
-			case 2: // Golem
-				writeLog(lowmonsters.get(2).getM_name()+" 이/가 나타났다.\n");
-				current_monster_hp = lowmonsters.get(2).getM_hp(); // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
-				MonsterHpbar.setMaximum(lowmonsters.get(2).getM_hp()); // 체력바의 최대수치를 몹 체력으로 설정
-				MonsterHpbar.setValue(current_monster_hp);
-				MonsterHpbar.setString(String.valueOf(current_monster_hp));
-				MonsterHpbar.setVisible(true);
-				monsterimgLabel.setIcon(new ImageIcon(GOLEM));
-				break;
-			}
+			
 		}else if(level >=11 && level <= 20) {
-			System.out.println("[info] 캐릭터 등급 : 중급");
+			
 		}else {
-			System.out.println("[info] 캐릭터 등급 : 고급");
+			
 		}
 	}
 }
