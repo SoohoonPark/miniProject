@@ -7,8 +7,8 @@ import java.sql.SQLException;
 
 // DB에 접근하고 처리하는 DAO 클래스
 public class DSDAO {
-	private static PreparedStatement pstmt = null;
 	private static ResultSet rs = null;
+	private static PreparedStatement pstmt = null;
 	
 	// 몹 정보를 가져와서 결과(rs)를 Service로 넘겨줌.
 	public static ResultSet getMonsterData(Connection conn, String grade) {	
@@ -21,7 +21,6 @@ public class DSDAO {
 			System.out.println("[Error] SQL 처리 예외 발생(getMonster)");
 			System.out.println(sql.getMessage());
 		}
-		
 		return rs;
 	}
 	
@@ -31,6 +30,7 @@ public class DSDAO {
 			String query = "SELECT * FROM ITEMS";
 			pstmt = conn.prepareStatement(query);
 			rs = pstmt.executeQuery();
+			
 		}catch(SQLException sql) {
 			System.out.println("[Error] SQL 처리 예외 발생(getItem)");
 			System.out.println(sql.getMessage());
@@ -38,7 +38,7 @@ public class DSDAO {
 		return rs;
 	}
 	
-	public static PreparedStatement getPstmt() {
+	public static PreparedStatement getpstmt() {
 		return pstmt;
 	}
 }

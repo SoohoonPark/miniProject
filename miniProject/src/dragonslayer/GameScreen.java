@@ -96,6 +96,7 @@ public class GameScreen extends JFrame{
 	private LinkedList<DSMonsters> middlemonsters = null; // 중급몹정보가 저장돼있는 LinkedList
 	private LinkedList<DSMonsters> highmonsters = null; // 고급몹정보가 저장돼있는 LinkedList
 	private LinkedList<DSItems> iteminfo = null; // 게임 내 아이템 정보가 담겨 있는 iteminfo
+	private String[] dropitem = null; // 몹이 드랍하는 아이템이 저장되어있는 String 배열
 	private LinkedList<DSItems> inven = null; // 플레이어 인벤토리 내용물
 	
 	private static JButton buttonsearch, buttonattack, buttoninven, buttonequip, buttonstat, buttonskill, buttonexit;
@@ -108,7 +109,7 @@ public class GameScreen extends JFrame{
 	
 	private int playeratk, playerdef;	// 플레이어 공격력, 방어력
 	private int monsteratk, monsterdef;	// 몬스터 공격력, 방어력
-	private DSService service = DSService.getInstance();
+	private DSService service = new DSService();
 	
 	public static void main(String[] args) {
 		new GameScreen("춘식이","모험가",10,10,10,100,80);
@@ -333,8 +334,8 @@ public class GameScreen extends JFrame{
 						attack_monster();
 					}
 				};
-				// 1초 딜레이 후 attack_monster()가 실행됨. (즉, 플레이어 공격후 0.8초 뒤에 몹이 공격함)
-				mAttack.schedule(mAttackTask, 800); 
+				// 1초 딜레이 후 attack_monster()가 실행됨. (즉, 플레이어 공격후 3초 뒤에 몹이 공격함)
+				mAttack.schedule(mAttackTask, 3000); 
 			}
 		});
 		ButtonPanel.add(buttonattack);
@@ -552,10 +553,12 @@ public class GameScreen extends JFrame{
 			m_name = lowmonsters.get(swtichnum).getM_name();
 			monsteratk = lowmonsters.get(swtichnum).getM_atk();
 			monsterdef = lowmonsters.get(swtichnum).getM_def();
+			dropitem = lowmonsters.get(swtichnum).getMobDrop(); // 몹 드랍템
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp);
 			MonsterHpbar.setString(String.valueOf(current_monster_hp)+" / "+m_hp);
+			addInventory(dropitem);
 			MonsterHpbar.setVisible(true);
 			break;
 		case 1: // Orcwarrior
@@ -565,10 +568,12 @@ public class GameScreen extends JFrame{
 			m_name = lowmonsters.get(swtichnum).getM_name();
 			monsteratk = lowmonsters.get(swtichnum).getM_atk();
 			monsterdef = lowmonsters.get(swtichnum).getM_def();
+			dropitem = lowmonsters.get(swtichnum).getMobDrop(); // 몹 드랍템
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp);
 			MonsterHpbar.setString(String.valueOf(current_monster_hp)+" / "+m_hp);
+//			addInventory(dropitem);
 			MonsterHpbar.setVisible(true);	
 			break;
 		case 2: // Golem
@@ -578,10 +583,12 @@ public class GameScreen extends JFrame{
 			m_name = lowmonsters.get(2).getM_name();
 			monsteratk = lowmonsters.get(swtichnum).getM_atk();
 			monsterdef = lowmonsters.get(swtichnum).getM_def();
+			dropitem = lowmonsters.get(swtichnum).getMobDrop(); // 몹 드랍템
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp);
 			MonsterHpbar.setString(String.valueOf(current_monster_hp)+" / "+m_hp);
+//			addInventory(dropitem);
 			MonsterHpbar.setVisible(true);
 			break;
 		}
@@ -734,7 +741,7 @@ public class GameScreen extends JFrame{
 				System.out.println("[info] p_check 쓰레드 실행");
 				while(!Thread.currentThread().isInterrupted()) {
 					try {
-						Thread.sleep(200);
+						Thread.sleep(2000);
 						System.out.println("[info] 캐릭터 체력 상태 체크..");
 						playerHpbar.setValue(current_user_hp);
 						playerHpbar.setString(current_user_hp+" / "+c_hp);
@@ -760,11 +767,12 @@ public class GameScreen extends JFrame{
 				System.out.println("[info] m_check 쓰레드 실행");
 				while(!Thread.currentThread().isInterrupted()) {
 					try {
-						Thread.sleep(100);
+						Thread.sleep(2000);
 						System.out.println("[info] 몹 체력 상태 체크..");
 						MonsterHpbar.setValue(current_monster_hp);
 						MonsterHpbar.setString(current_monster_hp+" / "+m_hp);
 						if(battle) {
+							// 몹이 죽으면 경험치 & 아이템 획득
 							if(current_monster_hp <= 0) {
 								writeLog(m_name+"(이/가) 쓰러졌다.\n");
 								battle = false; // 전투 종료
@@ -780,5 +788,12 @@ public class GameScreen extends JFrame{
 			}
 		});
 		m_check.start();
+	}
+	
+	// 인벤토리에 획득한 아이템 추가하는 메소드
+	void addInventory(String[] mobdrop) {
+		for(int i=0; i<iteminfo.size(); i++) {
+			System.out.println(iteminfo.get(i).getI_name());
+		}
 	}
 }
