@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -90,14 +92,16 @@ public class GameScreen extends JFrame{
 	/** 필드 영역 **/
 	private String c_name, m_name, c_job; // 캐릭터명 & 몬스터이름
 	private int c_lv, c_str, c_dex, c_int, c_hp, c_mp, c_exp, c_next_exp; // 캐릭터 스탯 관련 정보 (스탯창 열었을때 보여줌)
-	private int current_user_hp, current_user_mp, current_monster_hp, m_hp; // 현재 플레이어 체력 & 몹 체력 & 몹 최대체력
+	private int current_monster_hp, m_hp, m_exp; //  몹 체력 & 몹 최대체력 & 몹이 주는 경험치
+	private static int current_user_hp, current_user_mp; // 현재 플레이어 체력 & 마나
 	private Boolean battle = false; // 전투 발생을 알려주는 변수. 전투 발생 시 true로 전환(기본값 false)
 	private LinkedList<DSMonsters> lowmonsters = null; // 초급몹정보가 저장돼있는 LinkedList
 	private LinkedList<DSMonsters> middlemonsters = null; // 중급몹정보가 저장돼있는 LinkedList
 	private LinkedList<DSMonsters> highmonsters = null; // 고급몹정보가 저장돼있는 LinkedList
-	private LinkedList<DSItems> iteminfo = null; // 게임 내 아이템 정보가 담겨 있는 iteminfo
-	private String[] dropitem = null; // 몹이 드랍하는 아이템이 저장되어있는 String 배열
-	private LinkedList<DSItems> inven = null; // 플레이어 인벤토리 내용물
+	private LinkedList<DSItems> iteminfo; // 게임 내 아이템 정보가 담겨 있는 iteminfo
+	private HashMap<Integer,Integer> exptable; // 게임 내 경험치 정보가 담겨 있는 exptable;
+	private String[] dropitem; // 몹이 드랍하는 아이템이 저장되어있는 String 배열
+	private static LinkedList<DSItems> inven = new LinkedList<DSItems>(); // 플레이어 인벤토리 내용물
 	
 	private static JButton buttonsearch, buttonattack, buttoninven, buttonequip, buttonstat, buttonskill, buttonexit;
 	private static JLabel mainbackgroundimgLabel, GameScreenimgLabel, monsterimgLabel; // 이미지 라벨들
@@ -134,26 +138,16 @@ public class GameScreen extends JFrame{
 		
 		this.c_exp = 0; // 초기 경험치 보유량 0
 		this.c_next_exp = 50; // 다음 경험치 요구량 50
-		iteminfo = service.itemData(); // 아이템 정보 저장
-		System.out.println("아이템 정보 : "+iteminfo.size());
+		
 		lowmonsters = service.monsterData("초급"); // 초급 몹 정보 저장
 //		middlemonsters = service.monsterData("중급"); // 중급 몹 정보 저장
 //		highmonsters = service.monsterData("고급"); // 고급 몹 정보 저장
-		if(!lowmonsters.isEmpty()) {
-			System.out.println("[info] 초급 몹 정보 가져오기 완료");
-		}
-//		if(!middlemonsters.isEmpty()) {
-//			System.out.println("[info] 중급 몹 정보 가져오기 완료");
-//		}
-//		if(!highmonsters.isEmpty()) {
-//			System.out.println("[info] 고급 몹 정보 가져오기 완료");
-//		}
+		iteminfo = service.itemData(); // 아이템 정보 저장
+		System.out.println("아이템 정보 : "+iteminfo.size());
 		System.out.println("[info] GameScreen() 필드 초기화 완료.");	
 		createGameScreen();
 		checkplayerstatus();
 		checkmonsterstatus();
-		
-		
 	}
 	
 	// 화면 생성 메소드
@@ -323,7 +317,7 @@ public class GameScreen extends JFrame{
 					JLabel message = new JLabel("<html><p style='font-size:14pt; font-family:맑은 고딕;'>적이 없으면 공격이 불가능합니다.</p></html>");
 					JOptionPane.showMessageDialog(null, message, "공격", JOptionPane.WARNING_MESSAGE, null);
 					return;
-				}
+				}			
 				attack_player();
 				// Timer 클래스를 통한 메소드 실행 딜레이를 줄 수가 있다.
 				Timer mAttack = new Timer();
@@ -334,7 +328,7 @@ public class GameScreen extends JFrame{
 						attack_monster();
 					}
 				};
-				// 1초 딜레이 후 attack_monster()가 실행됨. (즉, 플레이어 공격후 3초 뒤에 몹이 공격함)
+				// 3초 딜레이 후 attack_monster()가 실행됨. (즉, 플레이어 공격후 3초 뒤에 몹이 공격함)
 				mAttack.schedule(mAttackTask, 3000); 
 			}
 		});
@@ -358,7 +352,7 @@ public class GameScreen extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				// 중복 클릭을 통한 여러 창 띄우는걸 방지하기 위해 해당 버튼을 클릭하면 버튼 비활성화.
 				buttoninven.setEnabled(false);
-				new InventoryScreen();
+				new InventoryScreen(inven,current_user_hp);
 			}
 		});
 		ButtonPanel.add(buttoninven);
@@ -553,6 +547,7 @@ public class GameScreen extends JFrame{
 			m_name = lowmonsters.get(swtichnum).getM_name();
 			monsteratk = lowmonsters.get(swtichnum).getM_atk();
 			monsterdef = lowmonsters.get(swtichnum).getM_def();
+			m_exp = lowmonsters.get(swtichnum).getM_exp(); // 몹 경험치 저장
 			dropitem = lowmonsters.get(swtichnum).getMobDrop(); // 몹 드랍템
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
@@ -568,12 +563,13 @@ public class GameScreen extends JFrame{
 			m_name = lowmonsters.get(swtichnum).getM_name();
 			monsteratk = lowmonsters.get(swtichnum).getM_atk();
 			monsterdef = lowmonsters.get(swtichnum).getM_def();
+			m_exp = lowmonsters.get(swtichnum).getM_exp(); // 몹 경험치 저장
 			dropitem = lowmonsters.get(swtichnum).getMobDrop(); // 몹 드랍템
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp);
 			MonsterHpbar.setString(String.valueOf(current_monster_hp)+" / "+m_hp);
-//			addInventory(dropitem);
+			addInventory(dropitem);
 			MonsterHpbar.setVisible(true);	
 			break;
 		case 2: // Golem
@@ -583,12 +579,13 @@ public class GameScreen extends JFrame{
 			m_name = lowmonsters.get(2).getM_name();
 			monsteratk = lowmonsters.get(swtichnum).getM_atk();
 			monsterdef = lowmonsters.get(swtichnum).getM_def();
+			m_exp = lowmonsters.get(swtichnum).getM_exp(); // 몹 경험치 저장
 			dropitem = lowmonsters.get(swtichnum).getMobDrop(); // 몹 드랍템
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp);
 			MonsterHpbar.setString(String.valueOf(current_monster_hp)+" / "+m_hp);
-//			addInventory(dropitem);
+			addInventory(dropitem);
 			MonsterHpbar.setVisible(true);
 			break;
 		}
@@ -792,8 +789,36 @@ public class GameScreen extends JFrame{
 	
 	// 인벤토리에 획득한 아이템 추가하는 메소드
 	void addInventory(String[] mobdrop) {
-		for(int i=0; i<iteminfo.size(); i++) {
-			System.out.println(iteminfo.get(i).getI_name());
+		try {
+			for(int i=0; i<iteminfo.size(); i++) {
+				for(int j=0; j<mobdrop.length; j++) {
+					if(mobdrop[j].equals(iteminfo.get(i).getI_name())) {
+						inven.add(iteminfo.get(i));
+					}
+				}
+			}
+			System.out.println("[info] 현재 인벤토리 사이즈 : "+inven.size());
+			for(int i=0; i<inven.size(); i++) {
+				System.out.println("[info] 현재 인벤토리에 들어있는 아이템 : "+inven.get(i).getI_name());
+			}
+		}catch(Exception e) {
+			System.out.println("[Error] 예외 발생");
+			e.printStackTrace();
 		}
+	}
+	
+	// InventoryScreen에서 인벤토리 최신화를 위해 사용하는 메소드.
+	public static void setInventorydata(LinkedList<DSItems> data) {
+		inven = data;
+	}
+	
+	// InventoryScreen에서 체력 포션을 사용했을때 사용자의 hp를 채워주기 위해 현재 hp를 가져오는 메소드
+	public static int getPlayerhp() {
+		 return current_user_hp;
+	}
+	
+	// InventoryScreen에서 체력 포션을 사용했을 때 사용자의 hp를 채우고 다시 current_user_hp를 저장하기 위한 메소드
+	public static void setPlayerhp(int hp) {
+		current_user_hp = hp;
 	}
 }
