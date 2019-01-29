@@ -41,4 +41,22 @@ public class DSService {
 		}
 		return monsters;
 	}
+	
+	public LinkedList<DSItems> itemData(){
+		LinkedList<DSItems> items = new LinkedList<DSItems>();
+		ResultSet item_rs = DSDAO.getItemData(conn);
+		try {
+			while(item_rs.next()) {
+				items.add(new DSItems(item_rs.getString(1), item_rs.getInt(2), item_rs.getInt(3), item_rs.getInt(4), item_rs.getString(5)));
+			}
+		}catch(SQLException sql) {
+			System.out.println("[Error] SQL 데이터 가져오기 에러");
+			System.out.println(sql.getMessage());
+		}finally {
+			DBConnectClose.Close(item_rs);
+			DBConnectClose.Close(DSDAO.getPstmt());
+			DBConnectClose.Close(conn);
+		}
+		return items;
+	}
 }

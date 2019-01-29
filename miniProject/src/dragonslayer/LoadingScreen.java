@@ -22,6 +22,11 @@ public class LoadingScreen extends JFrame {
 	private final static int STR = 10, DEX = 10, INT = 10, HP = 100, MP = 50; 
 	private final static String JOB = "¸ðÇè°¡";
 
+	
+//	public static void main(String[] args) {
+//		new LoadingScreen("test");
+//	}
+	
 	public LoadingScreen(String n) {
 		this.name = n;
 		CreateLoadingScreen();
