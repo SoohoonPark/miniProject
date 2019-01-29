@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 
@@ -35,7 +36,7 @@ public class GameScreen extends JFrame{
 	private final static Image MAINBACKGROUND = Toolkit.getDefaultToolkit().createImage("resource/images/background/gamescreenmainbackground.png");
 	
 	// 전투배경
-	private final static Image BATTLEBACKGROUND = Toolkit.getDefaultToolkit().createImage("resource/images/background/battlebackground_resize.png");
+	private final static ImageIcon BATTLEBACKGROUND = new ImageIcon(Toolkit.getDefaultToolkit().createImage("resource/images/background/battlebackground_resize.png"));
 	
 	// 이벤트 배경
 	private final static Image EVENTBACKGROUND1 = Toolkit.getDefaultToolkit().createImage("resource/images/background/Event1_resize.png");
@@ -83,6 +84,9 @@ public class GameScreen extends JFrame{
 	private final static Image BTNQUIT_PRESS = Toolkit.getDefaultToolkit().createImage("resource/images/button/GameScreen/button_quitgame_pressed.png");
 	private final static Image LOGO = Toolkit.getDefaultToolkit().createImage("resource/images/background/logo.png");
 	
+	// 스킬 이펙트 이미지들
+	private final static Image PLAYERBASICATTACK = Toolkit.getDefaultToolkit().createImage("resource/images/effects/player/player_basic_attack.gif");
+	
 	/** 필드 영역 **/
 	private String c_name, m_name, c_job; // 캐릭터명 & 몬스터이름
 	private int c_lv, c_str, c_dex, c_int, c_hp, c_mp, c_exp, c_next_exp; // 캐릭터 스탯 관련 정보 (스탯창 열었을때 보여줌)
@@ -94,6 +98,7 @@ public class GameScreen extends JFrame{
 	
 	private static JButton buttonsearch, buttonattack, buttoninven, buttonequip, buttonstat, buttonskill, buttonexit;
 	private static JLabel mainbackgroundimgLabel, GameScreenimgLabel, monsterimgLabel; // 이미지 라벨들
+	private static JLabel skilleffectLabel;
 	private static JPanel CharacterPanel,MonsterPanel; // 캐릭터 이미지가 출력되는 패널, 몹 이미지가 출력되는 패널
 	private static JTextArea logarea;
 	private static JScrollPane logscroll;
@@ -102,6 +107,10 @@ public class GameScreen extends JFrame{
 	private int playeratk, playerdef;	// 플레이어 공격력, 방어력
 	private int monsteratk, monsterdef;	// 몬스터 공격력, 방어력
 	private DSService service = DSService.getInstance();
+	
+	public static void main(String[] args) {
+		new GameScreen("춘식이","모험가",10,10,10,100,80);
+	}
 	
 	/** 메소드 영역 **/
 	public GameScreen(String name, String job, int s, int d, int i, int hp, int mp) {
@@ -136,18 +145,20 @@ public class GameScreen extends JFrame{
 //		}
 		System.out.println("[info] GameScreen() 필드 초기화 완료.");	
 		createGameScreen();
+		checkplayerstatus();
+		checkmonsterstatus();
+		
+		
 	}
 	
+	// 화면 생성 메소드
 	void createGameScreen() {
-		
 		setTitle("Dragon Slayer");
 		setSize(1040, 680);
 		setIconImage(ICONIMAGE);
 		setLocationRelativeTo(null);
 		getContentPane().setBackground(Color.BLACK);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		System.out.println(getLocation().x);
-		System.out.println(getLocation().y);
 		setResizable(false);
 		
 		// 레이어 설정
@@ -158,7 +169,7 @@ public class GameScreen extends JFrame{
 		mainbackgroundimgLabel.setBounds(5, 5, 1020, 638);
 		
 		// 게임진행 이미지 라벨
-		GameScreenimgLabel = new JLabel(new ImageIcon(BATTLEBACKGROUND));
+		GameScreenimgLabel = new JLabel(BATTLEBACKGROUND);
 		GameScreenimgLabel.setBounds(40, 35, 950, 330);
 		GameScreenimgLabel.setBorder(new LineBorder(Color.WHITE));
 		
@@ -167,6 +178,7 @@ public class GameScreen extends JFrame{
 		CharacterPanel.setBounds(650,60, 200, 300);
 		CharacterPanel.setBorder(new LineBorder(Color.BLUE));
 		CharacterPanel.setOpaque(false);
+		
 		
 		// 캐릭터 이미지 출력하는 Label
 		JLabel characterLabel = new JLabel(new ImageIcon(PLAYERBEGINNER));
@@ -205,7 +217,7 @@ public class GameScreen extends JFrame{
 		MonsterPanel.setBorder(new LineBorder(Color.RED));
 		MonsterPanel.setOpaque(false);
 		
-		monsterimgLabel = new JLabel();
+		monsterimgLabel = new JLabel("",SwingConstants.CENTER);
 		monsterimgLabel.setBounds(10, 25, 330, 290);
 		monsterimgLabel.setBorder(new LineBorder(Color.CYAN));
 		
@@ -270,7 +282,7 @@ public class GameScreen extends JFrame{
 				case 1: // 전투 발생
 					battle = true; // 전투 발생 시 true로 전환, 해당 변수는 전투가 종료되면 다시 false로 바뀜
 					System.out.println("[info] 전투 발생");
-					createBattle(c_lv);
+					createBattle(c_lv); // 플레이어 레벨에 따라서 생성되는 몹의 구간(?)이 달라짐. 1 ~ 10, 11 ~ 20, 21 ~ 30
 					break;
 				case 2:
 					System.out.println("[info] 아이템 획득");
@@ -317,8 +329,8 @@ public class GameScreen extends JFrame{
 						attack_monster();
 					}
 				};
-				// 1초 딜레이 후 attack_monster()가 실행됨. (즉, 플레이어 공격후 1초 뒤에 몹이 공격함)
-				mAttack.schedule(mAttackTask, 1000); 
+				// 1초 딜레이 후 attack_monster()가 실행됨. (즉, 플레이어 공격후 0.8초 뒤에 몹이 공격함)
+				mAttack.schedule(mAttackTask, 800); 
 			}
 		});
 		ButtonPanel.add(buttonattack);
@@ -403,6 +415,14 @@ public class GameScreen extends JFrame{
 				buttonskill.setIcon(new ImageIcon(BTNSKILL));
 			}
 		});
+		buttonskill.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		ButtonPanel.add(buttonskill);
 		
 		buttonexit = new JButton(new ImageIcon(BTNQUIT));
@@ -438,8 +458,29 @@ public class GameScreen extends JFrame{
 		
 		JLabel logoLabel = new JLabel(new ImageIcon(LOGO));
 		logoLabel.setBounds(320, 90, 105, 97);
+		logoLabel.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent m) {
+				// 로고 이미지 누르면 전투 회피 가능.(
+				if(battle) {
+					battle = false;
+				}else {
+					JOptionPane.showMessageDialog(null, "전투 중에만 쓸 수 있는 치트", "치트", JOptionPane.WARNING_MESSAGE, null);
+					return;
+				}
+			}
+		});
 		
 		ButtonPanel.add(logoLabel);
+		
+		JPanel skilleffectpanel = new JPanel(null);
+		skilleffectpanel.setBounds(320, 80, 380, 280);
+		skilleffectpanel.setOpaque(false);
+		skilleffectpanel.setBorder(new LineBorder(Color.PINK));
+		
+		skilleffectLabel = new JLabel();
+		skilleffectLabel.setBounds(0, 0, 380, 280);
+		
+		skilleffectpanel.add(skilleffectLabel);
 		
 		layer.add(mainbackgroundimgLabel, new Integer(1));
 		layer.add(GameScreenimgLabel, new Integer(2));
@@ -447,6 +488,7 @@ public class GameScreen extends JFrame{
 		layer.add(MonsterPanel, new Integer(3));
 		layer.add(LogPanel,new Integer(4));
 		layer.add(ButtonPanel,new Integer(4));
+		layer.add(skilleffectpanel, new Integer(3));
 		
 		setVisible(true);
 	}
@@ -497,8 +539,10 @@ public class GameScreen extends JFrame{
 	
 	// 초급 몹 생성
 	public void createLowMonster(int swtichnum) {
+		MonsterPanel.setVisible(true);
 		switch(swtichnum) {
 		case 0: // Skelwarrior
+			monsterimgLabel.setIcon(new ImageIcon(SKEL));
 			writeLog(lowmonsters.get(swtichnum).getM_name()+" 이/가 나타났다.\n");
 			m_hp = lowmonsters.get(swtichnum).getM_hp();
 			m_name = lowmonsters.get(swtichnum).getM_name();
@@ -509,9 +553,9 @@ public class GameScreen extends JFrame{
 			MonsterHpbar.setValue(current_monster_hp);
 			MonsterHpbar.setString(String.valueOf(current_monster_hp)+" / "+m_hp);
 			MonsterHpbar.setVisible(true);
-			monsterimgLabel.setIcon(new ImageIcon(SKEL));
 			break;
 		case 1: // Orcwarrior
+			monsterimgLabel.setIcon(new ImageIcon(ORC));
 			writeLog(lowmonsters.get(swtichnum).getM_name()+" 이/가 나타났다.\n");
 			m_hp = lowmonsters.get(swtichnum).getM_hp();
 			m_name = lowmonsters.get(swtichnum).getM_name();
@@ -521,10 +565,10 @@ public class GameScreen extends JFrame{
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp);
 			MonsterHpbar.setString(String.valueOf(current_monster_hp)+" / "+m_hp);
-			MonsterHpbar.setVisible(true);
-			monsterimgLabel.setIcon(new ImageIcon(ORC));
+			MonsterHpbar.setVisible(true);	
 			break;
 		case 2: // Golem
+			monsterimgLabel.setIcon(new ImageIcon(GOLEM));
 			writeLog(lowmonsters.get(2).getM_name()+" 이/가 나타났다.\n");
 			m_hp = lowmonsters.get(2).getM_hp();
 			m_name = lowmonsters.get(2).getM_name();
@@ -535,13 +579,13 @@ public class GameScreen extends JFrame{
 			MonsterHpbar.setValue(current_monster_hp);
 			MonsterHpbar.setString(String.valueOf(current_monster_hp)+" / "+m_hp);
 			MonsterHpbar.setVisible(true);
-			monsterimgLabel.setIcon(new ImageIcon(GOLEM));
 			break;
 		}
 	}
 	
 	// 중급 몹 생성
 	public void createMiddleMonster(int swtichnum) {
+		MonsterPanel.setVisible(true);
 		switch(swtichnum) {
 		case 0: // SkelKing
 			writeLog(middlemonsters.get(swtichnum).getM_name()+" 이/가 나타났다.\n");
@@ -587,6 +631,7 @@ public class GameScreen extends JFrame{
 	
 	// 고급 몹 생성
 	public void createHighMonster(int swtichnum) {
+		MonsterPanel.setVisible(true);
 		switch(swtichnum) {
 		case 0: // Drake
 			writeLog(highmonsters.get(swtichnum).getM_name()+" 이/가 나타났다.\n");
@@ -634,7 +679,13 @@ public class GameScreen extends JFrame{
 	
 	// 플레이어 공격 메소드
 	public void attack_player() {
+		if(!battle) {
+			System.out.println("[info] 전투 중이 아닙니다.");
+			return;
+		}
 		writeLog("'" + c_name + "' 의 공격!\n");
+		GameScreenimgLabel.setIcon(null); // 공격 시 배경화면 검은색으로
+		skilleffectLabel.setIcon(new ImageIcon(PLAYERBASICATTACK)); // 스킬 이펙트 출력
 		int damage = playeratk - monsterdef; // 데미지는 플레이어 공격력 - 몬스터 방어력
 		if(damage <= 0) { // 플레이어 공격력 - 몬스터 방어력의 결과가 0보다 작거나 같을 경우 (= 몬스터의 방어력이 플레이어 공격력보다 높을 경우)
 			damage = 1; // 최소 데미지 1이 적용되도록 설정함.
@@ -645,11 +696,18 @@ public class GameScreen extends JFrame{
 			current_monster_hp -= randomdamage; // randomdamage 수치만큼 몹 현재 체력 감소
 			writeLog("'" + c_name + "' (은/는) " + m_name + " 에게 " + randomdamage + " 의 피해를 입혔다!\n");
 		}
+		
 	}
 	
 	// 몬스터 공격 메소드
 	public void attack_monster() {
+		if(!battle) {
+			System.out.println("[info] 전투 중이 아닙니다.");
+			return;
+		}
 		writeLog("'" + m_name + "' 의 공격!\n");
+		// 몹의 스킬 이펙트
+		
 		int damage = monsteratk - playerdef; // 데미지는 몬스터 공격력 - 플레이어 방어력
 		if(damage <= 0) { // 몬스터 공격력 - 플레이어 방어력의 결과가 0보다 작거나 같을 경우 (= 플레이어의 방어력이 몬스터의 공격력보다 높을 경우)
 			damage = 1;
@@ -660,5 +718,64 @@ public class GameScreen extends JFrame{
 			current_user_hp -= randomdamage; // randomdamage 수치만큼 플레이어 현재 체력 감
 			writeLog("'" + m_name + "' (은/는) " + c_name + " 에게 " + randomdamage + " 의 피해를 입혔다!\n");
 		}
+		skilleffectLabel.setIcon(null);
+		GameScreenimgLabel.setIcon(BATTLEBACKGROUND);
+	}
+	
+	// 플레이어 상태 확인
+	public void checkplayerstatus() {
+		Thread p_check = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				System.out.println("[info] p_check 쓰레드 실행");
+				while(!Thread.currentThread().isInterrupted()) {
+					try {
+						Thread.sleep(200);
+						System.out.println("[info] 캐릭터 체력 상태 체크..");
+						playerHpbar.setValue(current_user_hp);
+						playerHpbar.setString(current_user_hp+" / "+c_hp);
+						if(current_user_hp <= 0) {
+							
+							Thread.currentThread().interrupt();
+						}
+					}catch(Exception e) {
+						System.out.println("[Error] p_check 쓰레드 에러");
+					}
+				}
+			}
+		});
+		p_check.start();
+	}
+	
+	// 몹 상태 확인
+	public void checkmonsterstatus() {
+		Thread m_check = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				System.out.println("[info] m_check 쓰레드 실행");
+				while(!Thread.currentThread().isInterrupted()) {
+					try {
+						Thread.sleep(100);
+						System.out.println("[info] 몹 체력 상태 체크..");
+						MonsterHpbar.setValue(current_monster_hp);
+						MonsterHpbar.setString(current_monster_hp+" / "+m_hp);
+						if(battle) {
+							if(current_monster_hp <= 0) {
+								writeLog(m_name+"(이/가) 쓰러졌다.\n");
+								battle = false; // 전투 종료
+								MonsterPanel.setVisible(false); // 몹패널 visible을 false
+								skilleffectLabel.setIcon(null);
+								GameScreenimgLabel.setIcon(BATTLEBACKGROUND);
+							}
+						}
+					}catch(Exception e) {
+						System.out.println("[Error] m_check 쓰레드 에러");
+					}
+				}
+			}
+		});
+		m_check.start();
 	}
 }
