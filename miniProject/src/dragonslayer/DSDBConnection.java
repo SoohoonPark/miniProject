@@ -10,11 +10,8 @@ public class DSDBConnection {
 	private final static String DBPW = "PAGODA";
 
 //	private final static String DBURL = "jdbc:oracle:thin:@localhost:1521:orcl";
-<<<<<<< HEAD
-private final static String DBURL = "jdbc:oracle:thin:@DESKTOP-OPLFPOO:1521:orcl";
-=======
 	private final static String DBURL = "jdbc:oracle:thin:@175.200.206.7:1521:orcl";
->>>>>>> branch 'master' of https://github.com/SoohoonPark/miniProject.git
+
 	private static Connection conn = null;
 	
 	public static Connection DBConn() {
