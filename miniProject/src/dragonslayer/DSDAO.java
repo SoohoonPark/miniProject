@@ -18,10 +18,23 @@ public class DSDAO {
 			rs = pstmt.executeQuery();
 			
 		}catch(SQLException sql) {
-			System.out.println("[Error] SQL 처리 예외 발생");
+			System.out.println("[Error] SQL 처리 예외 발생(getMonster)");
 			System.out.println(sql.getMessage());
 		}
 		
+		return rs;
+	}
+	
+	// 아이템 정보를 가져와서 결과(rs)를 Service로 넘겨줌
+	public static ResultSet getItemData(Connection conn) {
+		try {
+			String query = "SELECT * FROM ITEMS";
+			pstmt = conn.prepareStatement(query);
+			rs = pstmt.executeQuery();
+		}catch(SQLException sql) {
+			System.out.println("[Error] SQL 처리 예외 발생(getItem)");
+			System.out.println(sql.getMessage());
+		}
 		return rs;
 	}
 	

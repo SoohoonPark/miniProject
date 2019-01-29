@@ -95,6 +95,8 @@ public class GameScreen extends JFrame{
 	private LinkedList<DSMonsters> lowmonsters = null; // 초급몹정보가 저장돼있는 LinkedList
 	private LinkedList<DSMonsters> middlemonsters = null; // 중급몹정보가 저장돼있는 LinkedList
 	private LinkedList<DSMonsters> highmonsters = null; // 고급몹정보가 저장돼있는 LinkedList
+	private LinkedList<DSItems> iteminfo = null; // 게임 내 아이템 정보가 담겨 있는 iteminfo
+	private LinkedList<DSItems> inven = null; // 플레이어 인벤토리 내용물
 	
 	private static JButton buttonsearch, buttonattack, buttoninven, buttonequip, buttonstat, buttonskill, buttonexit;
 	private static JLabel mainbackgroundimgLabel, GameScreenimgLabel, monsterimgLabel; // 이미지 라벨들
@@ -131,6 +133,8 @@ public class GameScreen extends JFrame{
 		
 		this.c_exp = 0; // 초기 경험치 보유량 0
 		this.c_next_exp = 50; // 다음 경험치 요구량 50
+		iteminfo = service.itemData(); // 아이템 정보 저장
+		System.out.println("아이템 정보 : "+iteminfo.size());
 		lowmonsters = service.monsterData("초급"); // 초급 몹 정보 저장
 //		middlemonsters = service.monsterData("중급"); // 중급 몹 정보 저장
 //		highmonsters = service.monsterData("고급"); // 고급 몹 정보 저장
@@ -696,7 +700,6 @@ public class GameScreen extends JFrame{
 			current_monster_hp -= randomdamage; // randomdamage 수치만큼 몹 현재 체력 감소
 			writeLog("'" + c_name + "' (은/는) " + m_name + " 에게 " + randomdamage + " 의 피해를 입혔다!\n");
 		}
-		
 	}
 	
 	// 몬스터 공격 메소드
