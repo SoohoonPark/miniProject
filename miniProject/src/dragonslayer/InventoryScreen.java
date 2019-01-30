@@ -30,27 +30,11 @@ public class InventoryScreen extends JFrame {
 	private int current_player_maxmp; // 플레이어 총 마나(마나 물약 먹었을때 최대 마나 이상으로 회복 불가능)
 	private int current_player_hp; // 플레이어 현재 체력
 	private int current_player_mp; // 플레이어 현재 마나
-	private int atk_weapon,def_helmet, def_armor, def_glove, def_boots; // 무기 공격력,투구,갑옷,장갑,신발 방어력(해당 방어력들을 최종적으로 합산하면 현재장비방어력이 됨)
+	private int atk_weapon, def_helmet, def_armor, def_glove, def_boots; // 무기,투구,갑옷,장갑,신발 아이템 값(공격력,방어력)
 	private String w_name, h_name, a_name, g_name, b_name; // 무기,투구,갑옷,장갑,신발 아이템명
 	private Thread check, atkdef, equip; // 플레이어 체&마, 공&방 체크, 장비명 체크 Thread
 	private JButton use, drop;
 
-//	public static void main(String[] args) {
-//		LinkedList<DSItems> testdata = new LinkedList<DSItems>();
-//		testdata.add(new DSItems("체력 물약",0,0,50,"N","N"));
-//		testdata.add(new DSItems("마나 물약",0,0,50,"N","N"));
-//		testdata.add(new DSItems("강철 대검",20,0,0,"Y","W"));
-//		testdata.add(new DSItems("강철 도끼",25,0,0,"Y","W"));
-//		testdata.add(new DSItems("가죽 모자",0,2,0,"Y","H"));
-//		testdata.add(new DSItems("가죽 갑옷",0,5,0,"Y","A"));
-//		testdata.add(new DSItems("가죽 장갑",0,3,0,"Y","G"));
-//		testdata.add(new DSItems("가죽 신발",0,4,0,"Y","B"));
-//		testdata.add(new DSItems("강철 투구",0,5,0,"Y","H"));
-//		testdata.add(new DSItems("강철 갑옷",0,12,0,"Y","A"));
-//		testdata.add(new DSItems("강철 장갑",0,7,0,"Y","G"));
-//		testdata.add(new DSItems("강철 장화",0,9,0,"Y","B"));
-//		new InventoryScreen(testdata, 25, 20, 100, 50); // 체력 25/100, 마나 20/50
-//	}
 	public InventoryScreen(LinkedList<DSItems> inventory, int userhp, int usermp, int maxhp, int maxmp) {
 		System.out.println("[info] 인벤토리(가방)창 열림");
 		this.inventorydata = inventory;
