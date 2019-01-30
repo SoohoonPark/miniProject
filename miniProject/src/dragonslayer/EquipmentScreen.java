@@ -23,10 +23,8 @@ public class EquipmentScreen extends JFrame {
 	private Image iconarmor = Toolkit.getDefaultToolkit().createImage("resource/images/icon/icon_armor.png");
 	private Image iconglove = Toolkit.getDefaultToolkit().createImage("resource/images/icon/icon_glove.png");
 	private Image iconboots = Toolkit.getDefaultToolkit().createImage("resource/images/icon/icon_boots.png");
-	// 플레이어 이미지(모험가)
 
 	public EquipmentScreen(ImageIcon character, String weapon, String helmet, String armor, String glove, String boots) {
-
 		setTitle("Equipment");
 		setBounds(1480, 180, 416, 359);
 		setIconImage(iconimage);
