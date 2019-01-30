@@ -1,5 +1,6 @@
 package dragonslayer;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -12,9 +13,11 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -23,6 +26,7 @@ import javax.swing.SwingUtilities;
 @SuppressWarnings("serial")
 public class InventoryScreen extends JFrame {
 	private Image iconimage = Toolkit.getDefaultToolkit().createImage("resource/images/title/titleicon.png");
+	private Image backgroundimage = Toolkit.getDefaultToolkit().createImage("resource/images/background/InventoryScreen/inventory_background.png");
 	private LinkedList<DSItems> inventorydata;
 	private DefaultListModel<String> items = new DefaultListModel<String>();
 	private JList<String> invenlist;
@@ -44,12 +48,16 @@ public class InventoryScreen extends JFrame {
 		this.current_player_maxmp = maxmp;
 
 		System.out.println("[info] 현재 인벤토리 크기 : " + inventorydata.size());
-		setSize(400, 300);
+		setBounds(1480, 180, 406, 329);
 		setLayout(null);
 		setResizable(false);
-		setLocation(1480, 180);
 		setTitle("Inventory");
 		setIconImage(iconimage);
+		
+		JLayeredPane layer = getLayeredPane();
+		
+		JLabel backgroundimglabel = new JLabel(new ImageIcon(backgroundimage));
+		backgroundimglabel.setBounds(0, 0, 400, 300);
 
 		for (int i = 0; i < inventorydata.size(); i++) {
 			items.addElement(inventorydata.get(i).getI_name());
@@ -59,14 +67,19 @@ public class InventoryScreen extends JFrame {
 		invenlist.setSelectedIndex(0);
 
 		JScrollPane invenscroll = new JScrollPane(invenlist);
-		invenscroll.setBounds(20, 30, 230, 200);
-		add(invenscroll);
+		invenscroll.setBounds(30, 50, 230, 200);
+		layer.add(invenscroll, new Integer(2));
 
 		use = new JButton("장착 / 사용");
-		use.setBounds(260, 40, 110, 50);
+		use.setBounds(270, 50, 100, 50);
 		use.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(inventorydata.isEmpty()) {
+					JLabel message = new JLabel("<html><p style='font-family:맑은 고딕; font-size:14pt;'>인벤토리가 비어있습니다.</p></html>");
+					JOptionPane.showMessageDialog(SwingUtilities.getRoot(use), message, "사용/장비", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 				int selecteditemindex = invenlist.getSelectedIndex();
 				if (inventorydata.get(selecteditemindex).getI_equip().equals("N")) { // N = 장비불가능(=물약)
 					System.out.println("[info] 물약 사용");
@@ -74,8 +87,7 @@ public class InventoryScreen extends JFrame {
 					if (inventorydata.get(selecteditemindex).getI_name().equals("체력 물약")) {
 						System.out.println("[info] 체력 물약 사용");
 						if (current_player_hp == current_player_maxhp) {
-							JLabel message = new JLabel(
-									"<html><p style='font-family:맑은 고딕; font-size:14pt;'>체력이 가득 차있습니다.</p></html>");
+							JLabel message = new JLabel("<html><p style='font-family:맑은 고딕; font-size:14pt;'>체력이 가득 차있습니다.</p></html>");
 							JOptionPane.showMessageDialog(SwingUtilities.getRoot(use), message, "물약",
 									JOptionPane.ERROR_MESSAGE);
 							return;
@@ -120,10 +132,10 @@ public class InventoryScreen extends JFrame {
 			}
 		});
 
-		add(use);
+		layer.add(use, new Integer(3));
 
 		drop = new JButton("버리기");
-		drop.setBounds(260, 110, 110, 50);
+		drop.setBounds(270, 120, 100, 50);
 		drop.addActionListener(new ActionListener() {
 
 			@Override
@@ -140,7 +152,8 @@ public class InventoryScreen extends JFrame {
 				}
 			}
 		});
-		add(drop);
+		
+		layer.add(drop, new Integer(3));
 
 		// 해당 프레임이 닫힐 때 실행되는 windowListener
 		addWindowListener(new WindowAdapter() {
@@ -151,6 +164,8 @@ public class InventoryScreen extends JFrame {
 				System.out.println("[info] 인벤토리 창 닫힘");
 			}
 		});
+		
+		layer.add(backgroundimglabel, new Integer(1));
 		setVisible(true);
 	}
 

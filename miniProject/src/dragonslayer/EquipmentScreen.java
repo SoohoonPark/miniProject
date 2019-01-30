@@ -17,8 +17,7 @@ import javax.swing.border.LineBorder;
 @SuppressWarnings("serial")
 public class EquipmentScreen extends JFrame {
 	private Image iconimage = Toolkit.getDefaultToolkit().createImage("resource/images/title/titleicon.png");
-	private Image backgroundimage = Toolkit.getDefaultToolkit().createImage("resource/images/background/EquipmentScreen/backgroundmainpanel.png");
-	private Image backgroundimage2 = Toolkit.getDefaultToolkit().createImage("resource/images/background/EquipmentScreen/backgroundborder_resize.png");
+	private Image backgroundimage = Toolkit.getDefaultToolkit().createImage("resource/images/background/EquipmentScreen/equiment_background.png");
 	private Image iconweapon = Toolkit.getDefaultToolkit().createImage("resource/images/icon/icon_weapon.png");
 	private Image iconhelmet = Toolkit.getDefaultToolkit().createImage("resource/images/icon/icon_helmet.png");
 	private Image iconarmor = Toolkit.getDefaultToolkit().createImage("resource/images/icon/icon_armor.png");
