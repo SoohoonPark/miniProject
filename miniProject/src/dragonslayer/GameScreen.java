@@ -49,8 +49,7 @@ public class GameScreen extends JFrame {
 	private final static Image EVENTBACKGROUND3 = null;
 
 	// 플레이어 이미지(모험가)
-	private final static Image PLAYERBEGINNER = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/player/playercharacter_beginner.png");
+	private final static Image PLAYERBEGINNER = Toolkit.getDefaultToolkit().createImage("resource/images/player/playercharacter_beginner.png");
 	private final static Image PLAYERWARRIOR = null;
 	private final static Image PLAYERKNIGHT = null;
 
@@ -171,6 +170,13 @@ public class GameScreen extends JFrame {
 
 		this.c_exp = 0; // 초기 경험치 보유량 0
 		this.c_next_exp = 50; // 다음 경험치 요구량 50
+		
+		// 장비 기본값은 "없음"
+		weapon = "없음"; 
+		helmet = "없음";
+		armor = "없음";
+		glove = "없음";
+		boots = "없음";
 
 		lowmonsters = service.monsterData("초급"); // 초급 몹 정보 저장
 //		middlemonsters = service.monsterData("중급"); // 중급 몹 정보 저장
@@ -412,7 +418,7 @@ public class GameScreen extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				buttonequip.setEnabled(false);
-				new EquipmentScreen();
+				new EquipmentScreen(PLAYERBEGINNER,weapon,helmet,armor,glove,boots);
 			}
 		});
 		ButtonPanel.add(buttonequip);
