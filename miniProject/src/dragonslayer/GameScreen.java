@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -113,6 +112,7 @@ public class GameScreen extends JFrame{
 	
 	private int playeratk, playerdef;	// 플레이어 공격력, 방어력
 	private static int playerequipatk, playerequipdef; // 플레이어 장비공격력, 장비방어력 (최종 플레이어 공격력&방어력은 기본능력치+장비능력치)
+	private static String helmet, armor, glove, boots, weapon; // 캐릭터가 착용하고 있는 아이템명(장비 창으로 넘길 값들)
 	private int monsteratk, monsterdef;	// 몬스터 공격력, 방어력
 	private DSService service = new DSService();
 	
@@ -353,7 +353,7 @@ public class GameScreen extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				// 중복 클릭을 통한 여러 창 띄우는걸 방지하기 위해 해당 버튼을 클릭하면 버튼 비활성화.
 				buttoninven.setEnabled(false);
-				new InventoryScreen(inven,current_user_hp,current_user_mp, c_hp, c_mp);
+				new InventoryScreen(inven,current_user_hp,current_user_mp, c_hp, c_mp, playerequipatk, playerequipdef);
 			}
 		});
 		ButtonPanel.add(buttoninven);
@@ -739,7 +739,7 @@ public class GameScreen extends JFrame{
 				System.out.println("[info] p_check 쓰레드 실행");
 				while(!Thread.currentThread().isInterrupted()) {
 					try {
-						Thread.sleep(2000);
+						Thread.sleep(500);
 						System.out.println("[info] 캐릭터 체력 상태 체크..");
 						playerHpbar.setValue(current_user_hp);
 						playerHpbar.setString(current_user_hp+" / "+c_hp);
@@ -828,5 +828,14 @@ public class GameScreen extends JFrame{
 	public static void setPlayerEquipatk(int equipatk, int equipdef) {
 		playerequipatk = equipatk;
 		playerequipdef = equipdef;
+	}
+	
+	// InventoryScreen에서 캐릭터의 장비 명(무기,투구,갑옷,장갑,신발)을 저장함
+	public static void setPlayerEquipName(String w, String h, String a, String g, String b) {
+		weapon = w;
+		helmet = h;
+		armor = a;
+		glove = g;
+		boots = b;
 	}
 }
