@@ -112,6 +112,7 @@ public class GameScreen extends JFrame{
 	private static JProgressBar playerHpbar, playerMpbar, MonsterHpbar; // 플레이어 체력막대,마나막대, 몹 체력막대
 	
 	private int playeratk, playerdef;	// 플레이어 공격력, 방어력
+	private static int playerequipatk, playerequipdef; // 플레이어 장비공격력, 장비방어력 (최종 플레이어 공격력&방어력은 기본능력치+장비능력치)
 	private int monsteratk, monsterdef;	// 몬스터 공격력, 방어력
 	private DSService service = new DSService();
 	
@@ -126,9 +127,9 @@ public class GameScreen extends JFrame{
 		this.c_job = job; // 직업
 		this.c_lv = 1; // 1레벨
 		this.c_str = s; // 힘
-		this.playeratk = c_str/2; // 캐릭터 공격력은 힘/2
+		this.playeratk = (c_str/2)+playerequipatk; // 캐릭터 공격력은 (힘/2)+장비공격력
 		this.c_dex = d; // 민첩
-		this.playerdef = c_dex/5; // 캐릭터 방어력은 민첩/5
+		this.playerdef = (c_dex/5)+playerequipdef; // 캐릭터 방어력은 (민첩/5)+장비방어력
 		this.c_int = i; // 지능
 		
 		this.c_hp = hp; // 체력
@@ -352,7 +353,7 @@ public class GameScreen extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				// 중복 클릭을 통한 여러 창 띄우는걸 방지하기 위해 해당 버튼을 클릭하면 버튼 비활성화.
 				buttoninven.setEnabled(false);
-				new InventoryScreen(inven,current_user_hp);
+				new InventoryScreen(inven,current_user_hp,current_user_mp, c_hp, c_mp);
 			}
 		});
 		ButtonPanel.add(buttoninven);
@@ -743,9 +744,14 @@ public class GameScreen extends JFrame{
 						playerHpbar.setValue(current_user_hp);
 						playerHpbar.setString(current_user_hp+" / "+c_hp);
 						if(current_user_hp <= 0) {
-							
 							Thread.currentThread().interrupt();
 						}
+						
+						System.out.println("[info] 캐릭터 공격력&방어력 상태 체크..");
+						playeratk = (c_str/2)+playerequipatk;
+						playerdef = (c_dex/5)+playerequipdef;
+						System.out.println("[info] 현재 캐릭터 공격력 :"+playeratk);
+						System.out.println("[info] 현재 캐릭터 방어력 :"+playerdef);
 					}catch(Exception e) {
 						System.out.println("[Error] p_check 쓰레드 에러");
 					}
@@ -812,13 +818,15 @@ public class GameScreen extends JFrame{
 		inven = data;
 	}
 	
-	// InventoryScreen에서 체력 포션을 사용했을때 사용자의 hp를 채워주기 위해 현재 hp를 가져오는 메소드
-	public static int getPlayerhp() {
-		 return current_user_hp;
+	// InventoryScreen에서 포션을 사용하고 난 후의 체력/마나를 세팅
+	public static void setPlayerhpmp(int hp, int mp) {
+		current_user_hp = hp;
+		current_user_mp = mp;
 	}
 	
-	// InventoryScreen에서 체력 포션을 사용했을 때 사용자의 hp를 채우고 다시 current_user_hp를 저장하기 위한 메소드
-	public static void setPlayerhp(int hp) {
-		current_user_hp = hp;
+	// InventoryScreen에서 캐릭터의 장비를 장착하고 난 후의 장비공격력&방어력을 GameScreen에 저장
+	public static void setPlayerEquipatk(int equipatk, int equipdef) {
+		playerequipatk = equipatk;
+		playerequipdef = equipdef;
 	}
 }
