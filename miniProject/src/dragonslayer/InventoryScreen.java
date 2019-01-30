@@ -30,8 +30,7 @@ public class InventoryScreen extends JFrame {
 	private int current_player_maxmp; // 플레이어 총 마나(마나 물약 먹었을때 최대 마나 이상으로 회복 불가능)
 	private int current_player_hp; // 플레이어 현재 체력
 	private int current_player_mp; // 플레이어 현재 마나
-	private int equipatk, equipdef; // 장비공격력 & 방어력
-	private int def_helmet, def_armor, def_glove, def_boots; // 투구,갑옷,장갑,신발 방어력(해당 방어력들을 최종적으로 합산하면 현재장비방어력이 됨)
+	private int atk_weapon,def_helmet, def_armor, def_glove, def_boots; // 무기 공격력,투구,갑옷,장갑,신발 방어력(해당 방어력들을 최종적으로 합산하면 현재장비방어력이 됨)
 	private String w_name, h_name, a_name, g_name, b_name; // 무기,투구,갑옷,장갑,신발 아이템명
 	private Thread check, atkdef, equip; // 플레이어 체&마, 공&방 체크, 장비명 체크 Thread
 	private JButton use, drop;
@@ -52,15 +51,13 @@ public class InventoryScreen extends JFrame {
 //		testdata.add(new DSItems("강철 장화",0,9,0,"Y","B"));
 //		new InventoryScreen(testdata, 25, 20, 100, 50); // 체력 25/100, 마나 20/50
 //	}
-	public InventoryScreen(LinkedList<DSItems> inventory, int userhp, int usermp, int maxhp, int maxmp, int atk, int def) {
+	public InventoryScreen(LinkedList<DSItems> inventory, int userhp, int usermp, int maxhp, int maxmp) {
 		System.out.println("[info] 인벤토리(가방)창 열림");
 		this.inventorydata = inventory;
 		this.current_player_hp = userhp;
 		this.current_player_mp = usermp;
 		this.current_player_maxhp = maxhp;
 		this.current_player_maxmp = maxmp;
-		this.equipatk = atk; // 플레이어 현재 장비 공격력
-		this.equipdef = def; // 플레이어 현재 장비 방어력
 
 		System.out.println("[info] 현재 인벤토리 크기 : " + inventorydata.size());
 		setSize(400, 300);
@@ -104,8 +101,10 @@ public class InventoryScreen extends JFrame {
 						int requireRegenhp = current_player_maxhp - current_player_hp; // 총 체력 - 현재 체력 = 회복해야 할 체력
 						if (requireRegenhp <= inventorydata.get(selecteditemindex).getI_regen()) { // 회복해야할 체력 < 물약의 회복량
 							current_player_hp += requireRegenhp;
+							GameScreen.setPlayerhp(current_player_hp);
 						} else {
 							current_player_hp += inventorydata.get(selecteditemindex).getI_regen();
+							GameScreen.setPlayerhp(current_player_hp);
 						}
 						inventorydata.remove(selecteditemindex);
 						refreshItemList();
@@ -122,8 +121,10 @@ public class InventoryScreen extends JFrame {
 						int requireRegenmp = current_player_maxmp - current_player_mp; // 총 체력 - 현재 체력 = 회복해야 할 체력
 						if (requireRegenmp <= inventorydata.get(selecteditemindex).getI_regen()) { // 회복해야할 체력 < 물약의 회복량
 							current_player_mp += requireRegenmp;
+							GameScreen.setPlayermp(current_player_mp);
 						} else {
 							current_player_mp += inventorydata.get(selecteditemindex).getI_regen();
+							GameScreen.setPlayermp(current_player_mp);
 						}
 						inventorydata.remove(selecteditemindex);
 						refreshItemList();
@@ -163,15 +164,9 @@ public class InventoryScreen extends JFrame {
 				// 해당 프레임이 닫힐 때 GameScreen의 '가방' 버튼을 활성화시킴.
 				GameScreen.setInventorydata(inventorydata);
 				GameScreen.getInvenbutton().setEnabled(true);
-				check.interrupt();
-				equip.interrupt();
-				atkdef.interrupt();
 				System.out.println("[info] 인벤토리 창 닫힘");
 			}
 		});
-		setPlayerhpmp();
-		setPlayeratkdef();
-		setPlayerEquip();
 		setVisible(true);
 	}
 
@@ -190,94 +185,50 @@ public class InventoryScreen extends JFrame {
 		String parts = inventorydata.get(itemindex).getI_parts();
 		switch (parts) {
 		case "W": // 무기
-			equipatk = inventorydata.get(itemindex).getI_atk(); // 선택한 아이템의 공격력 수치를 변수에 저장.
+			atk_weapon = inventorydata.get(itemindex).getI_atk(); // 선택한 아이템의 공격력 수치를 변수에 저장.
 			w_name = inventorydata.get(itemindex).getI_name(); // 아이템 이름 저장
-			System.out.println("장착된 아이템 명 :" + w_name + " / 장착된 아이템 공격력 :" + equipatk);
+			System.out.println("장착된 아이템 명 :" + w_name + " / 장착된 아이템 공격력 :" + atk_weapon);
+			GameScreen.setEquipAtk(atk_weapon);
+			GameScreen.setPlayerEquipNameWeapon(w_name);
+			inventorydata.remove(itemindex);
+			refreshItemList();
 			break;
 		case "H": // 투구
 			h_name = inventorydata.get(itemindex).getI_name(); // 아이템 이름 저장
 			def_helmet = inventorydata.get(itemindex).getI_def(); // 아이템 이름 저장
 			System.out.println("장착된 아이템 명 :" + h_name + " / 장착된 아이템 방어력 :" + def_helmet);
+			GameScreen.setEquipDef_Helmet(def_helmet);
+			GameScreen.setPlayerEquipNameHelmet(h_name);
+			inventorydata.remove(itemindex);
+			refreshItemList();
 			break;
 		case "A": // 갑옷
 			a_name = inventorydata.get(itemindex).getI_name(); // 아이템 이름 저장
 			def_armor = inventorydata.get(itemindex).getI_def(); // 아이템 이름 저장
 			System.out.println("장착된 아이템 명 :" + a_name + " / 장착된 아이템 방어력 :" + def_armor);
+			GameScreen.setEquipDef_Armor(def_armor);
+			GameScreen.setPlayerEquipNameArmor(a_name);
+			inventorydata.remove(itemindex);
+			refreshItemList();
 			break;
 		case "G": // 장갑
 			g_name = inventorydata.get(itemindex).getI_name(); // 아이템 이름 저장
 			def_glove = inventorydata.get(itemindex).getI_def(); // 아이템 이름 저장
 			System.out.println("장착된 아이템 명 :" + g_name + " / 장착된 아이템 방어력 :" + def_glove);
+			GameScreen.setEquipDef_Glove(def_glove);
+			GameScreen.setPlayerEquipNameGlove(g_name);
+			inventorydata.remove(itemindex);
+			refreshItemList();
 			break;
 		case "B": // 신발
 			b_name = inventorydata.get(itemindex).getI_name(); // 아이템 이름 저장
 			def_boots = inventorydata.get(itemindex).getI_def(); // 아이템 이름 저장
 			System.out.println("장착된 아이템 명 :" + b_name + " / 장착된 아이템 방어력 :" + def_boots);
+			GameScreen.setEquipDef_Boots(def_boots);
+			GameScreen.setPlayerEquipNameBoots(b_name);
+			inventorydata.remove(itemindex);
+			refreshItemList();
 			break;
 		}
-		equipdef = def_helmet + def_armor + def_glove + def_boots; // 방어구 총 방어력(투구,갑옷,장갑,신발)
-	}
-
-	// 회복된 체력&마나를 GameScreen에 저장하는 Thread
-	void setPlayerhpmp() {
-		check = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				while (!Thread.currentThread().isInterrupted()) {
-					try {
-						Thread.sleep(50);
-						System.out.println("현재 플레이어 체력 :" + current_player_hp);
-						System.out.println("현재 플레이어 마나 :" + current_player_mp);
-						GameScreen.setPlayerhpmp(current_player_hp, current_player_mp);
-					} catch (InterruptedException e) {
-						System.out.println("[Error] 쓰레드 interrupt 발생");
-						Thread.currentThread().interrupt();
-					}
-				}
-			}
-		});
-		check.start();
-	}
-
-	// 장비공격력&방어력이 반영된 값들을 GameScreen에 저장하는 Thread
-	void setPlayeratkdef() {
-		atkdef = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				while (!Thread.currentThread().isInterrupted()) {
-					try {
-						Thread.sleep(50);
-						System.out.println("장착한 장비 공격력 :" + equipatk);
-						System.out.println("장착한 장비 방어력 :" + equipatk);
-						GameScreen.setPlayerEquipatk(equipatk, equipdef);
-					} catch (InterruptedException e) {
-						System.out.println("[Error] 쓰레드 interrupt 발생");
-						Thread.currentThread().interrupt();
-					}
-				}
-			}
-		});
-		atkdef.start();
-	}
-
-	// 플레이어가 장착한 장비명을 GameScreen에 넘김
-	void setPlayerEquip() {
-		equip = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				while (!Thread.currentThread().isInterrupted()) {
-					try {
-						Thread.sleep(50);
-						GameScreen.setPlayerEquipName(w_name, h_name, a_name, g_name, b_name);
-					} catch (InterruptedException e) {
-						System.out.println("[Error] 쓰레드 interrupt 발생");
-						Thread.currentThread().interrupt();
-					}
-				}
-			}
-		});
-		equip.start();
 	}
 }

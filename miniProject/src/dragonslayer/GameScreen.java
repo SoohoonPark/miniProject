@@ -111,8 +111,9 @@ public class GameScreen extends JFrame{
 	private static JProgressBar playerHpbar, playerMpbar, MonsterHpbar; // 플레이어 체력막대,마나막대, 몹 체력막대
 	
 	private int playeratk, playerdef;	// 플레이어 공격력, 방어력
-	private static int playerequipatk, playerequipdef; // 플레이어 장비공격력, 장비방어력 (최종 플레이어 공격력&방어력은 기본능력치+장비능력치)
 	private static String helmet, armor, glove, boots, weapon; // 캐릭터가 착용하고 있는 아이템명(장비 창으로 넘길 값들)
+	private static int def_helmet, def_armor, def_glove, def_boots, atk_weapon; // 캐릭터가 착용하고 있는 아이템의 공&방
+	private int equipdef; // 방어구의 총 방어력
 	private int monsteratk, monsterdef;	// 몬스터 공격력, 방어력
 	private DSService service = new DSService();
 	
@@ -127,9 +128,9 @@ public class GameScreen extends JFrame{
 		this.c_job = job; // 직업
 		this.c_lv = 1; // 1레벨
 		this.c_str = s; // 힘
-		this.playeratk = (c_str/2)+playerequipatk; // 캐릭터 공격력은 (힘/2)+장비공격력
+		this.playeratk = (c_str/2)+atk_weapon; // 캐릭터 공격력은 (힘/2)+장비공격력
 		this.c_dex = d; // 민첩
-		this.playerdef = (c_dex/5)+playerequipdef; // 캐릭터 방어력은 (민첩/5)+장비방어력
+		this.playerdef = (c_dex/5)+equipdef; // 캐릭터 방어력은 (민첩/5)+장비방어력
 		this.c_int = i; // 지능
 		
 		this.c_hp = hp; // 체력
@@ -353,7 +354,7 @@ public class GameScreen extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				// 중복 클릭을 통한 여러 창 띄우는걸 방지하기 위해 해당 버튼을 클릭하면 버튼 비활성화.
 				buttoninven.setEnabled(false);
-				new InventoryScreen(inven,current_user_hp,current_user_mp, c_hp, c_mp, playerequipatk, playerequipdef);
+				new InventoryScreen(inven,current_user_hp,current_user_mp, c_hp, c_mp);
 			}
 		});
 		ButtonPanel.add(buttoninven);
@@ -719,12 +720,12 @@ public class GameScreen extends JFrame{
 		int damage = monsteratk - playerdef; // 데미지는 몬스터 공격력 - 플레이어 방어력
 		if(damage <= 0) { // 몬스터 공격력 - 플레이어 방어력의 결과가 0보다 작거나 같을 경우 (= 플레이어의 방어력이 몬스터의 공격력보다 높을 경우)
 			damage = 1;
-			current_user_hp -= damage; // damage 수치만큼 플레이어 현재 체력 감소
 			writeLog("'" + m_name + "' (은/는) " + c_name + " 에게 " + damage + " 의 피해를 입혔다!\n");
+			current_user_hp -= damage; // damage 수치만큼 플레이어 현재 체력 감소
 		} else {
 			int randomdamage = (int) (Math.random() * damage) + 1; // 1 ~ 몬스터 데미지 사이의 랜덤데미지 결정
-			current_user_hp -= randomdamage; // randomdamage 수치만큼 플레이어 현재 체력 감
 			writeLog("'" + m_name + "' (은/는) " + c_name + " 에게 " + randomdamage + " 의 피해를 입혔다!\n");
+			current_user_hp -= randomdamage; // randomdamage 수치만큼 플레이어 현재 체력 감
 		}
 		skilleffectLabel.setIcon(null);
 		GameScreenimgLabel.setIcon(BATTLEBACKGROUND);
@@ -739,19 +740,29 @@ public class GameScreen extends JFrame{
 				System.out.println("[info] p_check 쓰레드 실행");
 				while(!Thread.currentThread().isInterrupted()) {
 					try {
-						Thread.sleep(500);
+						Thread.sleep(1000);
 						System.out.println("[info] 캐릭터 체력 상태 체크..");
+						System.out.println("[info] 현재 캐릭터 체력 : "+current_user_hp);
 						playerHpbar.setValue(current_user_hp);
 						playerHpbar.setString(current_user_hp+" / "+c_hp);
-						if(current_user_hp <= 0) {
+						if(GameScreen.current_user_hp <= 0) {
 							Thread.currentThread().interrupt();
 						}
 						
 						System.out.println("[info] 캐릭터 공격력&방어력 상태 체크..");
-						playeratk = (c_str/2)+playerequipatk;
-						playerdef = (c_dex/5)+playerequipdef;
+						playeratk = (c_str/2)+atk_weapon;
+						equipdef = def_helmet+def_armor+def_glove+def_boots; // 투구,갑옷,장갑,신발 방어력 합계
+						playerdef = (c_dex/5)+equipdef;
 						System.out.println("[info] 현재 캐릭터 공격력 :"+playeratk);
 						System.out.println("[info] 현재 캐릭터 방어력 :"+playerdef);
+						
+						System.out.println("[info] 캐릭터 현재 장비 템 체크..");
+						System.out.println("[info] 장착 중인 무기 : "+weapon);
+						System.out.println("[info] 장착 중인 투구 : "+helmet);
+						System.out.println("[info] 장착 중인 갑옷 : "+armor);
+						System.out.println("[info] 장착 중인 장갑 : "+glove);
+						System.out.println("[info] 장착 중인 신발 : "+boots);
+						
 					}catch(Exception e) {
 						System.out.println("[Error] p_check 쓰레드 에러");
 					}
@@ -770,7 +781,7 @@ public class GameScreen extends JFrame{
 				System.out.println("[info] m_check 쓰레드 실행");
 				while(!Thread.currentThread().isInterrupted()) {
 					try {
-						Thread.sleep(2000);
+						Thread.sleep(1000);
 						System.out.println("[info] 몹 체력 상태 체크..");
 						MonsterHpbar.setValue(current_monster_hp);
 						MonsterHpbar.setString(current_monster_hp+" / "+m_hp);
@@ -818,24 +829,76 @@ public class GameScreen extends JFrame{
 		inven = data;
 	}
 	
-	// InventoryScreen에서 포션을 사용하고 난 후의 체력/마나를 세팅
-	public static void setPlayerhpmp(int hp, int mp) {
+	// InventoryScreen에서 포션을 사용하고 난 후의 체력세팅
+	public static void setPlayerhp(int hp) {
 		current_user_hp = hp;
+	}
+	
+	// InventoryScreen에서 포션을 사용하고 난 후의 마나세팅
+	public static void setPlayermp(int mp) {
 		current_user_mp = mp;
 	}
 	
-	// InventoryScreen에서 캐릭터의 장비를 장착하고 난 후의 장비공격력&방어력을 GameScreen에 저장
-	public static void setPlayerEquipatk(int equipatk, int equipdef) {
-		playerequipatk = equipatk;
-		playerequipdef = equipdef;
+	// InventoryScreen에서 캐릭터의 장비 명(무기,투구,갑옷,장갑,신발)을 set함
+	public static void setPlayerEquipNameWeapon(String w) {
+		if(w != null) {
+			weapon = w;
+		}
 	}
 	
-	// InventoryScreen에서 캐릭터의 장비 명(무기,투구,갑옷,장갑,신발)을 저장함
-	public static void setPlayerEquipName(String w, String h, String a, String g, String b) {
-		weapon = w;
-		helmet = h;
-		armor = a;
-		glove = g;
-		boots = b;
+	public static void setPlayerEquipNameHelmet(String h) {
+		if(h != null) {
+			helmet = h;
+		}
+	}
+	
+	
+	public static void setPlayerEquipNameArmor(String a) {
+		if(a != null) {
+			armor = a;
+		}
+	}
+	
+	public static void setPlayerEquipNameGlove(String g) {
+		if(g != null) {
+			glove = g;
+		}
+	}
+	
+	public static void setPlayerEquipNameBoots(String b) {
+		if(b != null) {
+			boots = b;
+		}
+	}
+	
+	// InventoryScreen에서 넘어온 값들을 현재 GameScreen에 set함
+	public static void setEquipAtk(int w) {
+		if(w > 0) {
+			atk_weapon = w;
+		}
+	}
+	
+	public static void setEquipDef_Helmet(int h) {
+		if(h > 0) {
+			def_helmet = h;
+		}
+	}
+	
+	public static void setEquipDef_Armor(int a) {
+		if(a > 0) {
+			def_armor = a;
+		}
+	}
+	
+	public static void setEquipDef_Glove(int g) {
+		if(g > 0) {
+			def_glove = g;
+		}
+	}
+	
+	public static void setEquipDef_Boots(int b) {
+		if(b > 0) {
+			def_boots = b;
+		}
 	}
 }
