@@ -25,7 +25,7 @@ public class EquipmentScreen extends JFrame {
 	private Image iconboots = Toolkit.getDefaultToolkit().createImage("resource/images/icon/icon_boots.png");
 	// 플레이어 이미지(모험가)
 
-	public EquipmentScreen(Image character, String weapon, String helmet, String armor, String glove, String boots) {
+	public EquipmentScreen(ImageIcon character, String weapon, String helmet, String armor, String glove, String boots) {
 
 		setTitle("Equipment");
 		setBounds(1480, 180, 416, 359);
@@ -50,7 +50,7 @@ public class EquipmentScreen extends JFrame {
 		CharacterPanel.setOpaque(false);
 
 		// 캐릭터 이미지 출력하는 Label
-		JLabel characterlabel = new JLabel(new ImageIcon(character));
+		JLabel characterlabel = new JLabel(character);
 		characterlabel.setBounds(35, 30, 150, 226);
 
 		// 장비 이미지 및 설명을 출력하는 Label

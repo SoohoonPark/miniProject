@@ -387,7 +387,7 @@ public class GameScreen extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				buttonequip.setEnabled(false);
-				new EquipmentScreen(PLAYERBEGINNER,weapon,helmet,armor,glove,boots);
+				new EquipmentScreen((ImageIcon)characterLabel.getIcon(),weapon,helmet,armor,glove,boots);
 			}
 		});
 		ButtonPanel.add(buttonequip);
@@ -552,34 +552,24 @@ public class GameScreen extends JFrame {
 	}
 
 	// 초급 몹 생성
-	public void createLowMonster(int swtichnum) {
+	public void createLowMonster(int switchnum) {
 		MonsterPanel.setVisible(true);
-		switch (swtichnum) {
+		switch (switchnum) {
 		case 0: // Skelwarrior
 			monsterimgLabel.setIcon(new ImageIcon(SKEL));
-			writeLog(lowmonsters.get(swtichnum).getM_name() + " 이/가 나타났다.\n");
-			m_hp = lowmonsters.get(swtichnum).getM_hp();
-			m_name = lowmonsters.get(swtichnum).getM_name();
-			monsteratk = lowmonsters.get(swtichnum).getM_atk();
-			monsterdef = lowmonsters.get(swtichnum).getM_def();
-			m_exp = lowmonsters.get(swtichnum).getM_exp(); // 몹 경험치 저장
-			dropitem = lowmonsters.get(swtichnum).getMobDrop(); // 몹 드랍템
-			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
+			writeLog(lowmonsters.get(switchnum).getM_name() + " 이/가 나타났다.\n");
+			settingLowMobInfo(switchnum);
+			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
-			MonsterHpbar.setValue(current_monster_hp);
-			MonsterHpbar.setString(String.valueOf(current_monster_hp) + " / " + m_hp);
-			addInventory(dropitem);
+			MonsterHpbar.setValue(current_monster_hp); // 현재 몹 체력으로 몹 체력바 값 설정
+			MonsterHpbar.setString(String.valueOf(current_monster_hp) + " / " + m_hp); // 막대 안에 보이는 문자열 설정
+			addInventory(dropitem); // Test용
 			MonsterHpbar.setVisible(true);
 			break;
 		case 1: // Orcwarrior
 			monsterimgLabel.setIcon(new ImageIcon(ORC));
-			writeLog(lowmonsters.get(swtichnum).getM_name() + " 이/가 나타났다.\n");
-			m_hp = lowmonsters.get(swtichnum).getM_hp();
-			m_name = lowmonsters.get(swtichnum).getM_name();
-			monsteratk = lowmonsters.get(swtichnum).getM_atk();
-			monsterdef = lowmonsters.get(swtichnum).getM_def();
-			m_exp = lowmonsters.get(swtichnum).getM_exp(); // 몹 경험치 저장
-			dropitem = lowmonsters.get(swtichnum).getMobDrop(); // 몹 드랍템
+			writeLog(lowmonsters.get(switchnum).getM_name() + " 이/가 나타났다.\n");
+			settingLowMobInfo(switchnum);
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp);
@@ -589,13 +579,8 @@ public class GameScreen extends JFrame {
 			break;
 		case 2: // Golem
 			monsterimgLabel.setIcon(new ImageIcon(GOLEM));
-			writeLog(lowmonsters.get(2).getM_name() + " 이/가 나타났다.\n");
-			m_hp = lowmonsters.get(2).getM_hp();
-			m_name = lowmonsters.get(2).getM_name();
-			monsteratk = lowmonsters.get(swtichnum).getM_atk();
-			monsterdef = lowmonsters.get(swtichnum).getM_def();
-			m_exp = lowmonsters.get(swtichnum).getM_exp(); // 몹 경험치 저장
-			dropitem = lowmonsters.get(swtichnum).getMobDrop(); // 몹 드랍템
+			writeLog(lowmonsters.get(switchnum).getM_name() + " 이/가 나타났다.\n");
+			settingLowMobInfo(switchnum);
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp);
@@ -612,10 +597,7 @@ public class GameScreen extends JFrame {
 		switch (swtichnum) {
 		case 0: // SkelKing
 			writeLog(middlemonsters.get(swtichnum).getM_name() + " 이/가 나타났다.\n");
-			m_hp = middlemonsters.get(swtichnum).getM_hp(); // 몹 체력
-			m_name = middlemonsters.get(swtichnum).getM_name(); // 몹 이름
-			monsteratk = middlemonsters.get(swtichnum).getM_atk(); // 몹 공격력
-			monsterdef = middlemonsters.get(swtichnum).getM_def(); // 몹 방어력
+			settingMiddleMobInfo(swtichnum);
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp);
@@ -625,10 +607,7 @@ public class GameScreen extends JFrame {
 			break;
 		case 1: // Hatchling
 			writeLog(middlemonsters.get(swtichnum).getM_name() + " 이/가 나타났다.\n");
-			m_hp = middlemonsters.get(swtichnum).getM_hp();
-			m_name = middlemonsters.get(swtichnum).getM_name();
-			monsteratk = middlemonsters.get(swtichnum).getM_atk();
-			monsterdef = middlemonsters.get(swtichnum).getM_def();
+			settingMiddleMobInfo(swtichnum);
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp);
@@ -638,10 +617,7 @@ public class GameScreen extends JFrame {
 			break;
 		case 2: // Lagiacrus
 			writeLog(middlemonsters.get(swtichnum).getM_name() + " 이/가 나타났다.\n");
-			m_hp = middlemonsters.get(swtichnum).getM_hp();
-			m_name = middlemonsters.get(swtichnum).getM_name();
-			monsteratk = middlemonsters.get(swtichnum).getM_atk();
-			monsterdef = middlemonsters.get(swtichnum).getM_def();
+			settingMiddleMobInfo(swtichnum);
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp);
@@ -653,15 +629,12 @@ public class GameScreen extends JFrame {
 	}
 
 	// 고급 몹 생성
-	public void createHighMonster(int swtichnum) {
+	public void createHighMonster(int switchnum) {
 		MonsterPanel.setVisible(true);
-		switch (swtichnum) {
+		switch (switchnum) {
 		case 0: // Drake
-			writeLog(highmonsters.get(swtichnum).getM_name() + " 이/가 나타났다.\n");
-			m_hp = highmonsters.get(swtichnum).getM_hp();
-			m_name = highmonsters.get(swtichnum).getM_name();
-			monsteratk = highmonsters.get(swtichnum).getM_atk();
-			monsterdef = highmonsters.get(swtichnum).getM_def();
+			writeLog(highmonsters.get(switchnum).getM_name() + " 이/가 나타났다.\n");
+			settingHighMobInfo(switchnum);
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp);
@@ -671,11 +644,8 @@ public class GameScreen extends JFrame {
 			break;
 
 		case 1: // Chimera
-			writeLog(highmonsters.get(swtichnum).getM_name() + " 이/가 나타났다.\n");
-			m_hp = highmonsters.get(swtichnum).getM_hp();
-			m_name = highmonsters.get(swtichnum).getM_name();
-			monsteratk = highmonsters.get(swtichnum).getM_atk();
-			monsterdef = highmonsters.get(swtichnum).getM_def();
+			writeLog(highmonsters.get(switchnum).getM_name() + " 이/가 나타났다.\n");
+			settingHighMobInfo(switchnum);
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp);
@@ -685,11 +655,8 @@ public class GameScreen extends JFrame {
 			break;
 
 		case 2: // IceDragon
-			writeLog(highmonsters.get(swtichnum).getM_name() + " 이/가 나타났다.\n");
-			m_hp = highmonsters.get(swtichnum).getM_hp();
-			m_name = highmonsters.get(swtichnum).getM_name();
-			monsteratk = highmonsters.get(swtichnum).getM_atk();
-			monsterdef = highmonsters.get(swtichnum).getM_def();
+			writeLog(highmonsters.get(switchnum).getM_name() + " 이/가 나타났다.\n");
+			settingHighMobInfo(switchnum);
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp);
@@ -758,7 +725,7 @@ public class GameScreen extends JFrame {
 						System.out.println("[info] 현재 캐릭터 체력 : " + current_user_hp);
 						playerHpbar.setValue(current_user_hp);
 						playerHpbar.setString(current_user_hp + " / " + c_hp);
-						if (GameScreen.current_user_hp <= 0) {
+						if (current_user_hp <= 0) {
 							Thread.currentThread().interrupt();
 						}
 
@@ -912,5 +879,32 @@ public class GameScreen extends JFrame {
 		if (b > 0) {
 			def_boots = b;
 		}
+	}
+	
+	void settingLowMobInfo(int switchnum) {
+		m_hp = lowmonsters.get(switchnum).getM_hp(); // 몹 체력 저장
+		m_name = lowmonsters.get(switchnum).getM_name(); // 몹 이름 저장
+		monsteratk = lowmonsters.get(switchnum).getM_atk(); // 몹 공격력 저장
+		monsterdef = lowmonsters.get(switchnum).getM_def(); // 몹 방어력 저장
+		m_exp = lowmonsters.get(switchnum).getM_exp(); // 몹 경험치 저장
+		dropitem = lowmonsters.get(switchnum).getMobDrop(); // 몹 드랍템
+	}
+	
+	void settingMiddleMobInfo(int switchnum) {
+		m_hp = middlemonsters.get(switchnum).getM_hp(); // 몹 체력 저장
+		m_name = middlemonsters.get(switchnum).getM_name(); // 몹 이름 저장
+		monsteratk = middlemonsters.get(switchnum).getM_atk(); // 몹 공격력 저장
+		monsterdef = middlemonsters.get(switchnum).getM_def(); // 몹 방어력 저장
+		m_exp = middlemonsters.get(switchnum).getM_exp(); // 몹 경험치 저장
+		dropitem = middlemonsters.get(switchnum).getMobDrop(); // 몹 드랍템
+	}
+	
+	void settingHighMobInfo(int switchnum) {
+		m_hp = highmonsters.get(switchnum).getM_hp(); // 몹 체력 저장
+		m_name = highmonsters.get(switchnum).getM_name(); // 몹 이름 저장
+		monsteratk = highmonsters.get(switchnum).getM_atk(); // 몹 공격력 저장
+		monsterdef = highmonsters.get(switchnum).getM_def(); // 몹 방어력 저장
+		m_exp = highmonsters.get(switchnum).getM_exp(); // 몹 경험치 저장
+		dropitem = highmonsters.get(switchnum).getMobDrop(); // 몹 드랍템
 	}
 }
