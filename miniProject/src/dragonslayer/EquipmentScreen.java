@@ -69,7 +69,7 @@ public class EquipmentScreen extends JFrame {
 
 		JLabel bootslabel = new JLabel(new ImageIcon(iconboots), SwingConstants.LEFT);
 		bootslabel.setBounds(5, 205, 120, 40);
-		bootslabel.setText("<html><p style='color:white; font-size:10px; font-family:맑은 고딕;'>장화<br/>"+boots+"</p></html>");
+		bootslabel.setText("<html><p style='color:white; font-size:10px; font-family:맑은 고딕;'>신발<br/>"+boots+"</p></html>");
 
 		EquipPanel.add(weaponlabel);
 		EquipPanel.add(helmetlabel);
@@ -85,7 +85,7 @@ public class EquipmentScreen extends JFrame {
 		// 해당 프레임이 닫힐 때 실행되는 windowListener
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
-				// 해당 프레임이 닫힐 때 GameScreen의 '가방' 버튼을 활성화시킴.
+				// 해당 프레임이 닫힐 때 GameScreen의 '장비' 버튼을 활성화시킴.
 				GameScreen.getEquipbutton().setEnabled(true);
 			}
 		});

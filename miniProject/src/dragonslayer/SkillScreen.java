@@ -5,13 +5,17 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 
 @SuppressWarnings("serial")
@@ -20,13 +24,18 @@ public class SkillScreen extends JFrame {
 	private Image iconimage = Toolkit.getDefaultToolkit().createImage("resource/images/title/titleicon.png");
 	private Image Skill1 = Toolkit.getDefaultToolkit().createImage("resource/images/icon/skill_1_dragon_slasher.png");
 	private Image Skill2 = Toolkit.getDefaultToolkit().createImage("resource/images/icon/skill_2_aura_blade.png");
-	private Image Skill3 = Toolkit.getDefaultToolkit().createImage("resource/images/icon/skill_3_healing.png");
+	private Image Skill3 = Toolkit.getDefaultToolkit().createImage("resource/images/icon/skill_3_Demonic Swords.PNG");
 	private Image Skill4 = Toolkit.getDefaultToolkit().createImage("resource/images/icon/skill_4_fatal_attack.png");
 	private static JPanel SkillPanel1, SkillPanel2, SkillPanel3, SkillPanel4; // 스킬 정보 출력 패널
 	private static JButton Use1, Use2, Use3, Use4; // 스킬 사용 버튼
 	private static JLabel SkillIconLabel1, SkillIconLabel2, SkillIconLabel3, SkillIconLabel4, SkillMessageLabel1,
 						SkillMessageLabel2, SkillMessageLabel3, SkillMessageLabel4; // 스킬 아이콘 및 설명 라벨
-	public SkillScreen() {
+	private int current_player_mp; // 플레이어 현재 마나
+	
+	public SkillScreen(int usermp) {
+		System.out.println("[info] 스킬 창 열림");
+		this.current_player_mp = usermp;
+		
 		setSize(400, 690);
 		setLayout(null);
 		setLocation(1480, 180);
@@ -84,14 +93,14 @@ public class SkillScreen extends JFrame {
 		SkillMessageLabel2.setText("<html><p style='font-size:14pt; font-family:맑은 고딕;'>MP 120 소비, 200%의 데미지로<br/>무기 전체를 타오르는 불꽃으로 휘감아<br/>전방을 향해 내려찍는다.</p></html>");
 		
 		SkillIconLabel3 = new JLabel(new ImageIcon(Skill3));
-		SkillIconLabel3.setBounds(5, 5, 175, 40);
-		SkillIconLabel3.setText(" 체력 회복 (습득 Lv : 5)");
+		SkillIconLabel3.setBounds(5, 5, 200, 40);
+		SkillIconLabel3.setText(" 데모닉 소드 (습득 Lv : 20)");
 		SkillIconLabel3.setForeground(new Color(191, 255, 183));
 		
 		SkillMessageLabel3 = new JLabel();
-		SkillMessageLabel3.setBounds(5, 45, 240, 50);
+		SkillMessageLabel3.setBounds(5, 45, 240, 60);
 		SkillMessageLabel3.setForeground(new Color(80, 175, 73));
-		SkillMessageLabel3.setText("<html><p style='font-size:14pt; font-family:맑은 고딕;'>MP 50 소비, 체력을 회복하는 주문을<br/>사용하여 전체 HP의 40%를 회복한다.</p></html>");
+		SkillMessageLabel3.setText("<html><p style='font-size:14pt; font-family:맑은 고딕;'>MP 150 소비, 250%의 데미지로<br/>악마의 검을 소환하여 사방으로 수차례 휘두른다.</p></html>");
 		
 		SkillIconLabel4 = new JLabel(new ImageIcon(Skill4));
 		SkillIconLabel4.setBounds(5, 5, 220, 40);
@@ -109,7 +118,15 @@ public class SkillScreen extends JFrame {
 		Use1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				int requiredmp = 70;
+				if(current_player_mp < requiredmp) {
+					JLabel message = new JLabel("<html><p style='font-family:맑은 고딕; font-size:14pt;'>MP가 부족하여 사용할 수 없습니다.</p></html>");
+					JOptionPane.showMessageDialog(SwingUtilities.getRoot(Use1), message, "사용", JOptionPane.ERROR_MESSAGE);
+					return;
+				} else {
+					System.out.println("[info] 스킬 '드래곤 슬래셔' 사용");
+					current_player_mp -= requiredmp;
+				}
 				
 			}
 		});
@@ -162,11 +179,19 @@ public class SkillScreen extends JFrame {
 		layer.add(SkillPanel2, new Integer(2));
 		layer.add(SkillPanel3, new Integer(2));
 		layer.add(SkillPanel4, new Integer(2));
+		
+		// 해당 프레임이 닫힐 때 실행되는 windowListener
+		addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				// 해당 프레임이 닫힐 때 GameScreen의 '스킬' 버튼을 활성화시킴.
+				// GameScreen.getSkillbutton().setEnabled(true);
+			}
+		});
 				
 		setVisible(true); 
 	}
 	
 	public static void main(String[] args) {
-		new SkillScreen();
+		new SkillScreen(50);
 	}
 }

@@ -26,6 +26,7 @@ import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
+import javax.tools.Tool;
 
 @SuppressWarnings("serial")
 public class GameScreen extends JFrame {
@@ -87,10 +88,11 @@ public class GameScreen extends JFrame {
 
 	// 스킬 이펙트 이미지들
 	private final static Image PLAYERBASICATTACK = Toolkit.getDefaultToolkit().createImage("resource/images/effects/player/player_basic_attack.gif");
-
+	private final static Image MONSTERATTACK = Toolkit.getDefaultToolkit().createImage("resource/images/effects/monster/monster_attack_resized.gif");
+	private final static Image BEINGATTACKED = Toolkit.getDefaultToolkit().createImage("resource/images/effects/both sides/Being attacked_resized.gif");
 	/** 필드 영역 **/
 	private String c_name, m_name, c_job; // 캐릭터명 & 몬스터이름
-	private int c_lv, c_str, c_dex, c_int, c_hp, c_mp, c_exp, c_next_exp; // 캐릭터 스탯 관련 정보 (스탯창 열었을때 보여줌)
+	private static int c_lv, c_str, c_dex, c_int, c_hp, c_mp, c_exp, c_next_exp; // 캐릭터 스탯 관련 정보 (스탯창 열었을때 보여줌)
 	private int current_monster_hp, m_hp, m_exp; // 몹 체력 & 몹 최대체력 & 몹이 주는 경험치
 	private Boolean battle = false; // 전투 발생을 알려주는 변수. 전투 발생 시 true로 전환(기본값 false)
 	private LinkedList<DSMonsters> lowmonsters = null; // 초급몹정보가 저장돼있는 LinkedList
@@ -106,7 +108,7 @@ public class GameScreen extends JFrame {
 
 	private static JButton buttonsearch, buttonattack, buttoninven, buttonequip, buttonstat, buttonskill, buttonexit;
 	private static JLabel mainbackgroundimgLabel, GameScreenimgLabel, monsterimgLabel; // 이미지 라벨들
-	private static JLabel skilleffectLabel;
+	private static JLabel playerattackLabel, monsterattackLabel, playerbeingattackedLabel, monsterbeingattackedLabel; // 공격 및 스킬 이팩트 라벨
 	private static JPanel CharacterPanel, MonsterPanel; // 캐릭터 이미지가 출력되는 패널, 몹 이미지가 출력되는 패널
 	private static JTextArea logarea;
 	private static JScrollPane logscroll;
@@ -165,6 +167,7 @@ public class GameScreen extends JFrame {
 		setSize(1040, 680);
 		setIconImage(ICONIMAGE);
 		setLocationRelativeTo(null);
+		setLayout(null);
 		getContentPane().setBackground(Color.BLACK);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
@@ -323,7 +326,6 @@ public class GameScreen extends JFrame {
 		buttonattack.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				if (!battle) {
 					JLabel message = new JLabel("<html><p style='font-size:14pt; font-family:맑은 고딕;'>적이 없으면 공격이 불가능합니다.</p></html>");
 					JOptionPane.showMessageDialog(null, message, "공격", JOptionPane.WARNING_MESSAGE, null);
@@ -335,7 +337,6 @@ public class GameScreen extends JFrame {
 				TimerTask mAttackTask = new TimerTask() {
 					@Override
 					public void run() {
-						// TODO Auto-generated method stub
 						attack_monster();
 					}
 				};
@@ -433,7 +434,9 @@ public class GameScreen extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new SkillScreen();
+				// 중복 클릭을 통한 여러 창 띄우는걸 방지하기 위해 해당 버튼을 클릭하면 버튼 비활성화.
+				buttonskill.setEnabled(false);
+				new SkillScreen(current_user_mp);
 			}
 		});
 		ButtonPanel.add(buttonskill);
@@ -486,14 +489,30 @@ public class GameScreen extends JFrame {
 		ButtonPanel.add(logoLabel);
 
 		JPanel skilleffectpanel = new JPanel(null);
-		skilleffectpanel.setBounds(320, 80, 380, 280);
+		skilleffectpanel.setBounds(150, 70, 670, 280);
 		skilleffectpanel.setOpaque(false);
 		skilleffectpanel.setBorder(new LineBorder(Color.PINK));
+		
+		// 플레이어 기본 공격 이팩트 라벨
+		playerattackLabel = new JLabel();
+		playerattackLabel.setBounds(150, 0, 380, 280);
+		
+		// 몬스터 공격 이팩트 라벨
+		monsterattackLabel = new JLabel();
+		monsterattackLabel.setBounds(320, 30, 201, 253);
+		
+		// 플레이어 피격 이팩트 라벨
+		playerbeingattackedLabel = new JLabel();
+		playerbeingattackedLabel.setBounds(425, 30, 250, 250);
+		
+		// 몬스터 피격 이팩트 라벨
+		monsterbeingattackedLabel = new JLabel();
+		monsterbeingattackedLabel.setBounds(0, 30, 250, 250);
 
-		skilleffectLabel = new JLabel();
-		skilleffectLabel.setBounds(0, 0, 380, 280);
-
-		skilleffectpanel.add(skilleffectLabel);
+		skilleffectpanel.add(playerattackLabel);
+		skilleffectpanel.add(monsterattackLabel);
+		skilleffectpanel.add(playerbeingattackedLabel);
+		skilleffectpanel.add(monsterbeingattackedLabel);
 
 		layer.add(mainbackgroundimgLabel, new Integer(1));
 		layer.add(GameScreenimgLabel, new Integer(2));
@@ -501,7 +520,7 @@ public class GameScreen extends JFrame {
 		layer.add(MonsterPanel, new Integer(3));
 		layer.add(LogPanel, new Integer(4));
 		layer.add(ButtonPanel, new Integer(4));
-		layer.add(skilleffectpanel, new Integer(3));
+		layer.add(skilleffectpanel, new Integer(4));
 
 		setVisible(true);
 	}
@@ -673,8 +692,8 @@ public class GameScreen extends JFrame {
 			return;
 		}
 		writeLog("'" + c_name + "' 의 공격!\n");
-		GameScreenimgLabel.setIcon(null); // 공격 시 배경화면 검은색으로
-		skilleffectLabel.setIcon(new ImageIcon(PLAYERBASICATTACK)); // 스킬 이펙트 출력
+		playerattackLabel.setIcon(new ImageIcon(PLAYERBASICATTACK)); // 플레이어 기본공격 이펙트 출력
+		monsterbeingattackedLabel.setIcon(new ImageIcon(BEINGATTACKED)); // 피격 이팩트 출력
 		int damage = playeratk - monsterdef; // 데미지는 플레이어 공격력 - 몬스터 방어력
 		if (damage <= 0) { // 플레이어 공격력 - 몬스터 방어력의 결과가 0보다 작거나 같을 경우 (= 몬스터의 방어력이 플레이어 공격력보다 높을 경우)
 			damage = 1; // 최소 데미지 1이 적용되도록 설정함.
@@ -694,8 +713,8 @@ public class GameScreen extends JFrame {
 			return;
 		}
 		writeLog("'" + m_name + "' 의 공격!\n");
-		// 몹의 스킬 이펙트
-
+		monsterattackLabel.setIcon(new ImageIcon(MONSTERATTACK)); // 몬스터 공격 이펙트 출력
+		playerbeingattackedLabel.setIcon(new ImageIcon(BEINGATTACKED)); // 피격 이팩트 출력
 		int damage = monsteratk - playerdef; // 데미지는 몬스터 공격력 - 플레이어 방어력
 		if (damage <= 0) { // 몬스터 공격력 - 플레이어 방어력의 결과가 0보다 작거나 같을 경우 (= 플레이어의 방어력이 몬스터의 공격력보다 높을 경우)
 			damage = 1;
@@ -706,7 +725,7 @@ public class GameScreen extends JFrame {
 			writeLog("'" + m_name + "' (은/는) " + c_name + " 에게 " + randomdamage + " 의 피해를 입혔다!");
 			current_user_hp -= randomdamage; // randomdamage 수치만큼 플레이어 현재 체력 감
 		}
-		skilleffectLabel.setIcon(null);
+//		attackLabel.setIcon(null);
 		GameScreenimgLabel.setIcon(BATTLEBACKGROUND);
 	}
 
@@ -772,7 +791,7 @@ public class GameScreen extends JFrame {
 								c_exp += m_exp; // 현재 경험치에 몹 경험치를 더함(경험치 획득)
 								battle = false; // 전투 종료
 								MonsterPanel.setVisible(false); // 몹패널 visible을 false
-								skilleffectLabel.setIcon(null);
+								playerattackLabel.setIcon(null);
 								GameScreenimgLabel.setIcon(BATTLEBACKGROUND);
 							}
 						}
