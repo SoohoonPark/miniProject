@@ -37,7 +37,7 @@ public class InventoryScreen extends JFrame {
 	private int atk_weapon, def_helmet, def_armor, def_glove, def_boots; // 무기,투구,갑옷,장갑,신발 아이템 값(공격력,방어력)
 	private String w_name, h_name, a_name, g_name, b_name; // 무기,투구,갑옷,장갑,신발 아이템명
 	private JButton use, drop; // 사용/장착, 버리기 버튼
-
+	
 	public InventoryScreen(LinkedList<DSItems> inventory, int userhp, int usermp, int maxhp, int maxmp) {
 		System.out.println("[info] 인벤토리(가방)창 열림");
 		this.inventorydata = inventory;
