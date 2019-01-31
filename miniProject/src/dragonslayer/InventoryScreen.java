@@ -1,6 +1,5 @@
 package dragonslayer;
 
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -99,49 +98,82 @@ public class InventoryScreen extends JFrame {
 				}
 				int selecteditemindex = invenlist.getSelectedIndex();
 				if (inventorydata.get(selecteditemindex).getI_equip().equals("N")) { // N = 장비불가능(=물약)
-					System.out.println("[info] 물약 사용");
-					/** 물약 사용 로직 **/
-					if (inventorydata.get(selecteditemindex).getI_name().equals("체력 물약")) {
-						System.out.println("[info] 체력 물약 사용");
-						if (current_player_hp == current_player_maxhp) {
-							JLabel message = new JLabel("<html><p style='font-family:맑은 고딕; font-size:14pt;'>체력이 가득 차있습니다.</p></html>");
-							JOptionPane.showMessageDialog(SwingUtilities.getRoot(use), message, "물약",
-									JOptionPane.ERROR_MESSAGE);
-							return;
-						}
-						// 체력 회복은 현재 최대 체력을 넘어갈 수 없음.
-						// 70/100 일 경우 30만 회복. 50/100 일 경우 50 회복.....
-						int requireRegenhp = current_player_maxhp - current_player_hp; // 총 체력 - 현재 체력 = 회복해야 할 체력
-						if (requireRegenhp <= inventorydata.get(selecteditemindex).getI_regen()) { // 회복해야할 체력 < 물약의 회복량
-							current_player_hp += requireRegenhp;
-							GameScreen.setPlayerhp(current_player_hp);
-						} else {
-							current_player_hp += inventorydata.get(selecteditemindex).getI_regen();
-							GameScreen.setPlayerhp(current_player_hp);
-						}
-						inventorydata.remove(selecteditemindex);
-						refreshItemList();
+					if(inventorydata.get(selecteditemindex).getI_name().contains("물약")) {
+						System.out.println("[info] 물약 사용");
+						/** 물약 사용 로직 **/
+						if (inventorydata.get(selecteditemindex).getI_name().equals("체력 물약")) {
+							System.out.println("[info] 체력 물약 사용");
+							if (current_player_hp == current_player_maxhp) {
+								JLabel message = new JLabel("<html><p style='font-family:맑은 고딕; font-size:14pt;'>체력이 가득 차있습니다.</p></html>");
+								JOptionPane.showMessageDialog(SwingUtilities.getRoot(use), message, "물약",
+										JOptionPane.ERROR_MESSAGE);
+								return;
+							}
+							// 체력 회복은 현재 최대 체력을 넘어갈 수 없음.
+							// 70/100 일 경우 30만 회복. 50/100 일 경우 50 회복.....
+							int requireRegenhp = current_player_maxhp - current_player_hp; // 총 체력 - 현재 체력 = 회복해야 할 체력
+							if (requireRegenhp <= inventorydata.get(selecteditemindex).getI_regen()) { // 회복해야할 체력 < 물약의 회복량
+								current_player_hp += requireRegenhp;
+								GameScreen.setPlayerhp(current_player_hp);
+							} else {
+								current_player_hp += inventorydata.get(selecteditemindex).getI_regen();
+								GameScreen.setPlayerhp(current_player_hp);
+							}
+							inventorydata.remove(selecteditemindex);
+							refreshItemList();
 
-					} else if (inventorydata.get(selecteditemindex).getI_name().equals("마나 물약")) {
-						System.out.println("[info] 마나 물약 사용");
-						if (current_player_mp == current_player_maxmp) {
-							JLabel message = new JLabel(
-									"<html><p style='font-family:맑은 고딕; font-size:14pt;'>마나가 가득 차있습니다.</p></html>");
-							JOptionPane.showMessageDialog(SwingUtilities.getRoot(use), message, "물약",
-									JOptionPane.ERROR_MESSAGE);
-							return;
+						} else if (inventorydata.get(selecteditemindex).getI_name().equals("마나 물약")) {
+							System.out.println("[info] 마나 물약 사용");
+							if (current_player_mp == current_player_maxmp) {
+								JLabel message = new JLabel(
+										"<html><p style='font-family:맑은 고딕; font-size:14pt;'>마나가 가득 차있습니다.</p></html>");
+								JOptionPane.showMessageDialog(SwingUtilities.getRoot(use), message, "물약",
+										JOptionPane.ERROR_MESSAGE);
+								return;
+							}
+							int requireRegenmp = current_player_maxmp - current_player_mp; // 총 체력 - 현재 체력 = 회복해야 할 체력
+							if (requireRegenmp <= inventorydata.get(selecteditemindex).getI_regen()) { // 회복해야할 체력 < 물약의 회복량
+								current_player_mp += requireRegenmp;
+								GameScreen.setPlayermp(current_player_mp);
+							} else {
+								current_player_mp += inventorydata.get(selecteditemindex).getI_regen();
+								GameScreen.setPlayermp(current_player_mp);
+							}
+							inventorydata.remove(selecteditemindex);
+							refreshItemList();
 						}
-						int requireRegenmp = current_player_maxmp - current_player_mp; // 총 체력 - 현재 체력 = 회복해야 할 체력
-						if (requireRegenmp <= inventorydata.get(selecteditemindex).getI_regen()) { // 회복해야할 체력 < 물약의 회복량
-							current_player_mp += requireRegenmp;
-							GameScreen.setPlayermp(current_player_mp);
-						} else {
-							current_player_mp += inventorydata.get(selecteditemindex).getI_regen();
-							GameScreen.setPlayermp(current_player_mp);
+					}else if(inventorydata.get(selecteditemindex).getI_name().contains("비약")){
+						System.out.println("[info] 비약 사용");
+						/** 비약 사용 로직 **/
+						if(inventorydata.get(selecteditemindex).getI_name().contains("힘의")) {
+							System.out.println(inventorydata.get(selecteditemindex).getI_name());
+							GameScreen.writeLog("힘이 "+inventorydata.get(selecteditemindex).getI_regen()+" 만큼 올랐다.");
+							GameScreen.setPlayerStr(inventorydata.get(selecteditemindex).getI_regen());
+							inventorydata.remove(selecteditemindex);
+							refreshItemList();
+							
+						}else if(inventorydata.get(selecteditemindex).getI_name().contains("지능의")) {
+							System.out.println(inventorydata.get(selecteditemindex).getI_name());
+							GameScreen.writeLog("지능이 "+inventorydata.get(selecteditemindex).getI_regen()+" 만큼 올랐다.");
+							GameScreen.setPlayerInt(inventorydata.get(selecteditemindex).getI_regen());
+							inventorydata.remove(selecteditemindex);
+							refreshItemList();
+							
+						}else if(inventorydata.get(selecteditemindex).getI_name().contains("민첩의")){
+							System.out.println(inventorydata.get(selecteditemindex).getI_name());
+							GameScreen.writeLog("민첩이 "+inventorydata.get(selecteditemindex).getI_regen()+" 만큼 올랐다.");
+							GameScreen.setPlayerDex(inventorydata.get(selecteditemindex).getI_regen());
+							inventorydata.remove(selecteditemindex);
+							refreshItemList();
+						}else {
+							System.out.println(inventorydata.get(selecteditemindex).getI_name());
+							GameScreen.writeLog("모든 능력치가 "+inventorydata.get(selecteditemindex).getI_regen()+" 만큼 올랐다.");
+							GameScreen.setPlayerAllstat(inventorydata.get(selecteditemindex).getI_regen());
+							inventorydata.remove(selecteditemindex);
+							refreshItemList();
 						}
-						inventorydata.remove(selecteditemindex);
-						refreshItemList();
 					}
+					
 				} else {
 					System.out.println("[info] 장비 장착");
 					setCharEquip(selecteditemindex);
