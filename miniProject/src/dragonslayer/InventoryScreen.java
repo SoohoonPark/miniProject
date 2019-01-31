@@ -97,10 +97,10 @@ public class InventoryScreen extends JFrame {
 					return;
 				}
 				int selecteditemindex = invenlist.getSelectedIndex();
-				if (inventorydata.get(selecteditemindex).getI_equip().equals("N")) { // N = 장비불가능(=물약)
+				if (inventorydata.get(selecteditemindex).getI_equip().equals("N")) { // N = 장비불가능(=물약, 비약, 경험의 돌)
 					if(inventorydata.get(selecteditemindex).getI_name().contains("물약")) {
-						System.out.println("[info] 물약 사용");
 						/** 물약 사용 로직 **/
+						System.out.println("[info] 물약 사용");
 						if (inventorydata.get(selecteditemindex).getI_name().equals("체력 물약")) {
 							System.out.println("[info] 체력 물약 사용");
 							if (current_player_hp == current_player_maxhp) {
@@ -143,8 +143,8 @@ public class InventoryScreen extends JFrame {
 							refreshItemList();
 						}
 					}else if(inventorydata.get(selecteditemindex).getI_name().contains("비약")){
-						System.out.println("[info] 비약 사용");
 						/** 비약 사용 로직 **/
+						System.out.println("[info] 비약 사용");
 						if(inventorydata.get(selecteditemindex).getI_name().contains("힘의")) {
 							System.out.println(inventorydata.get(selecteditemindex).getI_name());
 							GameScreen.writeLog("힘이 "+inventorydata.get(selecteditemindex).getI_regen()+" 만큼 올랐다.");
@@ -172,6 +172,13 @@ public class InventoryScreen extends JFrame {
 							inventorydata.remove(selecteditemindex);
 							refreshItemList();
 						}
+					}else {
+						System.out.println("[info] 경험의 돌 사용");
+						System.out.println(inventorydata.get(selecteditemindex).getI_name());
+						GameScreen.setPlayerExp(inventorydata.get(selecteditemindex).getI_regen());
+						GameScreen.writeLog("경험치가 "+inventorydata.get(selecteditemindex).getI_regen()+" 만큼 올랐다.");
+						inventorydata.remove(selecteditemindex);
+						refreshItemList();
 					}
 					
 				} else {

@@ -993,6 +993,11 @@ public class GameScreen extends JFrame {
 		c_int += up;
 	}
 	
+	// InventoryScreen에서 경험의 돌을 사용하고 난 후의 캐릭터 경험치 세팅
+	public static void setPlayerExp(int up) {
+		c_exp += up;
+	}
+	
 	// InventoryScreen에서 캐릭터의 장비 명(무기,투구,갑옷,장갑,신발)을 set함
 	public static void setPlayerEquipNameWeapon(String w) {
 		if (w != null) {
