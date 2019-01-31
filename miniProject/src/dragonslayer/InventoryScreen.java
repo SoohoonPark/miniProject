@@ -62,6 +62,7 @@ public class InventoryScreen extends JFrame {
 		invenlist = new JList<>(items);
 		invenlist.setFont(new Font("¸¼Àº °íµñ", Font.PLAIN, 14));
 		invenlist.setSelectedIndex(0);
+		
 
 		JScrollPane invenscroll = new JScrollPane(invenlist);
 		invenscroll.setBounds(30, 50, 230, 200);
