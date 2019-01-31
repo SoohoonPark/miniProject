@@ -35,10 +35,10 @@ public class GameScreen extends JFrame {
 	private final static Image ICONIMAGE = Toolkit.getDefaultToolkit().createImage("resource/images/title/titleicon.png");
 
 	// 게임배경화면(사각형 테두리)
-	private final static Image MAINBACKGROUND = Toolkit.getDefaultToolkit().createImage("resource/images/background/gamescreenmainbackground.png");
+	private final static Image MAINBACKGROUND = Toolkit.getDefaultToolkit().createImage("resource/images/background/GameScreen/MainBackgroundborder.png");
 
 	// 전투배경
-	private final static ImageIcon BATTLEBACKGROUND = new ImageIcon(Toolkit.getDefaultToolkit().createImage("resource/images/background/battlebackground_resize.png"));
+	private final static ImageIcon BATTLEBACKGROUND = new ImageIcon(Toolkit.getDefaultToolkit().createImage("resource/images/background/GameScreen/battlebackground.png"));
 
 	// 이벤트 배경
 	private final static Image EVENTBACKGROUND1 = Toolkit.getDefaultToolkit().createImage("resource/images/background/Event1_resize.png");
@@ -67,7 +67,7 @@ public class GameScreen extends JFrame {
 
 	// 버튼 패널 & 로그 패널 배경(테두리)
 	private final static Image LOGBACKGROUND = Toolkit.getDefaultToolkit().createImage("resource/images/background/LogPanelBorder.png");
-	private final static Image BUTTONBACKGROUND = Toolkit.getDefaultToolkit().createImage("resource/images/background/ButtonPanelBorder.png");
+	private final static Image BUTTONBACKGROUND = Toolkit.getDefaultToolkit().createImage("resource/images/background/GameScreen/ButtonPanelBorder.png");
 
 	// 버튼 이미지들(탐색,공격,가방....)
 	private final static Image BTNATK = Toolkit.getDefaultToolkit().createImage("resource/images/button/GameScreen/button_attack.png");
@@ -90,6 +90,7 @@ public class GameScreen extends JFrame {
 	private final static Image PLAYERBASICATTACK = Toolkit.getDefaultToolkit().createImage("resource/images/effects/player/player_basic_attack.gif");
 	private final static Image MONSTERATTACK = Toolkit.getDefaultToolkit().createImage("resource/images/effects/monster/monster_attack_resized.gif");
 	private final static Image BEINGATTACKED = Toolkit.getDefaultToolkit().createImage("resource/images/effects/both sides/Being attacked_resized.gif");
+	
 	/** 필드 영역 **/
 	private String c_name, m_name, c_job; // 캐릭터명 & 몬스터이름
 	private static int c_lv, c_str, c_dex, c_int, c_hp, c_mp, c_exp, c_next_exp; // 캐릭터 스탯 관련 정보 (스탯창 열었을때 보여줌)
@@ -171,6 +172,7 @@ public class GameScreen extends JFrame {
 		getContentPane().setBackground(Color.BLACK);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
+		setLayout(null);
 
 		// 레이어 설정
 		JLayeredPane layer = getLayeredPane();
@@ -692,8 +694,13 @@ public class GameScreen extends JFrame {
 			return;
 		}
 		writeLog("'" + c_name + "' 의 공격!\n");
+
 		playerattackLabel.setIcon(new ImageIcon(PLAYERBASICATTACK)); // 플레이어 기본공격 이펙트 출력
 		monsterbeingattackedLabel.setIcon(new ImageIcon(BEINGATTACKED)); // 피격 이팩트 출력
+
+//		GameScreenimgLabel.setIcon(null); // 공격 시 배경화면 검은색으로
+		playerattackLabel.setIcon(new ImageIcon(PLAYERBASICATTACK)); // 스킬 이펙트 출력
+
 		int damage = playeratk - monsterdef; // 데미지는 플레이어 공격력 - 몬스터 방어력
 		if (damage <= 0) { // 플레이어 공격력 - 몬스터 방어력의 결과가 0보다 작거나 같을 경우 (= 몬스터의 방어력이 플레이어 공격력보다 높을 경우)
 			damage = 1; // 최소 데미지 1이 적용되도록 설정함.

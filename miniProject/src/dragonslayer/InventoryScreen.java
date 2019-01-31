@@ -6,6 +6,8 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.LinkedList;
@@ -25,6 +27,12 @@ import javax.swing.SwingUtilities;
 public class InventoryScreen extends JFrame {
 	private Image iconimage = Toolkit.getDefaultToolkit().createImage("resource/images/title/titleicon.png");
 	private Image backgroundimage = Toolkit.getDefaultToolkit().createImage("resource/images/background/InventoryScreen/inventory_background.png");
+	private Image button_use = Toolkit.getDefaultToolkit().createImage("resource/images/button/InventoryScreen/inventory_use_button.png");
+	private Image button_use_pressed = Toolkit.getDefaultToolkit().createImage("resource/images/button/InventoryScreen/inventory_use_button_pressed.png");
+	
+	private Image button_drop = Toolkit.getDefaultToolkit().createImage("resource/images/button/InventoryScreen/inventory_drop_button.png");
+	private Image button_drop_pressed = Toolkit.getDefaultToolkit().createImage("resource/images/button/InventoryScreen/inventory_drop_button_pressed.png");
+	
 	private LinkedList<DSItems> inventorydata; // GameScreen에서 넘어온 inventorydata(해당 데이터를 나중에 다시 GameScreen으로 넘겨줌)
 	private DefaultListModel<String> items = new DefaultListModel<String>(); // JList에 올라갈 데이터모델
 	private JList<String> invenlist; // 인벤토리 리스트를 출력할 JList
@@ -62,13 +70,25 @@ public class InventoryScreen extends JFrame {
 		invenlist = new JList<>(items);
 		invenlist.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
 		invenlist.setSelectedIndex(0);
+		
 
 		JScrollPane invenscroll = new JScrollPane(invenlist);
 		invenscroll.setBounds(30, 50, 230, 200);
 		layer.add(invenscroll, new Integer(2));
 
-		use = new JButton("장착 / 사용");
-		use.setBounds(270, 50, 100, 50);
+		use = new JButton(new ImageIcon(button_use));
+		use.setBounds(270, 50, 100, 54);
+		use.setBorderPainted(false);
+		use.setContentAreaFilled(false);
+		use.setFocusPainted(false);
+		use.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent m) {
+				use.setIcon(new ImageIcon(button_use_pressed));
+			}
+			public void mouseReleased(MouseEvent m) {
+				use.setIcon(new ImageIcon(button_use));
+			}
+		});
 		use.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -131,8 +151,19 @@ public class InventoryScreen extends JFrame {
 
 		layer.add(use, new Integer(3));
 
-		drop = new JButton("버리기");
-		drop.setBounds(270, 120, 100, 50);
+		drop = new JButton(new ImageIcon(button_drop));
+		drop.setBounds(270, 120, 100, 54);
+		drop.setBorderPainted(false);
+		drop.setContentAreaFilled(false);
+		drop.setFocusPainted(false);
+		drop.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent m) {
+				drop.setIcon(new ImageIcon(button_drop_pressed));
+			}
+			public void mouseReleased(MouseEvent m) {
+				drop.setIcon(new ImageIcon(button_drop));
+			}
+		});
 		drop.addActionListener(new ActionListener() {
 
 			@Override
