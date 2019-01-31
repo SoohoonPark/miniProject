@@ -86,7 +86,7 @@ public class GameScreen extends JFrame {
 	private final static Image LOGO = Toolkit.getDefaultToolkit().createImage("resource/images/background/logo.png");
 
 	// 스킬 이펙트 이미지들
-	private final static Image PLAYERBASICATTACK = Toolkit.getDefaultToolkit().createImage("resource/images/effects/player/player_basic_attack.gif");
+	private final static Image PLAYERBASICATTACK = Toolkit.getDefaultToolkit().createImage("resource/images/effects/player/playerbasicattack.gif");
 
 	/** 필드 영역 **/
 	private String c_name, m_name, c_job; // 캐릭터명 & 몬스터이름
@@ -168,6 +168,7 @@ public class GameScreen extends JFrame {
 		getContentPane().setBackground(Color.BLACK);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
+		setLayout(null);
 
 		// 레이어 설정
 		JLayeredPane layer = getLayeredPane();
@@ -673,7 +674,7 @@ public class GameScreen extends JFrame {
 			return;
 		}
 		writeLog("'" + c_name + "' 의 공격!\n");
-		GameScreenimgLabel.setIcon(null); // 공격 시 배경화면 검은색으로
+//		GameScreenimgLabel.setIcon(null); // 공격 시 배경화면 검은색으로
 		skilleffectLabel.setIcon(new ImageIcon(PLAYERBASICATTACK)); // 스킬 이펙트 출력
 		int damage = playeratk - monsterdef; // 데미지는 플레이어 공격력 - 몬스터 방어력
 		if (damage <= 0) { // 플레이어 공격력 - 몬스터 방어력의 결과가 0보다 작거나 같을 경우 (= 몬스터의 방어력이 플레이어 공격력보다 높을 경우)
