@@ -883,18 +883,9 @@ public class GameScreen extends JFrame {
 						}
 
 						System.out.println("[info] 캐릭터 공격력&방어력 상태 체크..");
-						playeratk = (c_str / 2) + atk_weapon;
+						playeratk = (c_str / 2) + atk_weapon; // 플레이어 총 공격력(기본공격력 + 무기공격력)
 						equipdef = def_helmet + def_armor + def_glove + def_boots; // 투구,갑옷,장갑,신발 방어력 합계
-						playerdef = (c_dex / 5) + equipdef;
-						System.out.println("[info] 현재 캐릭터 공격력 :" + playeratk);
-						System.out.println("[info] 현재 캐릭터 방어력 :" + playerdef);
-
-						System.out.println("[info] 캐릭터 현재 장비 템 체크..");
-						System.out.println("[info] 장착 중인 무기 : " + weapon);
-						System.out.println("[info] 장착 중인 투구 : " + helmet);
-						System.out.println("[info] 장착 중인 갑옷 : " + armor);
-						System.out.println("[info] 장착 중인 장갑 : " + glove);
-						System.out.println("[info] 장착 중인 신발 : " + boots);
+						playerdef = (c_dex / 5) + equipdef; // 플레이어 총 방어력(기본방어력 + 방어구 총방어력)
 
 					} catch (Exception e) {
 						System.out.println("[Error] p_check 쓰레드 에러");
