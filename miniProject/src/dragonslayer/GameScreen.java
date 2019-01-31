@@ -146,11 +146,7 @@ public class GameScreen extends JFrame {
 
 	private static JButton buttonsearch, buttonattack, buttoninven, buttonequip, buttonstat, buttonskill, buttonexit;
 	private static JLabel mainbackgroundimgLabel, GameScreenimgLabel, monsterimgLabel; // 이미지 라벨들
-	private static JLabel playerattackLabel, monsterattackLabel, playerbeingattackedLabel, monsterbeingattackedLabel; // 공격
-																														// 및
-																														// 스킬
-																														// 이팩트
-																														// 라벨
+	private static JLabel playerattackLabel, monsterattackLabel, playerbeingattackedLabel, monsterbeingattackedLabel;
 	private static JPanel CharacterPanel, MonsterPanel; // 캐릭터 이미지가 출력되는 패널, 몹 이미지가 출력되는 패널
 	private static JTextArea logarea;
 	private static JScrollPane logscroll;
@@ -341,9 +337,9 @@ public class GameScreen extends JFrame {
 					createBattle(c_lv); // 플레이어 레벨에 따라서 생성되는 몹의 구간(?)이 달라짐. 1 ~ 10, 11 ~ 20, 21 ~ 30
 					break;
 				case 2:
-					System.out.println("[info] 아이템 획득");
-					int chestevent = (int) (Math.random() * 10) + 1; // 1 ~ 10 상자 이벤트(1 ~ 6 일반 상자, 7 ~ 9 괜찮아 보이는 상자, 10
-																		// 화려한 상자)
+					System.out.println("[info] 상자 획득 이벤트 발생");
+					// 1 ~ 10 상자 이벤트 (1 ~ 6 일반 상자, 7 ~ 9 괜찮아 보이는 상자, 10 화려한 상자)
+					int chestevent = (int) (Math.random() * 10) + 1;
 					System.out.println("[info] 발생한 상자 획득 이벤트 : " + chestevent);
 					createGetItemEvent(chestevent);
 					break;
@@ -644,7 +640,7 @@ public class GameScreen extends JFrame {
 				low[i] = Rewards.get(ran[i]);
 			}
 			addInventory(low); // 인벤토리에 추가
-			
+
 		} else if (event >= 7 && event < 10) { // 7 ~ 9 : 괜찮아 보이는 상자
 			writeLog("괜찮아 보이는 상자를 발견하고 상자를 열었다.");
 
@@ -663,8 +659,8 @@ public class GameScreen extends JFrame {
 				good[i] = GoodRewards.get(ran[i]);
 			}
 			addInventory(good); // 인벤토리에 추가
-			
-		}else { // 10 : 화려해 보이는 상자
+
+		} else { // 10 : 화려해 보이는 상자
 			writeLog("화려해 보이는 상자를 발견하고 상자를 열었다.");
 
 			// '중급' 키워드가 들어간 아이템 명을 담을 문자열 리스트
@@ -697,6 +693,269 @@ public class GameScreen extends JFrame {
 			}
 		}
 		return ran;
+	}
+
+	// 플레이어 공격 메소드
+	public void attack_player() {
+		if (!battle) {
+			System.out.println("[info] 전투 중이 아닙니다.");
+			return;
+		}
+		writeLog("'" + c_name + "' 의 공격!\n");
+
+		playerattackLabel.setIcon(new ImageIcon(PLAYERBASICATTACK)); // 플레이어 기본공격 이펙트 출력
+		monsterbeingattackedLabel.setIcon(new ImageIcon(BEINGATTACKED)); // 피격 이팩트 출력
+		playerattackLabel.setIcon(new ImageIcon(PLAYERBASICATTACK)); // 스킬 이펙트 출력
+
+		int damage = playeratk - monsterdef; // 데미지는 플레이어 공격력 - 몬스터 방어력
+		if (damage <= 0) { // 플레이어 공격력 - 몬스터 방어력의 결과가 0보다 작거나 같을 경우 (= 몬스터의 방어력이 플레이어 공격력보다 높을 경우)
+			damage = 1; // 최소 데미지 1이 적용되도록 설정함.
+			current_monster_hp -= damage; // damage 수치만큼 몬스터 현재 체력 감소
+			writeLog("'" + c_name + "' (은/는) " + m_name + " 에게 " + damage + " 의 피해를 입혔다!");
+		} else {
+			int randomdamage = (int) (Math.random() * damage) + 1; // 1 ~ 플레이어 데미지 사이의 랜덤데미지 결정
+			current_monster_hp -= randomdamage; // randomdamage 수치만큼 몹 현재 체력 감소
+			writeLog("'" + c_name + "' (은/는) " + m_name + " 에게 " + randomdamage + " 의 피해를 입혔다!");
+		}
+	}
+
+	// 몬스터 공격 메소드
+	public void attack_monster() {
+		if (!battle) {
+			System.out.println("[info] 전투 중이 아닙니다.");
+			return;
+		}
+		writeLog("'" + m_name + "' 의 공격!\n");
+		monsterattackLabel.setIcon(new ImageIcon(MONSTERATTACK)); // 몬스터 공격 이펙트 출력
+		playerbeingattackedLabel.setIcon(new ImageIcon(BEINGATTACKED)); // 피격 이팩트 출력
+		int damage = monsteratk - playerdef; // 데미지는 몬스터 공격력 - 플레이어 방어력
+		if (damage <= 0) { // 몬스터 공격력 - 플레이어 방어력의 결과가 0보다 작거나 같을 경우 (= 플레이어의 방어력이 몬스터의 공격력보다 높을 경우)
+			damage = 1;
+			writeLog("'" + m_name + "' (은/는) " + c_name + " 에게 " + damage + " 의 피해를 입혔다!");
+			current_user_hp -= damage; // damage 수치만큼 플레이어 현재 체력 감소
+		} else {
+			int randomdamage = (int) (Math.random() * damage) + 1; // 1 ~ 몬스터 데미지 사이의 랜덤데미지 결정
+			writeLog("'" + m_name + "' (은/는) " + c_name + " 에게 " + randomdamage + " 의 피해를 입혔다!");
+			current_user_hp -= randomdamage; // randomdamage 수치만큼 플레이어 현재 체력 감
+		}
+		GameScreenimgLabel.setIcon(BATTLEBACKGROUND);
+	}
+
+	// 플레이어 상태 확인 Thread 실행 메소드
+	public void checkplayerstatus() {
+		Thread p_check = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				System.out.println("[info] p_check 쓰레드 실행");
+				while (!Thread.currentThread().isInterrupted()) {
+					try {
+						Thread.sleep(1000);
+						System.out.println("[info] 캐릭터 체력 상태 체크..");
+						System.out.println("[info] 현재 캐릭터 체력 : " + current_user_hp);
+						playerHpbar.setValue(current_user_hp);
+						playerHpbar.setString(current_user_hp + " / " + c_hp);
+						if (current_user_hp <= 0) {
+							Thread.currentThread().interrupt();
+						}
+
+						System.out.println("[info] 캐릭터 공격력&방어력 상태 체크..");
+						playeratk = (c_str / 2) + atk_weapon; // 플레이어 총 공격력(기본공격력 + 무기공격력)
+						equipdef = def_helmet + def_armor + def_glove + def_boots; // 투구,갑옷,장갑,신발 방어력 합계
+						playerdef = (c_dex / 5) + equipdef; // 플레이어 총 방어력(기본방어력 + 방어구 총방어력)
+
+					} catch (Exception e) {
+						System.out.println("[Error] p_check 쓰레드 에러");
+					}
+				}
+			}
+		});
+		p_check.start();
+	}
+
+	// 몹 상태 확인 Thread 실행 메소드
+	public void checkmonsterstatus() {
+		Thread m_check = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				System.out.println("[info] m_check 쓰레드 실행");
+				while (!Thread.currentThread().isInterrupted()) {
+					try {
+						Thread.sleep(1000);
+						System.out.println("[info] 몹 체력 상태 체크..");
+						MonsterHpbar.setValue(current_monster_hp);
+						MonsterHpbar.setString(current_monster_hp + " / " + m_hp);
+						if (battle) { // 전투 발생 시
+							// 몹이 죽으면 경험치 & 아이템 획득
+							if (current_monster_hp <= 0) {
+								writeLog(m_name + "(이/가) 쓰러졌다.");
+								writeLog("경험치가 " + m_exp + " 올랐습니다.");
+								c_exp += m_exp; // 현재 경험치에 몹 경험치를 더함(경험치 획득)
+								battle = false; // 전투 종료
+								MonsterPanel.setVisible(false); // 몹패널 visible을 false
+								playerattackLabel.setIcon(null);
+								GameScreenimgLabel.setIcon(BATTLEBACKGROUND);
+							}
+						}
+					} catch (Exception e) {
+						System.out.println("[Error] m_check 쓰레드 에러");
+					}
+				}
+			}
+		});
+		m_check.start();
+	}
+
+	// 인벤토리에 아이템 추가하는 메소드
+	void addInventory(String[] getitem) {
+		try {
+			for (int i = 0; i < iteminfo.size(); i++) {
+				for (int j = 0; j < getitem.length; j++) {
+					if (getitem[j].equals(iteminfo.get(i).getI_name())) {
+						inven.add(iteminfo.get(i));
+					}
+				}
+			}
+			System.out.println("[info] 현재 인벤토리 사이즈 : " + inven.size());
+			for (int i = 0; i < inven.size(); i++) {
+				System.out.println("[info] 현재 인벤토리에 들어있는 아이템 : " + inven.get(i).getI_name());
+			}
+		} catch (Exception e) {
+			System.out.println("[Error] 예외 발생");
+			e.printStackTrace();
+		}
+	}
+
+	// InventoryScreen에서 인벤토리 최신화를 위해 사용하는 메소드.
+	public static void setInventorydata(LinkedList<DSItems> data) {
+		inven = data;
+	}
+
+	// InventoryScreen에서 포션을 사용하고 난 후의 체력세팅
+	public static void setPlayerhp(int hp) {
+		current_user_hp = hp;
+	}
+
+	// InventoryScreen에서 포션을 사용하고 난 후의 마나세팅
+	public static void setPlayermp(int mp) {
+		current_user_mp = mp;
+	}
+
+	// InventoryScreen에서 비약을 사용하고 난 후의 캐릭터 스텟 세팅
+	public static void setPlayerStr(int up) { // 힘의 비약
+		c_str += up; // c_str = c_str+up : up은 증가수치
+	}
+
+	public static void setPlayerDex(int up) { // 민첩의 비약
+		c_dex += up;
+	}
+
+	public static void setPlayerInt(int up) { // 지능의 비약
+		c_int += up;
+	}
+
+	public static void setPlayerAllstat(int up) { // 능력향상(올스텟)의 비약
+		c_str += up;
+		c_dex += up;
+		c_int += up;
+	}
+
+	// InventoryScreen에서 경험의 돌을 사용하고 난 후의 캐릭터 경험치 세팅
+	public static void setPlayerExp(int up) {
+		c_exp += up;
+	}
+
+	// InventoryScreen에서 캐릭터의 장비 명(무기,투구,갑옷,장갑,신발)을 set함
+	public static void setPlayerEquipNameWeapon(String w) {
+		if (w != null) {
+			weapon = w;
+		}
+	}
+
+	public static void setPlayerEquipNameHelmet(String h) {
+		if (h != null) {
+			helmet = h;
+		}
+	}
+
+	public static void setPlayerEquipNameArmor(String a) {
+		if (a != null) {
+			armor = a;
+		}
+	}
+
+	public static void setPlayerEquipNameGlove(String g) {
+		if (g != null) {
+			glove = g;
+		}
+	}
+
+	public static void setPlayerEquipNameBoots(String b) {
+		if (b != null) {
+			boots = b;
+		}
+	}
+
+	// InventoryScreen에서 넘어온 값들을 현재 GameScreen에 set함
+	public static void setEquipAtk(int w) {
+		if (w > 0) {
+			atk_weapon = w;
+		}
+	}
+
+	public static void setEquipDef_Helmet(int h) {
+		if (h > 0) {
+			def_helmet = h;
+		}
+	}
+
+	public static void setEquipDef_Armor(int a) {
+		if (a > 0) {
+			def_armor = a;
+		}
+	}
+
+	public static void setEquipDef_Glove(int g) {
+		if (g > 0) {
+			def_glove = g;
+		}
+	}
+
+	public static void setEquipDef_Boots(int b) {
+		if (b > 0) {
+			def_boots = b;
+		}
+	}
+
+	// 초급 몹 기본 정보 저장
+	void settingLowMobInfo(int switchnum) {
+		m_hp = lowmonsters.get(switchnum).getM_hp(); // 몹 체력 저장
+		m_name = lowmonsters.get(switchnum).getM_name(); // 몹 이름 저장
+		monsteratk = lowmonsters.get(switchnum).getM_atk(); // 몹 공격력 저장
+		monsterdef = lowmonsters.get(switchnum).getM_def(); // 몹 방어력 저장
+		m_exp = lowmonsters.get(switchnum).getM_exp(); // 몹 경험치 저장
+		dropitem = lowmonsters.get(switchnum).getMobDrop(); // 몹 드랍템
+	}
+
+	// 중급 몹 기본 정보 저장
+	void settingMiddleMobInfo(int switchnum) {
+		m_hp = middlemonsters.get(switchnum).getM_hp(); // 몹 체력 저장
+		m_name = middlemonsters.get(switchnum).getM_name(); // 몹 이름 저장
+		monsteratk = middlemonsters.get(switchnum).getM_atk(); // 몹 공격력 저장
+		monsterdef = middlemonsters.get(switchnum).getM_def(); // 몹 방어력 저장
+		m_exp = middlemonsters.get(switchnum).getM_exp(); // 몹 경험치 저장
+		dropitem = middlemonsters.get(switchnum).getMobDrop(); // 몹 드랍템
+	}
+
+	// 고급 몹 기본 정보 저장
+	void settingHighMobInfo(int switchnum) {
+		m_hp = highmonsters.get(switchnum).getM_hp(); // 몹 체력 저장
+		m_name = highmonsters.get(switchnum).getM_name(); // 몹 이름 저장
+		monsteratk = highmonsters.get(switchnum).getM_atk(); // 몹 공격력 저장
+		monsterdef = highmonsters.get(switchnum).getM_def(); // 몹 방어력 저장
+		m_exp = highmonsters.get(switchnum).getM_exp(); // 몹 경험치 저장
+		dropitem = highmonsters.get(switchnum).getMobDrop(); // 몹 드랍템
 	}
 
 	// 초급 몹 생성
@@ -813,271 +1072,5 @@ public class GameScreen extends JFrame {
 			monsterimgLabel.setIcon(new ImageIcon(ICEDRAGON));
 			break;
 		}
-	}
-
-	// 플레이어 공격 메소드
-	public void attack_player() {
-		if (!battle) {
-			System.out.println("[info] 전투 중이 아닙니다.");
-			return;
-		}
-		writeLog("'" + c_name + "' 의 공격!\n");
-
-		playerattackLabel.setIcon(new ImageIcon(PLAYERBASICATTACK)); // 플레이어 기본공격 이펙트 출력
-		monsterbeingattackedLabel.setIcon(new ImageIcon(BEINGATTACKED)); // 피격 이팩트 출력
-
-//		GameScreenimgLabel.setIcon(null); // 공격 시 배경화면 검은색으로
-		playerattackLabel.setIcon(new ImageIcon(PLAYERBASICATTACK)); // 스킬 이펙트 출력
-
-		int damage = playeratk - monsterdef; // 데미지는 플레이어 공격력 - 몬스터 방어력
-		if (damage <= 0) { // 플레이어 공격력 - 몬스터 방어력의 결과가 0보다 작거나 같을 경우 (= 몬스터의 방어력이 플레이어 공격력보다 높을 경우)
-			damage = 1; // 최소 데미지 1이 적용되도록 설정함.
-			current_monster_hp -= damage; // damage 수치만큼 몬스터 현재 체력 감소
-			writeLog("'" + c_name + "' (은/는) " + m_name + " 에게 " + damage + " 의 피해를 입혔다!");
-		} else {
-			int randomdamage = (int) (Math.random() * damage) + 1; // 1 ~ 플레이어 데미지 사이의 랜덤데미지 결정
-			current_monster_hp -= randomdamage; // randomdamage 수치만큼 몹 현재 체력 감소
-			writeLog("'" + c_name + "' (은/는) " + m_name + " 에게 " + randomdamage + " 의 피해를 입혔다!");
-		}
-	}
-
-	// 몬스터 공격 메소드
-	public void attack_monster() {
-		if (!battle) {
-			System.out.println("[info] 전투 중이 아닙니다.");
-			return;
-		}
-		writeLog("'" + m_name + "' 의 공격!\n");
-		monsterattackLabel.setIcon(new ImageIcon(MONSTERATTACK)); // 몬스터 공격 이펙트 출력
-		playerbeingattackedLabel.setIcon(new ImageIcon(BEINGATTACKED)); // 피격 이팩트 출력
-		int damage = monsteratk - playerdef; // 데미지는 몬스터 공격력 - 플레이어 방어력
-		if (damage <= 0) { // 몬스터 공격력 - 플레이어 방어력의 결과가 0보다 작거나 같을 경우 (= 플레이어의 방어력이 몬스터의 공격력보다 높을 경우)
-			damage = 1;
-			writeLog("'" + m_name + "' (은/는) " + c_name + " 에게 " + damage + " 의 피해를 입혔다!");
-			current_user_hp -= damage; // damage 수치만큼 플레이어 현재 체력 감소
-		} else {
-			int randomdamage = (int) (Math.random() * damage) + 1; // 1 ~ 몬스터 데미지 사이의 랜덤데미지 결정
-			writeLog("'" + m_name + "' (은/는) " + c_name + " 에게 " + randomdamage + " 의 피해를 입혔다!");
-			current_user_hp -= randomdamage; // randomdamage 수치만큼 플레이어 현재 체력 감
-		}
-//		attackLabel.setIcon(null);
-		GameScreenimgLabel.setIcon(BATTLEBACKGROUND);
-	}
-
-	// 플레이어 상태 확인
-	public void checkplayerstatus() {
-		Thread p_check = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				System.out.println("[info] p_check 쓰레드 실행");
-				while (!Thread.currentThread().isInterrupted()) {
-					try {
-						Thread.sleep(1000);
-						System.out.println("[info] 캐릭터 체력 상태 체크..");
-						System.out.println("[info] 현재 캐릭터 체력 : " + current_user_hp);
-						playerHpbar.setValue(current_user_hp);
-						playerHpbar.setString(current_user_hp + " / " + c_hp);
-						if (current_user_hp <= 0) {
-							Thread.currentThread().interrupt();
-						}
-
-						System.out.println("[info] 캐릭터 공격력&방어력 상태 체크..");
-						playeratk = (c_str / 2) + atk_weapon; // 플레이어 총 공격력(기본공격력 + 무기공격력)
-						equipdef = def_helmet + def_armor + def_glove + def_boots; // 투구,갑옷,장갑,신발 방어력 합계
-						playerdef = (c_dex / 5) + equipdef; // 플레이어 총 방어력(기본방어력 + 방어구 총방어력)
-
-					} catch (Exception e) {
-						System.out.println("[Error] p_check 쓰레드 에러");
-					}
-				}
-			}
-		});
-		p_check.start();
-	}
-
-	// 몹 상태 확인
-	public void checkmonsterstatus() {
-		Thread m_check = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				System.out.println("[info] m_check 쓰레드 실행");
-				while (!Thread.currentThread().isInterrupted()) {
-					try {
-						Thread.sleep(1000);
-						System.out.println("[info] 몹 체력 상태 체크..");
-						MonsterHpbar.setValue(current_monster_hp);
-						MonsterHpbar.setString(current_monster_hp + " / " + m_hp);
-						if (battle) { // 전투 발생 시
-							// 몹이 죽으면 경험치 & 아이템 획득
-							if (current_monster_hp <= 0) {
-								writeLog(m_name + "(이/가) 쓰러졌다.");
-								writeLog("경험치가 " + m_exp + " 올랐습니다.");
-								c_exp += m_exp; // 현재 경험치에 몹 경험치를 더함(경험치 획득)
-								battle = false; // 전투 종료
-								MonsterPanel.setVisible(false); // 몹패널 visible을 false
-								playerattackLabel.setIcon(null);
-								GameScreenimgLabel.setIcon(BATTLEBACKGROUND);
-							}
-						}
-					} catch (Exception e) {
-						System.out.println("[Error] m_check 쓰레드 에러");
-					}
-				}
-			}
-		});
-		m_check.start();
-	}
-
-	// 인벤토리에 아이템 추가하는 메소드
-	void addInventory(String[] getitem) {
-		try {
-			for (int i = 0; i < iteminfo.size(); i++) {
-				for (int j = 0; j < getitem.length; j++) {
-					if (getitem[j].equals(iteminfo.get(i).getI_name())) {
-						inven.add(iteminfo.get(i));
-					}
-				}
-			}
-			System.out.println("[info] 현재 인벤토리 사이즈 : " + inven.size());
-			for (int i = 0; i < inven.size(); i++) {
-				System.out.println("[info] 현재 인벤토리에 들어있는 아이템 : " + inven.get(i).getI_name());
-			}
-		} catch (Exception e) {
-			System.out.println("[Error] 예외 발생");
-			e.printStackTrace();
-		}
-	}
-
-	// InventoryScreen에서 인벤토리 최신화를 위해 사용하는 메소드.
-	public static void setInventorydata(LinkedList<DSItems> data) {
-		inven = data;
-	}
-
-	// InventoryScreen에서 포션을 사용하고 난 후의 체력세팅
-	public static void setPlayerhp(int hp) {
-		current_user_hp = hp;
-	}
-
-	// InventoryScreen에서 포션을 사용하고 난 후의 마나세팅
-	public static void setPlayermp(int mp) {
-		current_user_mp = mp;
-	}
-
-	// InventoryScreen에서 비약을 사용하고 난 후의 캐릭터 스텟 세팅
-	public static void setPlayerStr(int up) { // 힘의 비약
-		c_str += up; // c_str = c_str+up : up은 증가수치
-	}
-	
-	public static void setPlayerDex(int up) { // 민첩의 비약
-		c_dex += up;
-	}
-	
-	public static void setPlayerInt(int up) { // 지능의 비약
-		c_int += up;
-	}
-	
-	public static void setPlayerAllstat(int up) { // 능력향상(올스텟)의 비약
-		c_str += up;
-		c_dex += up;
-		c_int += up;
-	}
-	
-	// InventoryScreen에서 경험의 돌을 사용하고 난 후의 캐릭터 경험치 세팅
-	public static void setPlayerExp(int up) {
-		c_exp += up;
-	}
-	
-	// InventoryScreen에서 캐릭터의 장비 명(무기,투구,갑옷,장갑,신발)을 set함
-	public static void setPlayerEquipNameWeapon(String w) {
-		if (w != null) {
-			weapon = w;
-		}
-	}
-
-	public static void setPlayerEquipNameHelmet(String h) {
-		if (h != null) {
-			helmet = h;
-		}
-	}
-
-	public static void setPlayerEquipNameArmor(String a) {
-		if (a != null) {
-			armor = a;
-		}
-	}
-
-	public static void setPlayerEquipNameGlove(String g) {
-		if (g != null) {
-			glove = g;
-		}
-	}
-
-	public static void setPlayerEquipNameBoots(String b) {
-		if (b != null) {
-			boots = b;
-		}
-	}
-
-	// InventoryScreen에서 넘어온 값들을 현재 GameScreen에 set함
-	public static void setEquipAtk(int w) {
-		if (w > 0) {
-			atk_weapon = w;
-		}
-	}
-
-	public static void setEquipDef_Helmet(int h) {
-		if (h > 0) {
-			def_helmet = h;
-		}
-	}
-
-	public static void setEquipDef_Armor(int a) {
-		if (a > 0) {
-			def_armor = a;
-		}
-	}
-
-	public static void setEquipDef_Glove(int g) {
-		if (g > 0) {
-			def_glove = g;
-		}
-	}
-
-	public static void setEquipDef_Boots(int b) {
-		if (b > 0) {
-			def_boots = b;
-		}
-	}
-
-	// 초급 몹 기본 정보 저장
-	void settingLowMobInfo(int switchnum) {
-		m_hp = lowmonsters.get(switchnum).getM_hp(); // 몹 체력 저장
-		m_name = lowmonsters.get(switchnum).getM_name(); // 몹 이름 저장
-		monsteratk = lowmonsters.get(switchnum).getM_atk(); // 몹 공격력 저장
-		monsterdef = lowmonsters.get(switchnum).getM_def(); // 몹 방어력 저장
-		m_exp = lowmonsters.get(switchnum).getM_exp(); // 몹 경험치 저장
-		dropitem = lowmonsters.get(switchnum).getMobDrop(); // 몹 드랍템
-	}
-
-	// 중급 몹 기본 정보 저장
-	void settingMiddleMobInfo(int switchnum) {
-		m_hp = middlemonsters.get(switchnum).getM_hp(); // 몹 체력 저장
-		m_name = middlemonsters.get(switchnum).getM_name(); // 몹 이름 저장
-		monsteratk = middlemonsters.get(switchnum).getM_atk(); // 몹 공격력 저장
-		monsterdef = middlemonsters.get(switchnum).getM_def(); // 몹 방어력 저장
-		m_exp = middlemonsters.get(switchnum).getM_exp(); // 몹 경험치 저장
-		dropitem = middlemonsters.get(switchnum).getMobDrop(); // 몹 드랍템
-	}
-
-	// 고급 몹 기본 정보 저장
-	void settingHighMobInfo(int switchnum) {
-		m_hp = highmonsters.get(switchnum).getM_hp(); // 몹 체력 저장
-		m_name = highmonsters.get(switchnum).getM_name(); // 몹 이름 저장
-		monsteratk = highmonsters.get(switchnum).getM_atk(); // 몹 공격력 저장
-		monsterdef = highmonsters.get(switchnum).getM_def(); // 몹 방어력 저장
-		m_exp = highmonsters.get(switchnum).getM_exp(); // 몹 경험치 저장
-		dropitem = highmonsters.get(switchnum).getMobDrop(); // 몹 드랍템
 	}
 }
