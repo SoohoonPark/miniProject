@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 // DAO를 사용해서 DB로부터 넘어온 값들을 처리하는 서비스
@@ -49,5 +50,23 @@ public class DSService {
 		DBConnectClose.Close(DSDAO.getpstmt());
 		DBConnectClose.Close(conn);
 		return items;
+	}
+	
+	public HashMap<Integer, Integer> expData(){
+		conn = DSDBConnection.DBConn();
+		HashMap<Integer,Integer> exp = new HashMap<Integer,Integer>();
+		ResultSet exp_rs = DSDAO.getExpData(conn);
+		try {
+			while(exp_rs.next()) {
+				exp.put(exp_rs.getInt(1), exp_rs.getInt(2));
+			}
+		}catch(SQLException sql) {
+			System.out.println("[Error] SQL 데이터 가져오기 에러");
+			System.out.println(sql.getMessage());
+		}
+		DBConnectClose.Close(exp_rs);
+		DBConnectClose.Close(DSDAO.getpstmt());
+		DBConnectClose.Close(conn);
+		return exp;
 	}
 }

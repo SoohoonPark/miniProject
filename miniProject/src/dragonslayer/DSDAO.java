@@ -38,6 +38,19 @@ public class DSDAO {
 		return rs;
 	}
 	
+	// 경험치 정보를 가져와서 결과(rs)를 Service로 넘겨줌
+	public static ResultSet getExpData(Connection conn) {
+		try {
+			String query = "SELECT * FROM EXPTABLE";
+			pstmt = conn.prepareStatement(query);
+			rs = pstmt.executeQuery();
+		}catch(SQLException sql) {
+			System.out.println("[Error] SQL 처리 예외 발생(getExp)");
+			System.out.println(sql.getMessage());
+		}
+		return rs;
+	}
+	
 	public static PreparedStatement getpstmt() {
 		return pstmt;
 	}

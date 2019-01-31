@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Timer;
@@ -135,9 +134,9 @@ public class GameScreen extends JFrame {
 	private LinkedList<DSMonsters> middlemonsters = null; // 중급몹정보가 저장돼있는 LinkedList
 	private LinkedList<DSMonsters> highmonsters = null; // 고급몹정보가 저장돼있는 LinkedList
 	private LinkedList<DSItems> iteminfo; // 게임 내 아이템 정보가 담겨 있는 iteminfo
-	private ArrayList<String> Rewards = new ArrayList<String>();
-	private ArrayList<String> GoodRewards = new ArrayList<String>();
-	private ArrayList<String> VeryGoodRewards = new ArrayList<String>();
+	private ArrayList<String> Rewards = new ArrayList<String>(); // 평범해보이는 상자
+	private ArrayList<String> GoodRewards = new ArrayList<String>(); // 괜찮아보이는 상자
+	private ArrayList<String> VeryGoodRewards = new ArrayList<String>(); // 화려해보이는 상자
 	private HashMap<Integer, Integer> exptable; // 게임 내 경험치 정보가 담겨 있는 exptable;
 	private String[] dropitem; // 몹이 드랍하는 아이템이 저장되어있는 String 배열
 	private int playeratk, playerdef; // 플레이어 공격력, 방어력
@@ -197,6 +196,7 @@ public class GameScreen extends JFrame {
 //		middlemonsters = service.monsterData("중급"); // 중급 몹 정보 저장
 //		highmonsters = service.monsterData("고급"); // 고급 몹 정보 저장
 		iteminfo = service.itemData(); // 아이템 정보 저장
+		exptable = service.expData(); // 경험치 정보 저장(Key - 레벨 / Value - 다음 경험치)
 		System.out.println("아이템 정보 : " + iteminfo.size());
 		System.out.println("[info] GameScreen() 필드 초기화 완료.");
 		createGameScreen();
