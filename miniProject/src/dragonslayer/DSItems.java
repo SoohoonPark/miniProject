@@ -6,13 +6,15 @@ public class DSItems {
 	private int i_def; // 아이템 방어력
 	private int i_regen; // 아이템 회복력(물약만 해당)
 	private String i_equip; // 장비 여부(장비템인지 아닌지 Y or N);
+	private String i_parts; // 투구,갑옷,장갑,신발 부위별 값
 	
-	public DSItems(String n, int a, int d, int r, String e) {
+	public DSItems(String n, int a, int d, int r, String e, String p) {
 		this.i_name = n;
 		this.i_atk = a;
 		this.i_def = d;
 		this.i_regen = r;
 		this.i_equip = e;
+		this.i_parts = p;
 		System.out.println("[info] DB로부터 아이템정보 객체에 저장 완료.");
 	}
 
@@ -34,5 +36,9 @@ public class DSItems {
 
 	public String getI_equip() {
 		return i_equip;
+	}
+	
+	public String getI_parts() {
+		return i_parts;
 	}
 }
