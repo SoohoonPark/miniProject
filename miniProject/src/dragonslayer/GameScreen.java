@@ -975,19 +975,19 @@ public class GameScreen extends JFrame {
 	}
 
 	// InventoryScreen에서 비약을 사용하고 난 후의 캐릭터 스텟 세팅
-	public static void setPlayerStr(int up) {
+	public static void setPlayerStr(int up) { // 힘의 비약
 		c_str += up; // c_str = c_str+up : up은 증가수치
 	}
 	
-	public static void setPlayerDex(int up) {
+	public static void setPlayerDex(int up) { // 민첩의 비약
 		c_dex += up;
 	}
 	
-	public static void setPlayerInt(int up) {
+	public static void setPlayerInt(int up) { // 지능의 비약
 		c_int += up;
 	}
 	
-	public static void setPlayerAllstat(int up) {
+	public static void setPlayerAllstat(int up) { // 능력향상(올스텟)의 비약
 		c_str += up;
 		c_dex += up;
 		c_int += up;
