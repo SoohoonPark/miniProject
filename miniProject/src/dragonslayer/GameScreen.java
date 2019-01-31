@@ -92,7 +92,6 @@ public class GameScreen extends JFrame {
 	private String c_name, m_name, c_job; // 캐릭터명 & 몬스터이름
 	private int c_lv, c_str, c_dex, c_int, c_hp, c_mp, c_exp, c_next_exp; // 캐릭터 스탯 관련 정보 (스탯창 열었을때 보여줌)
 	private int current_monster_hp, m_hp, m_exp; // 몹 체력 & 몹 최대체력 & 몹이 주는 경험치
-	private static int current_user_hp, current_user_mp; // 현재 플레이어 체력 & 마나
 	private Boolean battle = false; // 전투 발생을 알려주는 변수. 전투 발생 시 true로 전환(기본값 false)
 	private LinkedList<DSMonsters> lowmonsters = null; // 초급몹정보가 저장돼있는 LinkedList
 	private LinkedList<DSMonsters> middlemonsters = null; // 중급몹정보가 저장돼있는 LinkedList
@@ -100,7 +99,10 @@ public class GameScreen extends JFrame {
 	private LinkedList<DSItems> iteminfo; // 게임 내 아이템 정보가 담겨 있는 iteminfo
 	private HashMap<Integer, Integer> exptable; // 게임 내 경험치 정보가 담겨 있는 exptable;
 	private String[] dropitem; // 몹이 드랍하는 아이템이 저장되어있는 String 배열
-	private static LinkedList<DSItems> inven = new LinkedList<DSItems>(); // 플레이어 인벤토리 내용물
+	private int playeratk, playerdef; // 플레이어 공격력, 방어력
+	private int equipdef; // 방어구의 총 방어력
+	private int monsteratk, monsterdef; // 몬스터 공격력, 방어력
+	private DSService service = new DSService();
 
 	private static JButton buttonsearch, buttonattack, buttoninven, buttonequip, buttonstat, buttonskill, buttonexit;
 	private static JLabel mainbackgroundimgLabel, GameScreenimgLabel, monsterimgLabel; // 이미지 라벨들
@@ -110,12 +112,10 @@ public class GameScreen extends JFrame {
 	private static JScrollPane logscroll;
 	private static JProgressBar playerHpbar, playerMpbar, MonsterHpbar; // 플레이어 체력막대,마나막대, 몹 체력막대
 
-	private int playeratk, playerdef; // 플레이어 공격력, 방어력
 	private static String helmet, armor, glove, boots, weapon; // 캐릭터가 착용하고 있는 아이템명(장비 창으로 넘길 값들)
 	private static int def_helmet, def_armor, def_glove, def_boots, atk_weapon; // 캐릭터가 착용하고 있는 아이템의 공&방
-	private int equipdef; // 방어구의 총 방어력
-	private int monsteratk, monsterdef; // 몬스터 공격력, 방어력
-	private DSService service = new DSService();
+	private static LinkedList<DSItems> inven = new LinkedList<DSItems>(); // 플레이어 인벤토리 내용물
+	private static int current_user_hp, current_user_mp; // 현재 플레이어 체력 & 마나
 
 	public static void main(String[] args) {
 		new GameScreen("춘식이", "모험가", 10, 10, 10, 100, 80);
@@ -134,9 +134,9 @@ public class GameScreen extends JFrame {
 		this.c_int = i; // 지능
 
 		this.c_hp = hp; // 체력
-		this.current_user_hp = c_hp; // 플레이어 현재 체력
+		GameScreen.current_user_hp = c_hp; // 플레이어 현재 체력
 		this.c_mp = mp + (c_int * 2); // 마나는 기본 마나값 + 지능*2
-		this.current_user_mp = c_mp; // 플레이어 현재 마나
+		GameScreen.current_user_mp = c_mp; // 플레이어 현재 마나
 
 		this.c_exp = 0; // 초기 경험치 보유량 0
 		this.c_next_exp = 50; // 다음 경험치 요구량 50
@@ -881,6 +881,7 @@ public class GameScreen extends JFrame {
 		}
 	}
 	
+	// 초급 몹 기본 정보 저장
 	void settingLowMobInfo(int switchnum) {
 		m_hp = lowmonsters.get(switchnum).getM_hp(); // 몹 체력 저장
 		m_name = lowmonsters.get(switchnum).getM_name(); // 몹 이름 저장
@@ -890,6 +891,7 @@ public class GameScreen extends JFrame {
 		dropitem = lowmonsters.get(switchnum).getMobDrop(); // 몹 드랍템
 	}
 	
+	// 중급 몹 기본 정보 저장
 	void settingMiddleMobInfo(int switchnum) {
 		m_hp = middlemonsters.get(switchnum).getM_hp(); // 몹 체력 저장
 		m_name = middlemonsters.get(switchnum).getM_name(); // 몹 이름 저장
@@ -899,6 +901,7 @@ public class GameScreen extends JFrame {
 		dropitem = middlemonsters.get(switchnum).getMobDrop(); // 몹 드랍템
 	}
 	
+	// 고급 몹 기본 정보 저장
 	void settingHighMobInfo(int switchnum) {
 		m_hp = highmonsters.get(switchnum).getM_hp(); // 몹 체력 저장
 		m_name = highmonsters.get(switchnum).getM_name(); // 몹 이름 저장

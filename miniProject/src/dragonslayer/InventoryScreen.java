@@ -27,17 +27,16 @@ import javax.swing.SwingUtilities;
 public class InventoryScreen extends JFrame {
 	private Image iconimage = Toolkit.getDefaultToolkit().createImage("resource/images/title/titleicon.png");
 	private Image backgroundimage = Toolkit.getDefaultToolkit().createImage("resource/images/background/InventoryScreen/inventory_background.png");
-	private LinkedList<DSItems> inventorydata;
-	private DefaultListModel<String> items = new DefaultListModel<String>();
-	private JList<String> invenlist;
+	private LinkedList<DSItems> inventorydata; // GameScreen에서 넘어온 inventorydata(해당 데이터를 나중에 다시 GameScreen으로 넘겨줌)
+	private DefaultListModel<String> items = new DefaultListModel<String>(); // JList에 올라갈 데이터모델
+	private JList<String> invenlist; // 인벤토리 리스트를 출력할 JList
 	private int current_player_maxhp; // 플레이어 총 체력(체력 물약 먹었을때 최대 체력 이상으로 회복 불가능)
 	private int current_player_maxmp; // 플레이어 총 마나(마나 물약 먹었을때 최대 마나 이상으로 회복 불가능)
 	private int current_player_hp; // 플레이어 현재 체력
 	private int current_player_mp; // 플레이어 현재 마나
 	private int atk_weapon, def_helmet, def_armor, def_glove, def_boots; // 무기,투구,갑옷,장갑,신발 아이템 값(공격력,방어력)
 	private String w_name, h_name, a_name, g_name, b_name; // 무기,투구,갑옷,장갑,신발 아이템명
-	private Thread check, atkdef, equip; // 플레이어 체&마, 공&방 체크, 장비명 체크 Thread
-	private JButton use, drop;
+	private JButton use, drop; // 사용/장착, 버리기 버튼
 
 	public InventoryScreen(LinkedList<DSItems> inventory, int userhp, int usermp, int maxhp, int maxmp) {
 		System.out.println("[info] 인벤토리(가방)창 열림");
@@ -159,7 +158,7 @@ public class InventoryScreen extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				// 해당 프레임이 닫힐 때 GameScreen의 '가방' 버튼을 활성화시킴.
-				GameScreen.setInventorydata(inventorydata);
+				GameScreen.setInventorydata(inventorydata); // GameScreen의 inventorydata를 저장(인벤토리 최신화)
 				GameScreen.getInvenbutton().setEnabled(true);
 				System.out.println("[info] 인벤토리 창 닫힘");
 			}
