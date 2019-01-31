@@ -769,6 +769,7 @@ public class GameScreen extends JFrame {
 							if (current_monster_hp <= 0) {
 								writeLog(m_name + "(이/가) 쓰러졌다.");
 								writeLog("경험치가 "+m_exp+" 올랐습니다.");
+								c_exp += m_exp; // 현재 경험치에 몹 경험치를 더함(경험치 획득)
 								battle = false; // 전투 종료
 								MonsterPanel.setVisible(false); // 몹패널 visible을 false
 								skilleffectLabel.setIcon(null);
