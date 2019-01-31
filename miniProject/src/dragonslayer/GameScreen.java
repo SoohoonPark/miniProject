@@ -515,7 +515,7 @@ public class GameScreen extends JFrame {
 
 	// 로그 작성
 	void writeLog(String text) {
-		logarea.append(text);
+		logarea.append(text+"\n");
 		logarea.moveCaretPosition(logarea.getText().length());
 	}
 
@@ -680,11 +680,11 @@ public class GameScreen extends JFrame {
 		if (damage <= 0) { // 플레이어 공격력 - 몬스터 방어력의 결과가 0보다 작거나 같을 경우 (= 몬스터의 방어력이 플레이어 공격력보다 높을 경우)
 			damage = 1; // 최소 데미지 1이 적용되도록 설정함.
 			current_monster_hp -= damage; // damage 수치만큼 몬스터 현재 체력 감소
-			writeLog("'" + c_name + "' (은/는) " + m_name + " 에게 " + damage + " 의 피해를 입혔다!\n");
+			writeLog("'" + c_name + "' (은/는) " + m_name + " 에게 " + damage + " 의 피해를 입혔다!");
 		} else {
 			int randomdamage = (int) (Math.random() * damage) + 1; // 1 ~ 플레이어 데미지 사이의 랜덤데미지 결정
 			current_monster_hp -= randomdamage; // randomdamage 수치만큼 몹 현재 체력 감소
-			writeLog("'" + c_name + "' (은/는) " + m_name + " 에게 " + randomdamage + " 의 피해를 입혔다!\n");
+			writeLog("'" + c_name + "' (은/는) " + m_name + " 에게 " + randomdamage + " 의 피해를 입혔다!");
 		}
 	}
 
@@ -700,11 +700,11 @@ public class GameScreen extends JFrame {
 		int damage = monsteratk - playerdef; // 데미지는 몬스터 공격력 - 플레이어 방어력
 		if (damage <= 0) { // 몬스터 공격력 - 플레이어 방어력의 결과가 0보다 작거나 같을 경우 (= 플레이어의 방어력이 몬스터의 공격력보다 높을 경우)
 			damage = 1;
-			writeLog("'" + m_name + "' (은/는) " + c_name + " 에게 " + damage + " 의 피해를 입혔다!\n");
+			writeLog("'" + m_name + "' (은/는) " + c_name + " 에게 " + damage + " 의 피해를 입혔다!");
 			current_user_hp -= damage; // damage 수치만큼 플레이어 현재 체력 감소
 		} else {
 			int randomdamage = (int) (Math.random() * damage) + 1; // 1 ~ 몬스터 데미지 사이의 랜덤데미지 결정
-			writeLog("'" + m_name + "' (은/는) " + c_name + " 에게 " + randomdamage + " 의 피해를 입혔다!\n");
+			writeLog("'" + m_name + "' (은/는) " + c_name + " 에게 " + randomdamage + " 의 피해를 입혔다!");
 			current_user_hp -= randomdamage; // randomdamage 수치만큼 플레이어 현재 체력 감
 		}
 		skilleffectLabel.setIcon(null);
@@ -765,10 +765,11 @@ public class GameScreen extends JFrame {
 						System.out.println("[info] 몹 체력 상태 체크..");
 						MonsterHpbar.setValue(current_monster_hp);
 						MonsterHpbar.setString(current_monster_hp + " / " + m_hp);
-						if (battle) {
+						if (battle) { // 전투 발생 시
 							// 몹이 죽으면 경험치 & 아이템 획득
 							if (current_monster_hp <= 0) {
-								writeLog(m_name + "(이/가) 쓰러졌다.\n");
+								writeLog(m_name + "(이/가) 쓰러졌다.");
+								writeLog("경험치가 "+m_exp+" 올랐습니다.");
 								battle = false; // 전투 종료
 								MonsterPanel.setVisible(false); // 몹패널 visible을 false
 								skilleffectLabel.setIcon(null);
