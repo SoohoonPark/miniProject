@@ -57,12 +57,6 @@ public class GameScreen extends JFrame {
 	private final static ImageIcon WELLTRAP = new ImageIcon(
 			Toolkit.getDefaultToolkit().createImage("resource/images/background/GameScreen/trap/well_trap.png"));
 
-	// 이벤트 배경
-	private final static Image EVENTBACKGROUND1 = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/background/Event1_resize.png");
-	private final static Image EVENTBACKGROUND2 = null;
-	private final static Image EVENTBACKGROUND3 = null;
-
 	// 플레이어 이미지(모험가)
 	private final static Image PLAYERBEGINNER = Toolkit.getDefaultToolkit()
 			.createImage("resource/images/player/playercharacter_beginner.png");
@@ -141,9 +135,9 @@ public class GameScreen extends JFrame {
 	/** 필드 영역 **/
 	private static String c_name, m_name, c_job; // 캐릭터명 & 몬스터이름
 	// 캐릭터 스탯 관련 정보 (스탯창 열었을때 보여줌) 레벨, 힘, 민첩, 지능, 체력, 마나, 경험치, 다음 경험치
-	private static int c_lv, c_str, c_dex, c_int, c_hp, c_mp, c_exp, c_next_exp;
-	private int current_monster_hp, m_hp, m_exp; // 몹 체력 & 몹 최대체력 & 몹이 주는 경험치
-	private static Boolean battle = false; // 전투 발생을 알려주는 변수. 전투 발생 시 true로 전환(기본값 false)
+	public static int c_lv, c_str, c_dex, c_int, c_hp, c_mp, c_exp, c_next_exp;
+	public static int current_monster_hp, m_hp, m_exp; // 몹 체력 & 몹 최대체력 & 몹이 주는 경험치
+	public static Boolean battle = false; // 전투 발생을 알려주는 변수. 전투 발생 시 true로 전환(기본값 false)
 	private Boolean buff = false; // 플레이어 버프 상황(걸려있는지 아닌지)
 	private Thread p_check, m_check; // 플레이어, 몹 상태 확인 Thread
 	private LinkedList<DSMonsters> lowmonsters = null; // 초급몹정보가 저장돼있는 LinkedList
@@ -162,14 +156,8 @@ public class GameScreen extends JFrame {
 
 	private static JButton buttonsearch, buttonattack, buttoninven, buttonequip, buttonstat, buttonskill, buttonexit;
 	private static JLabel mainbackgroundimgLabel, GameScreenimgLabel, monsterimgLabel; // 이미지 라벨들
-	private static JLabel playerattackLabel, monsterattackLabel, playerbeingattackedLabel, monsterbeingattackedLabel; // 기본
-																														// 공격
-																														// 및
-																														// 피격
-																														// 라벨
-	static JLabel SkillEffectLabel1, SkillEffectLabel2, SkillEffectLabel3, SkillEffectLabel4_1, SkillEffectLabel4_2; // 스킬
-																														// 이팩트
-																														// 라벨
+	private static JLabel playerattackLabel, monsterattackLabel, playerbeingattackedLabel, monsterbeingattackedLabel; 
+	public static JLabel SkillEffectLabel1, SkillEffectLabel2, SkillEffectLabel3, SkillEffectLabel4_1, SkillEffectLabel4_2;
 
 	private static JPanel CharacterPanel, MonsterPanel; // 캐릭터 이미지가 출력되는 패널, 몹 이미지가 출력되는 패널
 	private static JTextArea logarea;
@@ -180,7 +168,6 @@ public class GameScreen extends JFrame {
 	private static int def_helmet, def_armor, def_glove, def_boots, atk_weapon; // 캐릭터가 착용하고 있는 아이템의 공&방
 	private static LinkedList<DSItems> inven = new LinkedList<DSItems>(); // 플레이어 인벤토리 내용물
 	private static int current_user_hp, current_user_mp; // 현재 플레이어 체력 & 마나
-	private int tempstr, tempdex, tempint; // 버프 적용받기 전 스텟값 저장(버프 끝나면 원상태로 복구해야하기 때문에)
 
 	public static void main(String[] args) {
 		new GameScreen("춘식이", 1, "모험가", 10, 10, 10, 100, 480);
@@ -797,8 +784,8 @@ public class GameScreen extends JFrame {
 		}
 		return ran;
 	}
+	
 	// 플레이어 공격(평타)
-
 	public void attack_player() {
 		if (!battle) {
 			System.out.println("[info] 전투 중이 아닙니다.");
@@ -1035,7 +1022,7 @@ public class GameScreen extends JFrame {
 			e.printStackTrace();
 		}
 	}
-
+	
 	// InventoryScreen에서 인벤토리 최신화를 위해 사용하는 메소드.
 	public static void setInventorydata(LinkedList<DSItems> data) {
 		inven = data;

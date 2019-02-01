@@ -40,6 +40,7 @@ public class SkillScreen extends JFrame {
 	private static JButton Use1, Use2, Use3, Use4; // 스킬 사용 버튼
 	private static JLabel SkillIconLabel1, SkillIconLabel2, SkillIconLabel3, SkillIconLabel4,
 						SkillMessageLabel1,	SkillMessageLabel2, SkillMessageLabel3, SkillMessageLabel4; // 스킬 아이콘 및 설명 라벨
+	
 	private int current_player_mp, playeratk, c_lv; // 플레이어 현재 마나, 공격력, 레벨
 	private int current_mob_hp, monsterdef; // 몬스터 현재 체력, 방어력
 	
