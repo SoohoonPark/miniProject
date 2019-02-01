@@ -1,7 +1,6 @@
 package dragonslayer;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -52,6 +51,7 @@ public class DSService {
 		return items;
 	}
 	
+	// DAO 로부터 가져온 경험치 정보를 맵에 담아서 GameScreen에 넘겨줌
 	public HashMap<Integer, Integer> expData(){
 		conn = DSDBConnection.DBConn();
 		HashMap<Integer,Integer> exp = new HashMap<Integer,Integer>();

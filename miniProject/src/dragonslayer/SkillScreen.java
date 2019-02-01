@@ -187,7 +187,7 @@ public class SkillScreen extends JFrame {
 				// GameScreen.getSkillbutton().setEnabled(true);
 			}
 		});
-				
+		
 		setVisible(true); 
 	}
 	
