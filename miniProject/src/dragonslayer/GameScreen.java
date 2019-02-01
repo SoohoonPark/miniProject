@@ -394,6 +394,16 @@ public class GameScreen extends JFrame {
 					return;
 				}
 				attack_player();
+				Timer mAttackTimer = new Timer();
+				TimerTask mAttackTimerTask = new TimerTask() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						attack_monster();
+					}
+				};
+				mAttackTimer.schedule(mAttackTimerTask, Calendar.getInstance().get(Calendar.MILLISECOND)+2000);
 			}
 		});
 		ButtonPanel.add(buttonattack);
@@ -567,7 +577,7 @@ public class GameScreen extends JFrame {
 		skilleffectpanel.add(playerattackLabel);
 		skilleffectpanel.add(monsterattackLabel);
 		skilleffectpanel.add(playerbeingattackedLabel);
-		skilleffectpanel.add(monsterbeingattackedLabel);
+		skilleffectpanel.add(monsterbeingattackedLabel);	
 
 		layer.add(mainbackgroundimgLabel, new Integer(1));
 		layer.add(GameScreenimgLabel, new Integer(2));
@@ -778,7 +788,7 @@ public class GameScreen extends JFrame {
 				monsterbeingattackedLabel.setIcon(null); // 피격 이팩트 출력
 			}
 		};
-		pAttacktimer.schedule(pAttackTask, 10);
+		pAttacktimer.schedule(pAttackTask, 900);
 
 		int damage = playeratk - monsterdef; // 데미지는 플레이어 공격력 - 몬스터 방어력
 		if (damage <= 0) { // 플레이어 공격력 - 몬스터 방어력의 결과가 0보다 작거나 같을 경우 (= 몬스터의 방어력이 플레이어 공격력보다 높을 경우)
@@ -812,7 +822,17 @@ public class GameScreen extends JFrame {
 			writeLog("'" + m_name + "' (은/는) " + c_name + " 에게 " + randomdamage + " 의 피해를 입혔다!");
 			current_user_hp -= randomdamage; // randomdamage 수치만큼 플레이어 현재 체력 감
 		}
-		GameScreenimgLabel.setIcon(BATTLEBACKGROUND);
+		Timer mAttackEnd = new Timer();
+		TimerTask mAttackEndTask = new TimerTask() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				monsterattackLabel.setIcon(null); // 몬스터 공격 이펙트 출력
+				playerbeingattackedLabel.setIcon(null); // 피격 이팩트 출력
+			}
+		};
+		mAttackEnd.schedule(mAttackEndTask, Calendar.getInstance().get(Calendar.MILLISECOND)+500);
 	}
 
 	// 플레이어 상태 확인 Thread 실행 메소드
