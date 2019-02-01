@@ -32,6 +32,8 @@ import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.tools.Tool;
 
+import uk.co.caprica.vlcj.discovery.NativeDiscovery;
+
 @SuppressWarnings("serial")
 public class GameScreen extends JFrame {
 	/** 이미지 영역 **/
@@ -137,11 +139,11 @@ public class GameScreen extends JFrame {
 			.createImage("resource/images/effects/both sides/Being attacked_resized.gif");
 
 	/** 필드 영역 **/
-	private String c_name, m_name, c_job; // 캐릭터명 & 몬스터이름
+	private static String c_name, m_name, c_job; // 캐릭터명 & 몬스터이름
 	// 캐릭터 스탯 관련 정보 (스탯창 열었을때 보여줌) 레벨, 힘, 민첩, 지능, 체력, 마나, 경험치, 다음 경험치
 	private static int c_lv, c_str, c_dex, c_int, c_hp, c_mp, c_exp, c_next_exp;
 	private int current_monster_hp, m_hp, m_exp; // 몹 체력 & 몹 최대체력 & 몹이 주는 경험치
-	private Boolean battle = false; // 전투 발생을 알려주는 변수. 전투 발생 시 true로 전환(기본값 false)
+	private static Boolean battle = false; // 전투 발생을 알려주는 변수. 전투 발생 시 true로 전환(기본값 false)
 	private Boolean buff = false; // 플레이어 버프 상황(걸려있는지 아닌지)
 	private Thread p_check, m_check; // 플레이어, 몹 상태 확인 Thread
 	private LinkedList<DSMonsters> lowmonsters = null; // 초급몹정보가 저장돼있는 LinkedList
@@ -195,14 +197,14 @@ public class GameScreen extends JFrame {
 
 		this.c_exp = 0; // 초기 경험치 보유량 0
 		this.c_next_exp = 50; // 다음 경험치 요구량 50
-
+		
 		// 장비 기본값은 "없음"
 		weapon = "없음";
 		helmet = "없음";
 		armor = "없음";
 		glove = "없음";
 		boots = "없음";
-
+		
 		lowmonsters = service.monsterData("초급"); // 초급 몹 정보 저장
 		middlemonsters = service.monsterData("중급"); // 중급 몹 정보 저장
 		highmonsters = service.monsterData("고급"); // 고급 몹 정보 저장
