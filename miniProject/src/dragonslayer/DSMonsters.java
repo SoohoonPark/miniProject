@@ -19,6 +19,7 @@ public class DSMonsters {
 		this.m_def = d;
 		this.m_exp = e;
 		this.m_dropitem = drop.split(","); // 콤마(,)를 기준으로 문자열을 나눠서 배열로 저장하게 됨.
+		System.out.println("[info] DB로부터 "+g+" 등급 몹정보 객체에 저장 완료");
 	}
 
 	public String getM_name() {
