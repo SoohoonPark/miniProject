@@ -139,14 +139,15 @@ public class GameScreen extends JFrame {
 	private ArrayList<String> VeryGoodRewards = new ArrayList<String>(); // 화려해보이는 상자
 	private HashMap<Integer, Integer> exptable; // 게임 내 경험치 정보가 담겨 있는 exptable;
 	private String[] dropitem; // 몹이 드랍하는 아이템이 저장되어있는 String 배열
-	private int playeratk, playerdef; // 플레이어 공격력, 방어력
+	private int playeratk, playerdef, playerskillatk; // 플레이어 공격력, 방어력, 스킬공격
 	private int equipdef; // 방어구의 총 방어력
 	private int monsteratk, monsterdef; // 몬스터 공격력, 방어력
 	private DSService service = new DSService();
 
 	private static JButton buttonsearch, buttonattack, buttoninven, buttonequip, buttonstat, buttonskill, buttonexit;
 	private static JLabel mainbackgroundimgLabel, GameScreenimgLabel, monsterimgLabel; // 이미지 라벨들
-	private static JLabel playerattackLabel, monsterattackLabel, playerbeingattackedLabel, monsterbeingattackedLabel;
+	private static JLabel playerattackLabel, monsterattackLabel, playerbeingattackedLabel, monsterbeingattackedLabel; // 기본 공격 및 피격 라벨
+	static JLabel SkillEffectLabel1, SkillEffectLabel2, SkillEffectLabel3, SkillEffectLabel4_1, SkillEffectLabel4_2; // 스킬 이팩트 라벨
 	private static JPanel CharacterPanel, MonsterPanel; // 캐릭터 이미지가 출력되는 패널, 몹 이미지가 출력되는 패널
 	private static JTextArea logarea;
 	private static JScrollPane logscroll;
@@ -158,7 +159,7 @@ public class GameScreen extends JFrame {
 	private static int current_user_hp, current_user_mp; // 현재 플레이어 체력 & 마나
 
 	public static void main(String[] args) {
-		new GameScreen("춘식이", "모험가", 10, 10, 10, 100, 80);
+		new GameScreen("춘식이", "모험가", 10, 10, 10, 100, 480);
 	}
 
 	/** 메소드 영역 **/
@@ -485,7 +486,7 @@ public class GameScreen extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// 중복 클릭을 통한 여러 창 띄우는걸 방지하기 위해 해당 버튼을 클릭하면 버튼 비활성화.
 				buttonskill.setEnabled(false);
-				new SkillScreen(current_user_mp);
+				new SkillScreen(current_user_mp, playeratk, c_lv, current_monster_hp, monsterdef);
 			}
 		});
 		ButtonPanel.add(buttonskill);
@@ -559,14 +560,35 @@ public class GameScreen extends JFrame {
 		// 몬스터 피격 이팩트 라벨
 		monsterbeingattackedLabel = new JLabel();
 		monsterbeingattackedLabel.setBounds(0, 30, 250, 250);
+		
+		// 스킬 이팩트 라벨
+		SkillEffectLabel1 = new JLabel();
+		SkillEffectLabel1.setBounds(150, 0, 380, 280);
+				
+		SkillEffectLabel2 = new JLabel();
+		SkillEffectLabel2.setBounds(150, 0, 380, 280);
+				
+		SkillEffectLabel3 = new JLabel();
+		SkillEffectLabel3.setBounds(150, 0, 380, 280);
+				
+		SkillEffectLabel4_1 = new JLabel();
+		SkillEffectLabel4_1.setBounds(40, 35, 950, 330);
+		
+		SkillEffectLabel4_2 = new JLabel();
+		SkillEffectLabel4_2.setBounds(40, 35, 950, 330);
 
 		skilleffectpanel.add(playerattackLabel);
 		skilleffectpanel.add(monsterattackLabel);
 		skilleffectpanel.add(playerbeingattackedLabel);
 		skilleffectpanel.add(monsterbeingattackedLabel);
-
+		skilleffectpanel.add(SkillEffectLabel1);
+		skilleffectpanel.add(SkillEffectLabel2);
+		skilleffectpanel.add(SkillEffectLabel3);
+		
 		layer.add(mainbackgroundimgLabel, new Integer(1));
 		layer.add(GameScreenimgLabel, new Integer(2));
+		layer.add(SkillEffectLabel4_1, new Integer(4));
+		layer.add(SkillEffectLabel4_2, new Integer(3));
 		layer.add(CharacterPanel, new Integer(3));
 		layer.add(MonsterPanel, new Integer(3));
 		layer.add(LogPanel, new Integer(4));
@@ -695,7 +717,7 @@ public class GameScreen extends JFrame {
 		return ran;
 	}
 
-	// 플레이어 공격 메소드
+	// 플레이어 기본 공격 메소드
 	public void attack_player() {
 		if (!battle) {
 			System.out.println("[info] 전투 중이 아닙니다.");
@@ -719,6 +741,65 @@ public class GameScreen extends JFrame {
 		}
 	}
 
+	// 플레이어 스킬 공격 메소드
+	public void skillattack_player(int use) {
+		if (!battle) {
+			System.out.println("[info] 전투 중이 아닙니다.");
+			return;
+		}
+		int damage = playerskillatk - monsterdef; // 스킬데미지는 플레이어 스킬공격 - 몬스터 방어력
+		switch(use) {
+		case 1:
+			System.out.println("[info] 스킬 '드래곤 슬래셔' 사용");
+			writeLog("'" + c_name + "' 의 스킬 '드래곤 슬래셔' 사용!\n");
+			if (damage <= 0) { // 스킬데이지가 0보다 작거나 같을 경우
+				damage = playeratk;
+				current_monster_hp -= damage; // damage 수치만큼 몬스터 현재 체력 감소
+				writeLog("'" + c_name + "' (은/는) " + m_name + " 에게 " + damage + " 의 피해를 입혔다!");
+			} else {
+				current_monster_hp -= damage; // damage 수치만큼 몬스터 현재 체력 감소
+				writeLog("'" + c_name + "' (은/는) " + m_name + " 에게 " + damage + " 의 피해를 입혔다!");
+			}
+			break;
+		case 2:
+			System.out.println("[info] 스킬 '오러 블레이드' 사용");
+			writeLog("'" + c_name + "' 의 스킬 '오러 블레이드' 사용!\n");
+			if (damage <= 0) { // 스킬데이지가 0보다 작거나 같을 경우
+				damage = playeratk;
+				current_monster_hp -= damage; // damage 수치만큼 몬스터 현재 체력 감소
+				writeLog("'" + c_name + "' (은/는) " + m_name + " 에게 " + damage + " 의 피해를 입혔다!");
+			} else {
+				current_monster_hp -= damage; // damage 수치만큼 몬스터 현재 체력 감소
+				writeLog("'" + c_name + "' (은/는) " + m_name + " 에게 " + damage + " 의 피해를 입혔다!");
+			}
+			break;
+		case 3:
+			System.out.println("[info] 스킬 '데모닉 소드' 사용");
+			writeLog("'" + c_name + "' 의 스킬 '데모닉 소드' 사용!\n");
+			if (damage <= 0) { // 스킬데이지가 0보다 작거나 같을 경우
+				damage = playeratk;
+				current_monster_hp -= damage; // damage 수치만큼 몬스터 현재 체력 감소
+				writeLog("'" + c_name + "' (은/는) " + m_name + " 에게 " + damage + " 의 피해를 입혔다!");
+			} else {
+				current_monster_hp -= damage; // damage 수치만큼 몬스터 현재 체력 감소
+				writeLog("'" + c_name + "' (은/는) " + m_name + " 에게 " + damage + " 의 피해를 입혔다!");
+			}
+			break;
+		case 4:
+			System.out.println("[info] 스킬 '디멘션 브레이커' 사용");
+			writeLog("'" + c_name + "' 의 스킬 '디멘션 브레이커' 사용!\n");
+			if (damage <= 0) { // 스킬데이지가 0보다 작거나 같을 경우
+				damage = playeratk;
+				current_monster_hp -= damage; // damage 수치만큼 몬스터 현재 체력 감소
+				writeLog("'" + c_name + "' (은/는) " + m_name + " 에게 " + damage + " 의 피해를 입혔다!");
+			} else {
+				current_monster_hp -= damage; // damage 수치만큼 몬스터 현재 체력 감소
+				writeLog("'" + c_name + "' (은/는) " + m_name + " 에게 " + damage + " 의 피해를 입혔다!");
+			}
+			break;
+		}
+	}
+	
 	// 몬스터 공격 메소드
 	public void attack_monster() {
 		if (!battle) {
@@ -758,7 +839,13 @@ public class GameScreen extends JFrame {
 						if (current_user_hp <= 0) {
 							Thread.currentThread().interrupt();
 						}
-
+						System.out.println("[info] 캐릭터 마나 상태 체크..");
+						System.out.println("[info] 현재 캐릭터 마나 : " + current_user_mp);
+						playerMpbar.setValue(current_user_mp);
+						playerMpbar.setString(current_user_mp + " / " + c_mp);
+						if (current_user_mp <= 0) {
+							Thread.currentThread().interrupt();
+						}
 						System.out.println("[info] 캐릭터 공격력&방어력 상태 체크..");
 						playeratk = (c_str / 2) + atk_weapon; // 플레이어 총 공격력(기본공격력 + 무기공격력)
 						equipdef = def_helmet + def_armor + def_glove + def_boots; // 투구,갑옷,장갑,신발 방어력 합계
