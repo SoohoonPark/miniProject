@@ -165,9 +165,9 @@ public class GameScreen extends JFrame {
 	private static LinkedList<DSItems> inven = new LinkedList<DSItems>(); // 플레이어 인벤토리 내용물
 	private static int current_user_hp, current_user_mp; // 현재 플레이어 체력 & 마나
 
-	public static void main(String[] args) {
-		new GameScreen("춘식이",30,"모험가",10,10,10,100,480);
-	}
+//	public static void main(String[] args) {
+//		new GameScreen("춘식이",30,"모험가",10,10,10,100,480);
+//	}
 
 	/** 메소드 영역 **/
 	public GameScreen(String name, int l, String job, int s, int d, int i, int hp, int mp) {

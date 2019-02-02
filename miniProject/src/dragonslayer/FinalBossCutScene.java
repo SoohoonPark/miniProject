@@ -64,9 +64,8 @@ public class FinalBossCutScene extends JFrame{
 		});
 		runcheck.start();
 	}
-
 	
-	public static void main(String[] args) {
-		new FinalBossCutScene();
-	}
+//	public static void main(String[] args) {
+//		new FinalBossCutScene();
+//	}
 }
