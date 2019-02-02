@@ -9,8 +9,8 @@ public class DSDBConnection {
 	private final static String DBID = "itbank";
 	private final static String DBPW = "PAGODA";
 
-//	private final static String DBURL = "jdbc:oracle:thin:@localhost:1521:orcl";
-	private final static String DBURL = "jdbc:oracle:thin:@175.200.206.7:1521:orcl";
+	private final static String DBURL = "jdbc:oracle:thin:@localhost:1521:orcl";
+//	private final static String DBURL = "jdbc:oracle:thin:@175.200.206.7:1521:orcl";
 
 	private static Connection conn = null;
 	

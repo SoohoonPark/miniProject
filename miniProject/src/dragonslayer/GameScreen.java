@@ -152,6 +152,7 @@ public class GameScreen extends JFrame {
 	private int playeratk, playerdef, playerskillatk; // 플레이어 공격력, 방어력, 스킬공격
 	private int equipdef; // 방어구의 총 방어력
 	private int monsteratk, monsterdef; // 몬스터 공격력, 방어력
+	private int prevlv;
 	private DSService service = new DSService();
 
 	private static JButton buttonsearch, buttonattack, buttoninven, buttonequip, buttonstat, buttonskill, buttonexit;
@@ -170,12 +171,18 @@ public class GameScreen extends JFrame {
 	private static int current_user_hp, current_user_mp; // 현재 플레이어 체력 & 마나
 
 	public static void main(String[] args) {
-		new GameScreen("춘식이", 1, "모험가", 10, 10, 10, 100, 480);
+		new GameScreen("춘식이",1,"모험가",10,10,10,100,480);
 	}
 
 	/** 메소드 영역 **/
 	public GameScreen(String name, int l, String job, int s, int d, int i, int hp, int mp) {
 		System.out.println("[info] GameScreen() 호출");
+		lowmonsters = service.monsterData("초급"); // 초급 몹 정보 저장
+		middlemonsters = service.monsterData("중급"); // 중급 몹 정보 저장
+		highmonsters = service.monsterData("고급"); // 고급 몹 정보 저장
+		iteminfo = service.itemData(); // 아이템 정보 저장
+		exptable = service.expData(); // 경험치 정보 저장(Key - 레벨 / Value - 다음 경험치)
+		
 		this.c_name = name; // 캐릭터명
 		this.c_job = job; // 직업
 		this.c_lv = l; // 레벨
@@ -186,12 +193,12 @@ public class GameScreen extends JFrame {
 		this.c_int = i; // 지능
 
 		this.c_hp = hp; // 체력
-		GameScreen.current_user_hp = c_hp; // 플레이어 현재 체력
+		this.current_user_hp = c_hp; // 플레이어 현재 체력
 		this.c_mp = mp + (c_int * 2); // 마나는 기본 마나값 + 지능*2
-		GameScreen.current_user_mp = c_mp; // 플레이어 현재 마나
+		this.current_user_mp = c_mp; // 플레이어 현재 마나
 
 		this.c_exp = 0; // 초기 경험치 보유량 0
-		this.c_next_exp = 50; // 다음 경험치 요구량 50
+		this.c_next_exp = exptable.get(c_lv); // 다음 경험치 요구량 50
 
 		// 장비 기본값은 "없음"
 		weapon = "없음";
@@ -199,14 +206,9 @@ public class GameScreen extends JFrame {
 		armor = "없음";
 		glove = "없음";
 		boots = "없음";
-
-		lowmonsters = service.monsterData("초급"); // 초급 몹 정보 저장
-		middlemonsters = service.monsterData("중급"); // 중급 몹 정보 저장
-		highmonsters = service.monsterData("고급"); // 고급 몹 정보 저장
-		iteminfo = service.itemData(); // 아이템 정보 저장
-		exptable = service.expData(); // 경험치 정보 저장(Key - 레벨 / Value - 다음 경험치)
-		System.out.println("아이템 정보 : " + iteminfo.size());
+		
 		System.out.println("[info] GameScreen() 필드 초기화 완료.");
+	
 		createGameScreen();
 		checkplayerstatus();
 		checkmonsterstatus();
@@ -657,62 +659,70 @@ public class GameScreen extends JFrame {
 
 	// 아이템 획득 이벤트(상자 이벤트)
 	public void createGetItemEvent(int event) {
-		if (event >= 1 && event <= 6) { // 1 ~ 6 : 일반 상자
-			writeLog("평범해 보이는 상자를 발견하고 상자를 열었다.");
-
-			// '하급' 키워드가 들어간 아이템 명을 담을 문자열 리스트
-			for (int i = 0; i < iteminfo.size(); i++) {
-				if (iteminfo.get(i).getI_name().contains("하급")) {
-					Rewards.add(iteminfo.get(i).getI_name());
+		try {
+			if (event >= 1 && event <= 6) { // 1 ~ 6 : 일반 상자
+				writeLog("평범해 보이는 상자를 발견하고 상자를 열었다.");
+				// '하급' 키워드가 들어간 아이템 명을 담을 문자열 리스트
+				for (int i = 0; i < iteminfo.size(); i++) {
+					if (iteminfo.get(i).getI_name().contains("하급")) {
+						Rewards.add(iteminfo.get(i).getI_name());
+					}
 				}
-			}
-			// 0 ~ 4 까지 중복 없이 숫자 2개 뽑기
-			int[] ran = makeRanNums();
+				System.out.println("[info] 하급 상자 보상 사이즈 : "+Rewards.size());
+				// 0 ~ 4 까지 중복 없이 숫자 2개 뽑기
+				int[] ran = makeRanNums();
 
-			// 뽑은 2개의 숫자가 보상 인덱스
-			String[] low = new String[2];
-			for (int i = 0; i < 2; i++) {
-				low[i] = Rewards.get(ran[i]);
-			}
-			addInventory(low); // 인벤토리에 추가
-
-		} else if (event >= 7 && event < 10) { // 7 ~ 9 : 괜찮아 보이는 상자
-			writeLog("괜찮아 보이는 상자를 발견하고 상자를 열었다.");
-
-			// '중급' 키워드가 들어간 아이템 명을 담을 문자열 리스트
-			for (int i = 0; i < iteminfo.size(); i++) {
-				if (iteminfo.get(i).getI_name().contains("중급")) {
-					GoodRewards.add(iteminfo.get(i).getI_name());
+				// 뽑은 2개의 숫자가 보상 인덱스
+				String[] low = new String[2];
+				for (int i = 0; i < 2; i++) {
+					low[i] = Rewards.get(ran[i]);
 				}
-			}
-			// 0 ~ 4 까지 중복 없이 숫자 2개 뽑기
-			int[] ran = makeRanNums();
+				addInventory(low); // 인벤토리에 추가
+				Rewards.clear(); // 보상 획득 후 기존 리스트 내용 초기화
 
-			// 뽑은 2개의 숫자가 보상 인덱스
-			String[] good = new String[2];
-			for (int i = 0; i < 2; i++) {
-				good[i] = GoodRewards.get(ran[i]);
-			}
-			addInventory(good); // 인벤토리에 추가
-
-		} else { // 10 : 화려해 보이는 상자
-			writeLog("화려해 보이는 상자를 발견하고 상자를 열었다.");
-
-			// '중급' 키워드가 들어간 아이템 명을 담을 문자열 리스트
-			for (int i = 0; i < iteminfo.size(); i++) {
-				if (iteminfo.get(i).getI_name().contains("고오급")) {
-					VeryGoodRewards.add(iteminfo.get(i).getI_name());
+			} else if (event >= 7 && event < 10) { // 7 ~ 9 : 괜찮아 보이는 상자
+				writeLog("괜찮아 보이는 상자를 발견하고 상자를 열었다.");
+				// '중급' 키워드가 들어간 아이템 명을 담을 문자열 리스트
+				for (int i = 0; i < iteminfo.size(); i++) {
+					if (iteminfo.get(i).getI_name().contains("중급")) {
+						GoodRewards.add(iteminfo.get(i).getI_name());
+					}
 				}
-			}
-			// 0 ~ 4 까지 중복 없이 숫자 2개 뽑기
-			int[] ran = makeRanNums();
+				System.out.println("[info] 중급 상자 보상 사이즈 : "+GoodRewards.size());
+				// 0 ~ 4 까지 중복 없이 숫자 2개 뽑기
+				int[] ran = makeRanNums();
 
-			// 뽑은 2개의 숫자가 보상 인덱스
-			String[] VeryGood = new String[2];
-			for (int i = 0; i < 2; i++) {
-				VeryGood[i] = VeryGoodRewards.get(ran[i]);
+				// 뽑은 2개의 숫자가 보상 인덱스
+				String[] good = new String[2];
+				for (int i = 0; i < 2; i++) {
+					good[i] = GoodRewards.get(ran[i]);
+				}
+				addInventory(good); // 인벤토리에 추가
+				GoodRewards.clear();
+
+			} else { // 10 : 화려해 보이는 상자
+				writeLog("화려해 보이는 상자를 발견하고 상자를 열었다.");
+				// '고오급' 키워드가 들어간 아이템 명을 담을 문자열 리스트
+				for (int i = 0; i < iteminfo.size(); i++) {
+					if (iteminfo.get(i).getI_name().contains("고오급")) {
+						VeryGoodRewards.add(iteminfo.get(i).getI_name());
+					}
+				}
+				System.out.println("[info] 고오급 상자 보상 사이즈 : "+VeryGoodRewards.size());
+				// 0 ~ 4 까지 중복 없이 숫자 2개 뽑기
+				int[] ran = makeRanNums();
+
+				// 뽑은 2개의 숫자가 보상 인덱스
+				String[] VeryGood = new String[2];
+				for (int i = 0; i < 2; i++) {
+					VeryGood[i] = VeryGoodRewards.get(ran[i]);
+				}
+				addInventory(VeryGood); // 인벤토리에 추가
+				VeryGoodRewards.clear();
 			}
-			addInventory(VeryGood); // 인벤토리에 추가
+		}catch(Exception e) {
+			System.out.println("[Error] 상자 이벤트 에러 발생");
+			System.out.println(e.getMessage());
 		}
 	}
 
@@ -727,6 +737,7 @@ public class GameScreen extends JFrame {
 			}
 			System.out.println("[info] 버프 이벤트 발생");
 			buff = true;
+			prevlv = c_lv; // 레벨업 후의 버프 수치랑 레벨업 전의 버프 수치랑 달라지는것을 방지하기 위한 변수.
 			writeLog("요정의 축복을 받아 능력치가 일시적으로 향상되었습니다.\n(해당 버프는 다음 첫 전투에만 적용됩니다.)");
 			// 능력치 버프는 기존 능력치 + 현재 캐릭터 레벨*5 만큼 증가시킴
 			c_str += (c_lv * 5);
@@ -775,12 +786,13 @@ public class GameScreen extends JFrame {
 	int[] makeRanNums() {
 		int[] ran = new int[2];
 		for (int i = 0; i < 2; i++) {
-			ran[i] = (int) (Math.random() * 5); // 0 ~ 4 랜덤
+			ran[i] = (int)(Math.random() * 4); // 0 ~ 3 랜덤 (0,1,2,3)
 			for (int j = 0; j < i; j++) {
 				if (ran[i] == ran[j]) {
 					i--;
 				}
 			}
+			System.out.println("나온 랜덤 숫자 : "+ran[i]);
 		}
 		return ran;
 	}
@@ -922,9 +934,8 @@ public class GameScreen extends JFrame {
 
 				while (!Thread.currentThread().isInterrupted()) {
 					try {
-						Thread.sleep(4000);
+						Thread.sleep(500);
 						System.out.println("[info] 캐릭터 체력 상태 체크..");
-						System.out.println("[info] 현재 캐릭터 체력 : " + current_user_hp);
 						playerHpbar.setValue(current_user_hp);
 						playerHpbar.setString(current_user_hp + " / " + c_hp);
 
@@ -933,15 +944,6 @@ public class GameScreen extends JFrame {
 						}
 
 						System.out.println("[info] 캐릭터 마나 상태 체크..");
-						System.out.println("[info] 현재 캐릭터 마나 : " + current_user_mp);
-						playerMpbar.setValue(current_user_mp);
-						playerMpbar.setString(current_user_mp + " / " + c_mp);
-						if (current_user_mp <= 0) {
-							Thread.currentThread().interrupt();
-						}
-
-						System.out.println("[info] 캐릭터 마나 상태 체크..");
-						System.out.println("[info] 현재 캐릭터 마나 : " + current_user_mp);
 						playerMpbar.setValue(current_user_mp);
 						playerMpbar.setString(current_user_mp + " / " + c_mp);
 
@@ -949,6 +951,68 @@ public class GameScreen extends JFrame {
 						playeratk = (c_str / 2) + atk_weapon; // 플레이어 총 공격력(기본공격력 + 무기공격력)
 						equipdef = def_helmet + def_armor + def_glove + def_boots; // 투구,갑옷,장갑,신발 방어력 합계
 						playerdef = (c_dex / 5) + equipdef; // 플레이어 총 방어력(기본방어력 + 방어구 총방어력)
+						
+						System.out.println("[info] 캐릭터 현재 경험치 & 다음 경험치 상태 체크..");
+						c_next_exp = exptable.get(c_lv);
+						System.out.println("[info] 현재 경험치 : "+c_exp);
+						System.out.println("[info] 다음 경험치 : "+c_next_exp);
+						// 레벨업(현재 경험치가 다음 경험치보다 크거나 같을 때)
+						if(c_exp >= c_next_exp) {
+							c_lv++;
+							writeLog("레벨 업!\n레벨이 "+c_lv+" 가 되었다.");
+							int strup, dexup, intup;
+							
+							if(c_lv >= 1 && c_lv <= 10) { // 레벨이 1 ~ 10인 경우 스텟 가중치 (1 ~ 5 랜덤), 체력/마나 +40
+								strup = (int)(Math.random()*5)+1;
+								c_str += strup;
+								writeLog("힘이 "+strup+ " 올랐다.");
+								dexup = (int)(Math.random()*5)+1;
+								c_dex += dexup;
+								writeLog("민첩이 "+dexup+ " 올랐다.");
+								intup = (int)(Math.random()*5)+1;
+								c_int += intup;
+								writeLog("지능이 "+intup+ " 올랐다.");
+								c_hp += 40;
+								c_mp += 40;
+								writeLog("체력이 40 올랐다.\n마나가 40 올랐다.");
+								
+							}else if(c_lv >=11 && c_lv <= 20) { // 레벨이 11 ~ 20인 경우 스텟 가중치 (5 ~ 10 랜덤), 체력/마나 +70
+								strup = (int)(Math.random()*10)+5;
+								c_str += strup;
+								writeLog("힘이 "+strup+" 올랐다.");
+								dexup = (int)(Math.random()*10)+5;
+								c_dex += dexup;
+								writeLog("민첩이 "+dexup+" 올랐다.");
+								intup = (int)(Math.random()*10)+5;
+								c_int += intup;
+								writeLog("지능이 "+intup+" 올랐다.");
+								
+							}else if(c_lv >=21 && c_lv <= 29){ // 21 ~ 29 스텟 가중치 (10 ~ 15 랜덤), 체력/마나 +100
+								strup = (int)(Math.random()*15)+10;
+								c_str += strup;
+								writeLog("힘이 "+strup+" 올랐다.");
+								dexup = (int)(Math.random()*15)+10;
+								c_dex += dexup;
+								writeLog("민첩이 "+dexup+" 올랐다.");
+								intup = (int)(Math.random()*15)+10;
+								c_int += intup;
+								writeLog("지능이 "+intup+" 올랐다.");
+					
+							}else { // 30 레벨 달성(만렙) 올스탯+50, 체,마 + 500
+								c_hp += 500;
+								c_mp += 500;
+								c_str += 50;
+								c_dex += 50;
+								c_int += 50;
+								writeLog("레벨 30이 되었다.\n체력이 500 올랐다.\n마나가 500 올랐다.\n모든 능력치가 50 올랐다.");
+							}
+							current_user_hp = c_hp;
+							current_user_mp = c_mp;
+							playerHpbar.setValue(current_user_hp);
+							playerMpbar.setValue(current_user_mp);
+							playerHpbar.setString(current_user_hp+" / "+c_hp);
+							playerMpbar.setString(current_user_mp+" / "+c_mp);
+						}
 
 						System.out.println("[info] 캐릭터 버프 상태 체크..");
 						System.out.println("[info] 버프 상태 : " + buff);
@@ -970,7 +1034,7 @@ public class GameScreen extends JFrame {
 				System.out.println("[info] m_check 쓰레드 실행");
 				while (!Thread.currentThread().isInterrupted()) {
 					try {
-						Thread.sleep(4000);
+						Thread.sleep(500);
 						System.out.println("[info] 몹 체력 상태 체크..");
 						MonsterHpbar.setValue(current_monster_hp);
 						MonsterHpbar.setString(current_monster_hp + " / " + m_hp);
@@ -980,15 +1044,21 @@ public class GameScreen extends JFrame {
 								writeLog(m_name + "(이/가) 쓰러졌다.");
 								writeLog("경험치가 " + m_exp + " 올랐습니다.");
 								c_exp += m_exp; // 현재 경험치에 몹 경험치를 더함(경험치 획득)
+								battle = false; // 전투 종료
 								if (buff) { // 버프가 걸려있는 경우 전투 종료 후 버프를 해제 해야함
 									buff = false; // 버프 상태 해제(전투 종료)
+									if(c_lv != prevlv) { // 현재 레벨과 버프받기전 레벨이 같지 않은 경우(즉, 버프 받고 레벨업 한 경우)
+										writeLog("요정에게서 받은 버프가 사라졌다.");
+										c_str -= (prevlv * 5); // 버프 받은 수치만큼 - 해줘서 원래 능력치로 돌아감
+										c_dex -= (prevlv * 5); // 민첩 수치
+										c_int -= (prevlv * 5); // 지능 수치
+									}
 									writeLog("요정에게서 받은 버프가 사라졌다.");
 									c_str -= (c_lv * 5); // 버프 받은 수치만큼 - 해줘서 원래 능력치로 돌아감
 									c_dex -= (c_lv * 5); // 민첩 수치
 									c_int -= (c_lv * 5); // 지능 수치
 									System.out.println("[info] 버프 받기 전 능력치 : " + c_str + " / " + c_dex + " / " + c_int);
 								}
-								battle = false; // 전투 종료
 								MonsterPanel.setVisible(false); // 몹패널 visible을 false
 								playerattackLabel.setIcon(null);
 								GameScreenimgLabel.setIcon(BATTLEBACKGROUND);
