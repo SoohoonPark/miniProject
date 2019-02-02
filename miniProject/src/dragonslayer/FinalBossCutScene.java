@@ -21,7 +21,6 @@ public class FinalBossCutScene extends JFrame{
         System.out.println(LibVlc.INSTANCE.libvlc_get_version());
         
 		setBounds(100, 100, 1000, 600);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 		
 		Canvas c = new Canvas();
@@ -43,6 +42,27 @@ public class FinalBossCutScene extends JFrame{
 		String file = "resource/video/test_video.mp4";
 		emp.prepareMedia(file);
 		emp.play();
+		
+		Thread runcheck = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				while(!Thread.currentThread().isInterrupted()) {
+					try {
+						Thread.sleep(500);
+						System.out.println(emp.isPlaying());
+						if(!emp.isPlaying()) {
+							dispose();
+							Thread.currentThread().interrupt();
+						}
+					}catch(Exception e) {
+						System.out.println("[Error] Thread error");
+					}
+				}
+			}
+		});
+		runcheck.start();
 	}
 
 	
