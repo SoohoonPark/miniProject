@@ -6,8 +6,6 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -30,9 +28,6 @@ import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
-import javax.tools.Tool;
-
-import uk.co.caprica.vlcj.discovery.NativeDiscovery;
 
 @SuppressWarnings("serial")
 public class GameScreen extends JFrame {
@@ -171,7 +166,7 @@ public class GameScreen extends JFrame {
 	private static int current_user_hp, current_user_mp; // 현재 플레이어 체력 & 마나
 
 	public static void main(String[] args) {
-		new GameScreen("춘식이",1,"모험가",10,10,10,100,480);
+		new GameScreen("춘식이",30,"모험가",10,10,10,100,480);
 	}
 
 	/** 메소드 영역 **/
@@ -537,15 +532,19 @@ public class GameScreen extends JFrame {
 		ButtonPanel.add(buttonexit);
 
 		JLabel logoLabel = new JLabel(new ImageIcon(LOGO));
-		logoLabel.setBounds(320, 90, 105, 97);
+		logoLabel.setBounds(325, 85, 90, 90);
 		logoLabel.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent m) {
 				// 로고 이미지 누르면 전투 회피 가능.(
-				if (battle) {
-					battle = false;
-				} else {
-					JOptionPane.showMessageDialog(null, "전투 중에만 쓸 수 있는 치트", "치트", JOptionPane.WARNING_MESSAGE, null);
-					return;
+//				if (battle) {
+//					battle = false;
+//				} else {
+//					JOptionPane.showMessageDialog(null, "전투 중에만 쓸 수 있는 치트", "치트", JOptionPane.WARNING_MESSAGE, null);
+//					return;
+//				}
+				
+				if(c_lv == 30) {
+					createFinalBossBattle();
 				}
 			}
 		});
@@ -610,6 +609,20 @@ public class GameScreen extends JFrame {
 		setVisible(true);
 	}
 
+	// 30 레벨이 된 후 최종보스전 진입
+	void createFinalBossBattle() {
+		UIManager.put("OptionPane.buttonFont", new Font("맑은 고딕",Font.PLAIN,12));
+		JLabel message = new JLabel("<html><p style='font-family:맑은 고딕;'>이제 사악한 용을 무찌르는 일만 남았습니다.<br/>두려움을 이겨내고 용에게 맞설 준비가 됐습니까?</p></html>");
+		int select = JOptionPane.showOptionDialog(this,message,"최종보스전",JOptionPane.YES_NO_OPTION,
+				JOptionPane.QUESTION_MESSAGE,null,new Object[]{"맞선다", "아직이다"},null);
+		switch(select) {
+		case 0: // '맞선다'
+			break;
+		case 1: // '아직이다'
+			break;
+		}
+	}
+	
 	// 1 ~ 3 랜덤 숫자 발생시키는 메소드
 	int createRandom() {
 		int random = (int) (Math.random() * 3) + 1; // 1 ~ 3 랜덤 숫자 생성
