@@ -948,6 +948,12 @@ public class GameScreen extends JFrame {
 				while (!Thread.currentThread().isInterrupted()) {
 					try {
 						Thread.sleep(500);
+						System.out.println("[info] 캐릭터 레벨 체크..");
+						if(c_lv > 10 && c_lv < 30) { // 11 ~ 29 레벨 전사 이미지
+							
+						}else { // 기사 이미지
+							
+						}
 						System.out.println("[info] 캐릭터 체력 상태 체크..");
 						playerHpbar.setValue(current_user_hp);
 						playerHpbar.setString(current_user_hp + " / " + c_hp);
