@@ -126,7 +126,7 @@ public class GameScreen extends JFrame {
 			.createImage("resource/images/effects/monster/monster_attack_resized.gif");
 	private final static Image BEINGATTACKED = Toolkit.getDefaultToolkit()
 			.createImage("resource/images/effects/both sides/Being attacked_resized.gif");
-
+	
 	/** 필드 영역 **/
 	private static String c_name, m_name, c_job; // 캐릭터명 & 몬스터이름
 	// 캐릭터 스탯 관련 정보 (스탯창 열었을때 보여줌) 레벨, 힘, 민첩, 지능, 체력, 마나, 경험치, 다음 경험치
