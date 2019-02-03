@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -151,7 +150,7 @@ public class GameScreen extends JFrame {
 	private static int monsteratk,monsterdef; // 몬스터 공격력, 방어력
 
 	private int prevlv; // 이전 레벨(버프 관련해서 사용하게 되는 변수)
-	private DSService service = new DSService();
+	private DSService service = new DSService(); // DB 접속 서비스
 
 	private static JButton buttonsearch, buttonattack, buttoninven, buttonequip, buttonstat, buttonskill, buttonexit;
 	private static JLabel mainbackgroundimgLabel, GameScreenimgLabel, monsterimgLabel; // 이미지 라벨들
@@ -169,9 +168,9 @@ public class GameScreen extends JFrame {
 	private static LinkedList<DSItems> inven = new LinkedList<DSItems>(); // 플레이어 인벤토리 내용물
 	private static int current_user_hp, current_user_mp; // 현재 플레이어 체력 & 마나
 
-	public static void main(String[] args) {
-		new GameScreen("춘식이",30,"모험가",10,10,10,1200,480);
-	}
+//	public static void main(String[] args) {
+//		new GameScreen("춘식이",30,"모험가",10,10,10,1200,480);
+//	}
 
 	/** 메소드 영역 **/
 	public GameScreen(String name, int l, String job, int s, int d, int i, int hp, int mp) {
@@ -207,6 +206,7 @@ public class GameScreen extends JFrame {
 		boots = "없음";
 		System.out.println("[info] GameScreen() 필드 초기화 완료.");
 		
+		addInventory(new String[] {"단검","체력 물약","마나 물약"}); // 기본 템 지급
 		createGameScreen();
 		checkplayerstatus();
 		checkmonsterstatus();
@@ -519,7 +519,7 @@ public class GameScreen extends JFrame {
 				// JOptionPane 버튼 글자 스타일 설정
 				UIManager.put("OptionPane.buttonFont", new Font("맑은 고딕", Font.PLAIN, 14));
 				JLabel message = new JLabel(
-						"<html><p style='font-size:14pt; font-family:맑은 고딕;'>정말 가실꺼에요?<br/>아직 용사님의 도움을 필요로 하는 곳이 많아요!!!</p></html>");
+						"<html><p style='font-family:맑은 고딕;'>정말 가실꺼에요?<br/>아직 용사님의 도움을 필요로 하는 곳이 많아요!!!</p></html>");
 				int a = JOptionPane.showOptionDialog(null, message, "게임종료", JOptionPane.YES_NO_OPTION,
 						JOptionPane.QUESTION_MESSAGE, null, new Object[] { "미안하지만, 지금은 좀 바빠.", "내 도움이 필요한 곳이 어디야??" },
 						null);
@@ -874,26 +874,23 @@ public class GameScreen extends JFrame {
 
 				while (!Thread.currentThread().isInterrupted()) {
 					try {
-						Thread.sleep(500);
+						Thread.sleep(200);
 						System.out.println("[info] 캐릭터 레벨 체크..");
 						if(c_lv > 10 && c_lv < 30) { // 11 ~ 29 레벨 전사 이미지
 							
 						}else { // 기사 이미지
 							
 						}
-						System.out.println("[info] 캐릭터 체력 상태 체크..");
+						System.out.println("[info] 캐릭터 체력 & 마나 상태 체크..");
 						playerHpbar.setValue(current_user_hp);
 						playerHpbar.setString(current_user_hp + " / " + c_hp);
-
+						playerMpbar.setValue(current_user_mp);
+						playerMpbar.setString(current_user_mp + " / " + c_mp);
+						
 						if (current_user_hp <= 0) {
 							Thread.currentThread().interrupt();
 						}
-
-						System.out.println("[info] 캐릭터 마나 상태 체크..");
-						System.out.println("[info] 캐릭터 마나 : "+current_user_mp);
-						playerMpbar.setValue(current_user_mp);
-						playerMpbar.setString(current_user_mp + " / " + c_mp);
-
+						
 						System.out.println("[info] 캐릭터 공격력&방어력 상태 체크..");
 						playeratk = (c_str / 2) + atk_weapon; // 플레이어 총 공격력(기본공격력 + 무기공격력)
 						equipdef = def_helmet + def_armor + def_glove + def_boots; // 투구,갑옷,장갑,신발 방어력 합계
@@ -923,6 +920,15 @@ public class GameScreen extends JFrame {
 								c_mp += 40;
 								writeLog("체력이 40 올랐다.\n마나가 40 올랐다.");
 								
+								current_user_hp = c_hp;
+								current_user_mp = c_mp;
+								playerHpbar.setValue(current_user_hp);
+								playerMpbar.setValue(current_user_mp);
+								playerHpbar.setMaximum(current_user_hp);
+								playerMpbar.setMaximum(current_user_mp);
+								playerHpbar.setString(current_user_hp+" / "+c_hp);
+								playerMpbar.setString(current_user_mp+" / "+c_mp);
+								
 							}else if(c_lv >=11 && c_lv <= 20) { // 레벨이 11 ~ 20인 경우 스텟 가중치 (5 ~ 10 랜덤), 체력/마나 +70
 								strup = (int)(Math.random()*10)+5;
 								c_str += strup;
@@ -933,6 +939,17 @@ public class GameScreen extends JFrame {
 								intup = (int)(Math.random()*10)+5;
 								c_int += intup;
 								writeLog("지능이 "+intup+" 올랐다.");
+								c_hp += 70;
+								c_mp += 70;
+								
+								current_user_hp = c_hp;
+								current_user_mp = c_mp;
+								playerHpbar.setValue(current_user_hp);
+								playerMpbar.setValue(current_user_mp);
+								playerHpbar.setMaximum(current_user_hp);
+								playerMpbar.setMaximum(current_user_mp);
+								playerHpbar.setString(current_user_hp+" / "+c_hp);
+								playerMpbar.setString(current_user_mp+" / "+c_mp);
 								
 							}else if(c_lv >=21 && c_lv <= 29){ // 21 ~ 29 스텟 가중치 (10 ~ 15 랜덤), 체력/마나 +100
 								strup = (int)(Math.random()*15)+10;
@@ -944,6 +961,17 @@ public class GameScreen extends JFrame {
 								intup = (int)(Math.random()*15)+10;
 								c_int += intup;
 								writeLog("지능이 "+intup+" 올랐다.");
+								c_hp += 100;
+								c_mp += 100;
+								
+								current_user_hp = c_hp;
+								current_user_mp = c_mp;
+								playerHpbar.setValue(current_user_hp);
+								playerMpbar.setValue(current_user_mp);
+								playerHpbar.setMaximum(current_user_hp);
+								playerMpbar.setMaximum(current_user_mp);
+								playerHpbar.setString(current_user_hp+" / "+c_hp);
+								playerMpbar.setString(current_user_mp+" / "+c_mp);
 					
 							}else { // 30 레벨 달성(만렙) 올스탯+50, 체,마 + 500
 								c_hp += 500;
@@ -952,13 +980,16 @@ public class GameScreen extends JFrame {
 								c_dex += 50;
 								c_int += 50;
 								writeLog("레벨 30이 되었다.\n체력이 500 올랐다.\n마나가 500 올랐다.\n모든 능력치가 50 올랐다.");
+								
+								current_user_hp = c_hp;
+								current_user_mp = c_mp;
+								playerHpbar.setValue(current_user_hp);
+								playerMpbar.setValue(current_user_mp);
+								playerHpbar.setMaximum(current_user_hp);
+								playerMpbar.setMaximum(current_user_mp);
+								playerHpbar.setString(current_user_hp+" / "+c_hp);
+								playerMpbar.setString(current_user_mp+" / "+c_mp);
 							}
-							current_user_hp = c_hp;
-							current_user_mp = c_mp;
-							playerHpbar.setValue(current_user_hp);
-							playerMpbar.setValue(current_user_mp);
-							playerHpbar.setString(current_user_hp+" / "+c_hp);
-							playerMpbar.setString(current_user_mp+" / "+c_mp);
 						}
 
 						System.out.println("[info] 캐릭터 버프 상태 체크..");
@@ -981,7 +1012,7 @@ public class GameScreen extends JFrame {
 				System.out.println("[info] m_check 쓰레드 실행");
 				while (!Thread.currentThread().isInterrupted()) {
 					try {
-						Thread.sleep(500);
+						Thread.sleep(200);
 						System.out.println("[info] 몹 체력 상태 체크..");
 						MonsterHpbar.setValue(current_monster_hp);
 						MonsterHpbar.setString(current_monster_hp + " / " + m_hp);
@@ -991,6 +1022,10 @@ public class GameScreen extends JFrame {
 								writeLog(m_name + "(이/가) 쓰러졌다.");
 								writeLog("경험치가 " + m_exp + " 올랐습니다.");
 								c_exp += m_exp; // 현재 경험치에 몹 경험치를 더함(경험치 획득)
+								addInventory(dropitem); // 몹이 드랍한 아이템 인벤토리에 추가
+								for(int i=0; i<dropitem.length; i++) {
+									writeLog(dropitem[i] +" (을/를) 얻었다.");
+								}
 								battle = false; // 전투 종료
 								if (buff) { // 버프가 걸려있는 경우 전투 종료 후 버프를 해제 해야함
 									buff = false; // 버프 상태 해제(전투 종료)
@@ -1209,7 +1244,6 @@ public class GameScreen extends JFrame {
 					writeLog("스킬 - 디멘션 브레이커 사용\n"+m_name+" 에게 피해를 "+skilldamage+" 입혔다.");
 					removeEffectTimer = new Timer();
 					removeEffectTask = new TimerTask() {
-						
 						@Override
 						public void run() {
 							// TODO Auto-generated method stub
@@ -1236,8 +1270,7 @@ public class GameScreen extends JFrame {
 			.createImage("resource/images/effects/player/skill4_Dimension_Breaker_main.gif")));
 		Timer changeImg1 = new Timer();
 		Timer changeImg2 = new Timer();
-		TimerTask changeImgTask2 = new TimerTask() {
-			
+		TimerTask changeImgTask2 = new TimerTask() {		
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
@@ -1247,8 +1280,7 @@ public class GameScreen extends JFrame {
 			}
 		};
 		
-		TimerTask changeImgTask1 = new TimerTask() {
-			
+		TimerTask changeImgTask1 = new TimerTask() {		
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
@@ -1258,7 +1290,6 @@ public class GameScreen extends JFrame {
 				
 			}
 		};
-		
 		changeImg1.schedule(changeImgTask1, 4200);
 	}
 	
@@ -1443,7 +1474,7 @@ public class GameScreen extends JFrame {
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp); // 현재 몹 체력으로 몹 체력바 값 설정
 			MonsterHpbar.setString(String.valueOf(current_monster_hp) + " / " + m_hp); // 막대 안에 보이는 문자열 설정
-			addInventory(dropitem); // Test용
+//			addInventory(dropitem); // Test용
 			MonsterHpbar.setVisible(true);
 			break;
 		case 1: // Orcwarrior
@@ -1454,7 +1485,7 @@ public class GameScreen extends JFrame {
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp);
 			MonsterHpbar.setString(String.valueOf(current_monster_hp) + " / " + m_hp);
-			addInventory(dropitem);
+//			addInventory(dropitem);
 			MonsterHpbar.setVisible(true);
 			break;
 		case 2: // Golem
@@ -1465,7 +1496,7 @@ public class GameScreen extends JFrame {
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp);
 			MonsterHpbar.setString(String.valueOf(current_monster_hp) + " / " + m_hp);
-			addInventory(dropitem);
+//			addInventory(dropitem);
 			MonsterHpbar.setVisible(true);
 			break;
 		}
