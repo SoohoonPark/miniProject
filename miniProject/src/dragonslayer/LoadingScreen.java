@@ -14,7 +14,7 @@ import javax.swing.border.LineBorder;
 
 @SuppressWarnings("serial")
 public class LoadingScreen extends JFrame {
-	private Image loading = Toolkit.getDefaultToolkit().createImage("resource/images/background/LoadingScreen.png");
+	private Image loading = Toolkit.getDefaultToolkit().createImage("resource/images/background/LoadingScreen/loadingbackground.png");
 	private Image iconimage = Toolkit.getDefaultToolkit().createImage("resource/images/title/titleicon.png");
 	private JProgressBar loadingbar;
 	

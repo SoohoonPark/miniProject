@@ -7,15 +7,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 
 @SuppressWarnings("serial")
@@ -26,31 +23,14 @@ public class SkillScreen extends JFrame {
 	private Image Skill2 = Toolkit.getDefaultToolkit().createImage("resource/images/icon/skill_2_aura_blade.png");
 	private Image Skill3 = Toolkit.getDefaultToolkit().createImage("resource/images/icon/skill_3_Demonic Swords.PNG");
 	private Image Skill4 = Toolkit.getDefaultToolkit().createImage("resource/images/icon/skill_4_fatal_attack.png");
-	private final static Image SkillEffect1 = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/effects/player/Skill1_Dragon Slasher.gif");
-	private final static Image SkillEffect2 = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/effects/player/Skill2_Aura Blade.gif");
-	private final static Image SkillEffect3 = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/effects/player/Skill3_Demonic Swords.gif");
-	private final static Image SkillEffect4= Toolkit.getDefaultToolkit()
-			.createImage("resource/images/effects/player/Skill4_Dimension Breaker.gif");
-	private final static Image SkillEffect4_Cutscene = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/effects/player/Skill4_Dimension Breaker Cutscene.gif");
+
 	private static JPanel SkillPanel1, SkillPanel2, SkillPanel3, SkillPanel4; // 스킬 정보 출력 패널
 	private static JButton Use1, Use2, Use3, Use4; // 스킬 사용 버튼
 	private static JLabel SkillIconLabel1, SkillIconLabel2, SkillIconLabel3, SkillIconLabel4,
 						SkillMessageLabel1,	SkillMessageLabel2, SkillMessageLabel3, SkillMessageLabel4; // 스킬 아이콘 및 설명 라벨
 	
-	private int current_player_mp, playeratk, c_lv; // 플레이어 현재 마나, 공격력, 레벨
-	private int current_mob_hp, monsterdef; // 몬스터 현재 체력, 방어력
-	
-	public SkillScreen(int usermp, int useratk, int userlv, int mobhp, int mobdef) {
+	public SkillScreen() {
 		System.out.println("[info] 스킬 창 열림");
-		this.current_player_mp = usermp;
-		this.playeratk = useratk;
-		this.c_lv = userlv;
-		this.current_mob_hp = mobhp;
-		this.monsterdef = mobdef;
 		
 		setSize(400, 690);
 		setLayout(null);
@@ -96,7 +76,7 @@ public class SkillScreen extends JFrame {
 		SkillMessageLabel1 = new JLabel();
 		SkillMessageLabel1.setBounds(5, 50, 235, 60);
 		SkillMessageLabel1.setForeground(new Color(80, 175, 73));
-		SkillMessageLabel1.setText("<html><p style='font-size:14pt; font-family:맑은 고딕;'>MP 70 소비, 60% 데미지로 5회 공격<br/>드래곤의 형상을 한 검기를 소환하여 전방으로 날려 보낸다.</p></html>");
+		SkillMessageLabel1.setText("<html><p style='font-family:맑은 고딕;'>MP 70 소비, 40% 데미지로 5회 공격<br/>드래곤의 형상을 한 검기를 소환하여 전방으로 날려 보낸다.</p></html>");
 		
 		SkillIconLabel2 = new JLabel(new ImageIcon(Skill2));
 		SkillIconLabel2.setBounds(5, 5, 210, 40);
@@ -106,7 +86,7 @@ public class SkillScreen extends JFrame {
 		SkillMessageLabel2 = new JLabel();
 		SkillMessageLabel2.setBounds(5, 50, 255, 60);
 		SkillMessageLabel2.setForeground(new Color(80, 175, 73));
-		SkillMessageLabel2.setText("<html><p style='font-size:14pt; font-family:맑은 고딕;'>MP 120 소비, 470% 데미지로 1회 공격<br/>무기 전체를 타오르는 불꽃으로 휘감아 전방을 향해 내려찍는다.</p></html>");
+		SkillMessageLabel2.setText("<html><p style='font-family:맑은 고딕;'>MP 120 소비, 400% 데미지로 1회 공격<br/>무기 전체를 타오르는 불꽃으로 휘감아 전방을 향해 내려찍는다.</p></html>");
 		
 		SkillIconLabel3 = new JLabel(new ImageIcon(Skill3));
 		SkillIconLabel3.setBounds(5, 5, 200, 40);
@@ -116,7 +96,7 @@ public class SkillScreen extends JFrame {
 		SkillMessageLabel3 = new JLabel();
 		SkillMessageLabel3.setBounds(5, 50, 250, 60);
 		SkillMessageLabel3.setForeground(new Color(80, 175, 73));
-		SkillMessageLabel3.setText("<html><p style='font-size:14pt; font-family:맑은 고딕;'>MP 150 소비, 90% 데미지로 8회 공격<br/>악마의 검을 소환하여 사방으로 휘둘러 적을 섬멸한다.</p></html>");
+		SkillMessageLabel3.setText("<html><p style='font-family:맑은 고딕;'>MP 150 소비, 100% 데미지로 8회 공격<br/>악마의 검을 소환하여 사방으로 휘둘러 적을 섬멸한다.</p></html>");
 		
 		SkillIconLabel4 = new JLabel(new ImageIcon(Skill4));
 		SkillIconLabel4.setBounds(5, 5, 220, 40);
@@ -126,7 +106,7 @@ public class SkillScreen extends JFrame {
 		SkillMessageLabel4 = new JLabel();
 		SkillMessageLabel4.setBounds(5, 35, 270, 100);
 		SkillMessageLabel4.setForeground(new Color(80, 175, 73));
-		SkillMessageLabel4.setText("<html><p style='font-size:14pt; font-family:맑은 고딕;'>MP 400 소비, 150% 데미지로 10회 공격<br/>어둠의 기운을 담아 공격하여 망자의 표식을 새기고, 마지막 타격에 350% 데미지로 차원 가르기를 사용한다. (궁극기)</p></html>");
+		SkillMessageLabel4.setText("<html><p style='font-family:맑은 고딕;'>MP 400 소비, 150% 데미지로 10회 공격<br/>어둠의 기운을 담아 공격하여 망자의 표식을 새기고, 마지막 타격에 300% 데미지로 차원 가르기를 사용한다. (궁극기)</p></html>");
 		
 		// 스킬 사용 버튼
 		Use1 = new JButton("사용");
@@ -134,21 +114,7 @@ public class SkillScreen extends JFrame {
 		Use1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int requiredmp = 70;
-				if(current_player_mp < requiredmp) {
-					JLabel message = new JLabel("<html><p style='font-family:맑은 고딕; font-size:14pt;'>MP가 부족하여 사용할 수 없습니다.</p></html>");
-					JOptionPane.showMessageDialog(SwingUtilities.getRoot(Use1), message, "사용", JOptionPane.ERROR_MESSAGE);
-					return;
-				} else {
-					System.out.println("[info] 스킬 '드래곤 슬래셔' 사용");
-					current_player_mp -= requiredmp;
-					System.out.println(current_player_mp);
-					GameScreen.setPlayermp(current_player_mp);
-					GameScreen.SkillEffectLabel1.setIcon(new ImageIcon(SkillEffect1));
-					
-					
-				}
-				
+				GameScreen.skill_DragonSlasher();
 			}
 		});
 		
@@ -157,20 +123,7 @@ public class SkillScreen extends JFrame {
 		Use2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int requiredmp = 120;
-				if(current_player_mp < requiredmp) {
-					JLabel message = new JLabel("<html><p style='font-family:맑은 고딕; font-size:14pt;'>MP가 부족하여 사용할 수 없습니다.</p></html>");
-					JOptionPane.showMessageDialog(SwingUtilities.getRoot(Use2), message, "사용", JOptionPane.ERROR_MESSAGE);
-					return;
-				} else {
-					System.out.println("[info] 스킬 '오러 블레이드' 사용");
-					current_player_mp -= requiredmp;
-					System.out.println(current_player_mp);
-					GameScreen.setPlayermp(current_player_mp);
-					GameScreen.SkillEffectLabel2.setIcon(new ImageIcon(SkillEffect2));
-					
-				}
-				
+				GameScreen.skill_AuraBlade();
 			}
 		});
 		
@@ -179,20 +132,7 @@ public class SkillScreen extends JFrame {
 		Use3.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int requiredmp = 150;
-				if(current_player_mp < requiredmp) {
-					JLabel message = new JLabel("<html><p style='font-family:맑은 고딕; font-size:14pt;'>MP가 부족하여 사용할 수 없습니다.</p></html>");
-					JOptionPane.showMessageDialog(SwingUtilities.getRoot(Use3), message, "사용", JOptionPane.ERROR_MESSAGE);
-					return;
-				} else {
-					System.out.println("[info] 스킬 '데모닉 소드' 사용");
-					current_player_mp -= requiredmp;
-					System.out.println(current_player_mp);
-					GameScreen.setPlayermp(current_player_mp);
-					GameScreen.SkillEffectLabel3.setIcon(new ImageIcon(SkillEffect3));
-					
-				}
-				
+				GameScreen.skill_DemonicSword();
 			}
 		});
 		
@@ -201,21 +141,7 @@ public class SkillScreen extends JFrame {
 		Use4.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int requiredmp = 400;
-				if(current_player_mp < requiredmp) {
-					JLabel message = new JLabel("<html><p style='font-family:맑은 고딕; font-size:14pt;'>MP가 부족하여 사용할 수 없습니다.</p></html>");
-					JOptionPane.showMessageDialog(SwingUtilities.getRoot(Use4), message, "사용", JOptionPane.ERROR_MESSAGE);
-					return;
-				} else {
-					System.out.println("[info] 스킬 '디멘션 브레이커' 사용");
-					current_player_mp -= requiredmp;
-					System.out.println(current_player_mp);
-					GameScreen.setPlayermp(current_player_mp);
-					GameScreen.SkillEffectLabel4_1.setIcon(new ImageIcon(SkillEffect4_Cutscene));
-					GameScreen.SkillEffectLabel4_2.setIcon(new ImageIcon(SkillEffect4));
-					
-				}
-				
+				GameScreen.skill_DimensionBreaker();
 			}
 		});
 		
@@ -248,8 +174,4 @@ public class SkillScreen extends JFrame {
 		
 		setVisible(true); 
 	}
-	
-//	public static void main(String[] args) {
-//		new SkillScreen(50);
-//	}
 }

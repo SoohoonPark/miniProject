@@ -20,7 +20,7 @@ import javax.swing.JTextField;
 @SuppressWarnings("serial")
 public class MakeCharacter extends JFrame{
 	// 배경이미지 & 아이콘이미지
-	private Image backgroundimg = Toolkit.getDefaultToolkit().createImage("resource/images/background/charactermakebackground.png");
+	private Image backgroundimg = Toolkit.getDefaultToolkit().createImage("resource/images/background/MakeCharacter/charactermakebackground.png");
 	private Image iconimg = Toolkit.getDefaultToolkit().createImage("resource/images/title/titleicon.png");
 	
 	// 버튼 이미지

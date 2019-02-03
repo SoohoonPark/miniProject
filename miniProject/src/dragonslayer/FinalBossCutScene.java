@@ -3,22 +3,31 @@ package dragonslayer;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import com.sun.jna.Native;
+import com.sun.jna.NativeLibrary;
 
 import uk.co.caprica.vlcj.binding.LibVlc;
 import uk.co.caprica.vlcj.discovery.NativeDiscovery;
 import uk.co.caprica.vlcj.player.MediaPlayerFactory;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 import uk.co.caprica.vlcj.player.embedded.windows.Win32FullScreenStrategy;
+import uk.co.caprica.vlcj.runtime.RuntimeUtil;
 
 @SuppressWarnings("serial")
 public class FinalBossCutScene extends JFrame{
-	
+	Thread runcheck;
 	public FinalBossCutScene() {
-		boolean found = new NativeDiscovery().discover();
-        System.out.println(found);
-        System.out.println(LibVlc.INSTANCE.libvlc_get_version());
+//		boolean found = new NativeDiscovery().discover();
+//		System.out.println(found);
+//		System.out.println(LibVlc.INSTANCE.libvlc_get_version());
+        NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(),"VLC");
+		Native.loadLibrary(RuntimeUtil.getLibVlcLibraryName(), LibVlc.class);
         
 		setBounds(100, 100, 1000, 600);
 		setVisible(true);
@@ -28,9 +37,6 @@ public class FinalBossCutScene extends JFrame{
 		JPanel p = new JPanel(new BorderLayout());
 		p.add(c);
 		add(p);
-		
-//		NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(),"VLC");
-//		Native.loadLibrary(RuntimeUtil.getLibVlcLibraryName(), LibVlc.class);
 		
 		MediaPlayerFactory mpf = new MediaPlayerFactory();
 		EmbeddedMediaPlayer emp = mpf.newEmbeddedMediaPlayer(new Win32FullScreenStrategy(this));
@@ -43,7 +49,7 @@ public class FinalBossCutScene extends JFrame{
 		emp.prepareMedia(file);
 		emp.play();
 		
-		Thread runcheck = new Thread(new Runnable() {
+		runcheck = new Thread(new Runnable() {
 			
 			@Override
 			public void run() {
