@@ -610,7 +610,6 @@ public class GameScreen extends JFrame {
 				JOptionPane.QUESTION_MESSAGE,null,new Object[]{"맞선다", "아직이다"},null);
 		switch(select) {
 		case 0: // '맞선다'
-			new FinalBossCutScene();
 			break;
 		case 1: // '아직이다'
 			break;
