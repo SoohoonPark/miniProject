@@ -19,19 +19,18 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 public class MainScreen extends JFrame {
 	// 이미지(메인배경이미지, 타이틀이미지, 아이콘이미지)
-	private Image mainimage = Toolkit.getDefaultToolkit().createImage("resource/images/background/mainimage.png");
+	private Image mainimage = Toolkit.getDefaultToolkit().createImage("resource/images/background/MainScreen/mainimage.png");
 	private Image titleimage = Toolkit.getDefaultToolkit().createImage("resource/images/title/titleimg.png");
 	private Image iconimage = Toolkit.getDefaultToolkit().createImage("resource/images/title/titleicon.png");
 	
 	// 버튼 이미지
-	private Image btnimgstart = Toolkit.getDefaultToolkit().createImage("resource/images/button/MainScreenButtons/main_btnstart.png");
-	private Image btnimgstart_pressed = Toolkit.getDefaultToolkit().createImage("resource/images/button/MainScreenButtons/main_btnstart_pressed.png");
-	private Image btnimgquit = Toolkit.getDefaultToolkit().createImage("resource/images/button/MainScreenButtons/main_btnquit.png");
-	private Image btnimgquit_pressed = Toolkit.getDefaultToolkit().createImage("resource/images/button/MainScreenButtons/main_btnquit_pressed.png");
+	private Image btnimgstart = Toolkit.getDefaultToolkit().createImage("resource/images/button/MainScreen/main_btnstart.png");
+	private Image btnimgstart_pressed = Toolkit.getDefaultToolkit().createImage("resource/images/button/MainScreen/main_btnstart_pressed.png");
+	private Image btnimgquit = Toolkit.getDefaultToolkit().createImage("resource/images/button/MainScreen/main_btnquit.png");
+	private Image btnimgquit_pressed = Toolkit.getDefaultToolkit().createImage("resource/images/button/MainScreen/main_btnquit_pressed.png");
 
 	// 버튼(게임시작,게임종료)
 	private JButton btnGamestart, btnGameQuit;
-
 	public static void main(String[] args) {
 		System.out.println("[info] 프로그램 실행");
 		new MainScreen();

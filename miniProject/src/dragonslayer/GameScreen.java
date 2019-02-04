@@ -33,23 +33,21 @@ import javax.swing.border.LineBorder;
 public class GameScreen extends JFrame {
 	/** 이미지 영역 **/
 	// 게임아이콘
-	private final static Image ICONIMAGE = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/title/titleicon.png");
+	private final static Image ICONIMAGE = Toolkit.getDefaultToolkit().createImage("resource/images/title/titleicon.png");
 	
 	// 게임배경화면(사각형 테두리)
 	private final static Image MAINBACKGROUND = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/background/GameScreen/MainBackgroundborder.png");
-	
+			.createImage("resource/images/background/GameScreen/background_border.png");
 	// 전투배경
-	private final static ImageIcon BATTLEBACKGROUND = new ImageIcon(
-			Toolkit.getDefaultToolkit().createImage("resource/images/background/GameScreen/battlebackground.png"));
+	private final static ImageIcon BATTLEBACKGROUND = new ImageIcon(Toolkit.getDefaultToolkit()
+			.createImage("resource/images/background/GameScreen/background_battle.png"));
 	// 함정배경
-	private final static ImageIcon FIRETRAP = new ImageIcon(
-			Toolkit.getDefaultToolkit().createImage("resource/images/background/GameScreen/trap/fire_trap.png"));
-	private final static ImageIcon SPIKETRAP = new ImageIcon(
-			Toolkit.getDefaultToolkit().createImage("resource/images/background/GameScreen/trap/spike_trap.png"));
-	private final static ImageIcon WELLTRAP = new ImageIcon(
-			Toolkit.getDefaultToolkit().createImage("resource/images/background/GameScreen/trap/well_trap.png"));
+	private final static ImageIcon FIRETRAP = new ImageIcon(Toolkit.getDefaultToolkit()
+			.createImage("resource/images/background/GameScreen/trap/fire_trap.png"));
+	private final static ImageIcon SPIKETRAP = new ImageIcon(Toolkit.getDefaultToolkit()
+			.createImage("resource/images/background/GameScreen/trap/spike_trap.png"));
+	private final static ImageIcon WELLTRAP = new ImageIcon(Toolkit.getDefaultToolkit()
+			.createImage("resource/images/background/GameScreen/trap/well_trap.png"));
 
 	// 플레이어 이미지(모험가)
 	private final static Image PLAYERBEGINNER = Toolkit.getDefaultToolkit()
@@ -83,9 +81,9 @@ public class GameScreen extends JFrame {
 
 	// 버튼 패널 & 로그 패널 배경(테두리)
 	private final static Image LOGBACKGROUND = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/background/LogPanelBorder.png");
+			.createImage("resource/images/background/GameScreen/background_border_log.png");
 	private final static Image BUTTONBACKGROUND = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/background/GameScreen/ButtonPanelBorder.png");
+			.createImage("resource/images/background/GameScreen/background_border_buttons.png");
 
 	// 버튼 이미지들(탐색,공격,가방....)
 	private final static Image BTNATK = Toolkit.getDefaultToolkit()

@@ -20,14 +20,14 @@ import javax.swing.JTextField;
 @SuppressWarnings("serial")
 public class MakeCharacter extends JFrame{
 	// 배경이미지 & 아이콘이미지
-	private Image backgroundimg = Toolkit.getDefaultToolkit().createImage("resource/images/background/MakeCharacter/charactermakebackground.png");
+	private Image backgroundimg = Toolkit.getDefaultToolkit().createImage("resource/images/background/MakeCharacter/makebackground.png");
 	private Image iconimg = Toolkit.getDefaultToolkit().createImage("resource/images/title/titleicon.png");
 	
 	// 버튼 이미지
-	private Image btncharstart = Toolkit.getDefaultToolkit().createImage("resource/images/button/MakeCharacterButtons/make_btnstart.png");
-	private Image btncharstart_pressed = Toolkit.getDefaultToolkit().createImage("resource/images/button/MakeCharacterButtons/make_btnstart_pressed.png");
-	private Image btncharcancel = Toolkit.getDefaultToolkit().createImage("resource/images/button/MakeCharacterButtons/make_btncancel.png");
-	private Image btncharcancel_pressed = Toolkit.getDefaultToolkit().createImage("resource/images/button/MakeCharacterButtons/make_btncancel_pressed.png");
+	private Image btncharstart = Toolkit.getDefaultToolkit().createImage("resource/images/button/MakeCharacter/make_btnstart.png");
+	private Image btncharstart_pressed = Toolkit.getDefaultToolkit().createImage("resource/images/button/MakeCharacter/make_btnstart_pressed.png");
+	private Image btncharcancel = Toolkit.getDefaultToolkit().createImage("resource/images/button/MakeCharacter/make_btncancel.png");
+	private Image btncharcancel_pressed = Toolkit.getDefaultToolkit().createImage("resource/images/button/MakeCharacter/make_btncancel_pressed.png");
 	
 	private static JTextField txtname; // 캐릭터명 입력란
 	private static JButton btnStart, btnCancel; // 시작버튼, 취소버튼
