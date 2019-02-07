@@ -166,9 +166,9 @@ public class GameScreen extends JFrame {
 	private static LinkedList<DSItems> inven = new LinkedList<DSItems>(); // 플레이어 인벤토리 내용물
 	private static int current_user_hp, current_user_mp; // 현재 플레이어 체력 & 마나
 
-//	public static void main(String[] args) {
-//		new GameScreen("춘식이",30,"모험가",10,10,10,1200,480);
-//	}
+	public static void main(String[] args) {
+		new GameScreen("춘식이",1,"모험가",10,10,10,100,70);
+	}
 
 	/** 메소드 영역 **/
 	public GameScreen(String name, int l, String job, int s, int d, int i, int hp, int mp) {
@@ -885,6 +885,8 @@ public class GameScreen extends JFrame {
 						playerMpbar.setString(current_user_mp + " / " + c_mp);
 						
 						if (current_user_hp <= 0) {
+							JOptionPane.showMessageDialog(null, "캐릭터 사망", "사망", JOptionPane.INFORMATION_MESSAGE, null);
+							new MainScreen();
 							Thread.currentThread().interrupt();
 						}
 						
@@ -1018,6 +1020,9 @@ public class GameScreen extends JFrame {
 							if (current_monster_hp <= 0) {
 								writeLog(m_name + "(이/가) 쓰러졌다.");
 								writeLog("경험치가 " + m_exp + " 올랐습니다.");
+								if(c_lv == 30) {
+									m_exp = 0; // 만렙일 시 경험치 획득 X
+								}
 								c_exp += m_exp; // 현재 경험치에 몹 경험치를 더함(경험치 획득)
 								addInventory(dropitem); // 몹이 드랍한 아이템 인벤토리에 추가
 								for(int i=0; i<dropitem.length; i++) {
@@ -1293,6 +1298,7 @@ public class GameScreen extends JFrame {
 	// 인벤토리에 아이템 추가하는 메소드
 	void addInventory(String[] getitem) {
 		try {
+			System.out.println(iteminfo.size());
 			for (int i = 0; i < iteminfo.size(); i++) {
 				for (int j = 0; j < getitem.length; j++) {
 					if (getitem[j].equals(iteminfo.get(i).getI_name())) {
