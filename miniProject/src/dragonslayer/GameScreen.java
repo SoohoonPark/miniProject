@@ -114,7 +114,7 @@ public class GameScreen extends JFrame {
 			.createImage("resource/images/button/GameScreen/button_quitgame.png");
 	private final static Image BTNQUIT_PRESS = Toolkit.getDefaultToolkit()
 			.createImage("resource/images/button/GameScreen/button_quitgame_pressed.png");
-	private final static Image LOGO = Toolkit.getDefaultToolkit().createImage("resource/images/background/logo.png");
+	private final static Image LOGO = Toolkit.getDefaultToolkit().createImage("resource/images/background/GameScreen/logo.png");
 
 	// 스킬 이펙트 이미지들
 	private final static Image PLAYERBASICATTACK = Toolkit.getDefaultToolkit()
@@ -339,21 +339,22 @@ public class GameScreen extends JFrame {
 					return;
 				}
 				// 1 ~ 3 분기 발생
-				int switchnum = (int)(Math.random()*3)+1;
+				int switchnum = (int)(Math.random()*10)+1; // 1 ~ 10
+				System.out.println("나온 탐색 분기 : "+switchnum);
 				switch (switchnum) {
-				case 1: // 전투 발생
+				case 1: case 2: case 3: case 4: case 5: case 6: // 전투 발생
 					battle = true; // 전투 발생 시 true로 전환, 해당 변수는 전투가 종료되면 다시 false로 바뀜
 					System.out.println("[info] 전투 발생");
 					createBattle(c_lv); // 플레이어 레벨에 따라서 생성되는 몹의 구간(?)이 달라짐. 1 ~ 10, 11 ~ 20, 21 ~ 30
 					break;
-				case 2:
+				case 7: case 8:
 					System.out.println("[info] 상자 획득 이벤트 발생");
 					// 1 ~ 10 상자 이벤트 (1 ~ 6 일반 상자, 7 ~ 9 괜찮아 보이는 상자, 10 화려한 상자)
 					int chestevent = (int) (Math.random() * 10) + 1;
 					System.out.println("[info] 발생한 상자 획득 이벤트 : " + chestevent);
 					createGetItemEvent(chestevent);
 					break;
-				case 3:
+				case 9: case 10:
 					System.out.println("[info] 특수 이벤트 발생(버프/함정)");
 					int subevent = (int) (Math.random() * 2) + 1; // 1 or 2 랜덤 숫자 (1 : 버프 / 2 : 함정)
 					System.out.println(subevent);
@@ -536,6 +537,8 @@ public class GameScreen extends JFrame {
 			public void mouseClicked(MouseEvent m) {			
 				if(c_lv == 30) {
 					createFinalBossBattle();
+				}else {
+					JOptionPane.showMessageDialog(null, "아직 용을 대면하기엔 힘이 부족합니다", "보스전 진입", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -777,7 +780,7 @@ public class GameScreen extends JFrame {
 				CharacterPanel.setVisible(true);
 			}
 		};
-		recoverimg.schedule(recovertask, 1000);
+		recoverimg.schedule(recovertask, 3000);
 	}
 
 	// 0 ~ 4 랜덤 만드는 메소드(상자 이벤트에서 사용)
@@ -806,14 +809,29 @@ public class GameScreen extends JFrame {
 		monsterbeingattackedLabel.setIcon(new ImageIcon(BEINGATTACKED)); // 피격 이팩트 출력
 		
 		int damage = playeratk - monsterdef; // 데미지는 플레이어 공격력 - 몬스터 방어력
+		System.out.println("나온 데미지 : "+damage);
 		if (damage <= 0) { // 플레이어 공격력 - 몬스터 방어력의 결과가 0보다 작거나 같을 경우 (= 몬스터의 방어력이 플레이어 공격력보다 높을 경우)
 			damage = 1; // 최소 데미지 1이 적용되도록 설정함.
 			current_monster_hp -= damage; // damage 수치만큼 몬스터 현재 체력 감소
 			writeLog("'" + c_name + "' (은/는) " + m_name + " 에게 " + damage + " 의 피해를 입혔다!");
 		} else {
-			int randomdamage = (int) (Math.random() * damage) + 1; // 1 ~ 플레이어 데미지 사이의 랜덤데미지 결정
-			current_monster_hp -= randomdamage; // randomdamage 수치만큼 몹 현재 체력 감소
-			writeLog("'" + c_name + "' (은/는) " + m_name + " 에게 " + randomdamage + " 의 피해를 입혔다!");
+			int mindam = damage/2; // 최소데미지는 데미지 / 2
+			int maxdam = damage; // 최대데미지
+			System.out.println("최소데미지 : "+mindam);
+			System.out.println("최대데미지 : "+maxdam);
+			if(mindam == 1 || maxdam == 1) {
+				int randomdamage = 1;
+				current_monster_hp -= randomdamage; // randomdamage 수치만큼 몹 현재 체력 감소
+				writeLog("'" + c_name + "' (은/는) " + m_name + " 에게 " + randomdamage + " 의 피해를 입혔다!");
+			}else {
+				int randomdamage = (int) (Math.random() * maxdam) + mindam; // 최소데미지 ~ 플레이어 데미지 사이의 랜덤데미지 결정
+				if(randomdamage > maxdam) {
+					randomdamage = maxdam;
+				}
+				System.out.println("나온 랜덤데미지 : "+randomdamage);
+				current_monster_hp -= randomdamage; // randomdamage 수치만큼 몹 현재 체력 감소
+				writeLog("'" + c_name + "' (은/는) " + m_name + " 에게 " + randomdamage + " 의 피해를 입혔다!");
+			}
 		}
 		
 		Timer pAttacktimer = new Timer();
@@ -871,7 +889,7 @@ public class GameScreen extends JFrame {
 
 				while (!Thread.currentThread().isInterrupted()) {
 					try {
-						Thread.sleep(200);
+						Thread.sleep(400);
 						System.out.println("[info] 캐릭터 레벨 체크..");
 						if(c_lv > 10 && c_lv < 30) { // 11 ~ 29 레벨 전사 이미지
 							
@@ -886,7 +904,7 @@ public class GameScreen extends JFrame {
 						
 						if (current_user_hp <= 0) {
 							JOptionPane.showMessageDialog(null, "캐릭터 사망", "사망", JOptionPane.INFORMATION_MESSAGE, null);
-							new MainScreen();
+							System.exit(0);
 							Thread.currentThread().interrupt();
 						}
 						
@@ -916,8 +934,8 @@ public class GameScreen extends JFrame {
 								c_int += intup;
 								writeLog("지능이 "+intup+ " 올랐다.");
 								c_hp += 40;
-								c_mp += 40;
-								writeLog("체력이 40 올랐다.\n마나가 40 올랐다.");
+								c_mp += 10;
+								writeLog("체력이 40 올랐다.\n마나가 10 올랐다.");
 								
 								current_user_hp = c_hp;
 								current_user_mp = c_mp;
@@ -938,8 +956,9 @@ public class GameScreen extends JFrame {
 								intup = (int)(Math.random()*10)+5;
 								c_int += intup;
 								writeLog("지능이 "+intup+" 올랐다.");
-								c_hp += 70;
-								c_mp += 70;
+								c_hp += 50;
+								c_mp += 10;
+								writeLog("체력이 50 올랐다.\n마나가 10 올랐다.");
 								
 								current_user_hp = c_hp;
 								current_user_mp = c_mp;
@@ -960,8 +979,9 @@ public class GameScreen extends JFrame {
 								intup = (int)(Math.random()*15)+10;
 								c_int += intup;
 								writeLog("지능이 "+intup+" 올랐다.");
-								c_hp += 100;
-								c_mp += 100;
+								c_hp += 60;
+								c_mp += 10;
+								writeLog("체력이 60 올랐다.\n마나가 10 올랐다.");
 								
 								current_user_hp = c_hp;
 								current_user_mp = c_mp;
@@ -973,12 +993,12 @@ public class GameScreen extends JFrame {
 								playerMpbar.setString(current_user_mp+" / "+c_mp);
 					
 							}else { // 30 레벨 달성(만렙) 올스탯+50, 체,마 + 500
-								c_hp += 500;
-								c_mp += 500;
+								c_hp += 300;
+								c_mp += 300;
 								c_str += 50;
 								c_dex += 50;
 								c_int += 50;
-								writeLog("레벨 30이 되었다.\n체력이 500 올랐다.\n마나가 500 올랐다.\n모든 능력치가 50 올랐다.");
+								writeLog("레벨 30이 되었다.\n체력이 300 올랐다.\n마나가 300 올랐다.\n모든 능력치가 50 올랐다.");
 								
 								current_user_hp = c_hp;
 								current_user_mp = c_mp;
@@ -1011,7 +1031,7 @@ public class GameScreen extends JFrame {
 				System.out.println("[info] m_check 쓰레드 실행");
 				while (!Thread.currentThread().isInterrupted()) {
 					try {
-						Thread.sleep(200);
+						Thread.sleep(400);
 						System.out.println("[info] 몹 체력 상태 체크..");
 						MonsterHpbar.setValue(current_monster_hp);
 						MonsterHpbar.setString(current_monster_hp + " / " + m_hp);
@@ -1083,10 +1103,23 @@ public class GameScreen extends JFrame {
 						System.out.println("[info] 남은 마나 : "+current_user_mp);
 						current_monster_hp -= skilldamage;
 					}else {
-						skilldamage = (int)(Math.random()*skilldamage)+1; // 1 ~ 스킬데미지 사이 랜덤 데미지
-						current_user_mp -= requiredMp;
-						System.out.println("[info] 남은 마나 : "+current_user_mp);
-						current_monster_hp -= skilldamage;
+						int mindam = skilldamage/2;
+						int maxdam = skilldamage;
+						System.out.println("드래곤 슬래셔 최소 데미지 : "+mindam+" 최대 데미지 : "+maxdam);
+						if(mindam == 1 || maxdam == 1) {
+							skilldamage = 1;
+							current_user_mp -= requiredMp;
+							System.out.println("[info] 남은 마나 : "+current_user_mp);
+							current_monster_hp -= skilldamage;
+						}else {
+							skilldamage = (int)(Math.random()*maxdam)+mindam; // 최소데미지 ~ 스킬데미지 사이 랜덤 데미지
+							if(skilldamage > maxdam) {
+								skilldamage = maxdam;
+							}
+							current_user_mp -= requiredMp;
+							System.out.println("[info] 남은 마나 : "+current_user_mp);
+							current_monster_hp -= skilldamage;
+						}
 					}
 					writeLog("스킬 - 드래곤 슬래셔 사용\n"+m_name+" 에게 피해를 "+skilldamage+" 입혔다.");
 					removeEffectTimer = new Timer();
@@ -1129,16 +1162,30 @@ public class GameScreen extends JFrame {
 				}else {
 					SkillEffectLabel2.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
 							.createImage("resource/images/effects/player/skill2_Aura_Blade.gif")));
-					skilldamage = (playeratk*4)-monsterdef; // 스킬데미지 = 스킬계수*4 - 몹 방어력
+					skilldamage = (playeratk*3)-monsterdef; // 스킬데미지 = 스킬계수*3 - 몹 방어력
 					if(skilldamage <= 0) {
 						skilldamage = 1; // 최소데미지는 무조건 1
 						current_user_mp -= requiredMp;
 						System.out.println("[info] 남은 마나 : "+current_user_mp);
 						current_monster_hp -= skilldamage;
 					}else {
-						skilldamage = (int)(Math.random()*skilldamage)+1; // 1 ~ 스킬데미지 사이 랜덤 데미지
-						current_user_mp -= requiredMp;
-						current_monster_hp -= skilldamage;
+						int mindam = skilldamage/2;
+						int maxdam = skilldamage;
+						System.out.println("오러 블레이드 최소 데미지 : "+mindam+" 최대 데미지 : "+maxdam);
+						if(mindam == 1 || maxdam == 1) {
+							skilldamage = 1;
+							current_user_mp -= requiredMp;
+							System.out.println("[info] 남은 마나 : "+current_user_mp);
+							current_monster_hp -= skilldamage;
+						}else {
+							skilldamage = (int)(Math.random()*maxdam)+mindam; // 최소데미지 ~ 스킬데미지 사이 랜덤 데미지
+							if(skilldamage > maxdam) {
+								skilldamage = maxdam;
+							}
+							current_user_mp -= requiredMp;
+							System.out.println("[info] 남은 마나 : "+current_user_mp);
+							current_monster_hp -= skilldamage;
+						}
 					}
 					writeLog("스킬 - 오러 블레이드 사용\n"+m_name+" 에게 피해를 "+skilldamage+" 입혔다.");
 					removeEffectTimer = new Timer();
@@ -1181,16 +1228,30 @@ public class GameScreen extends JFrame {
 				}else {
 					SkillEffectLabel3.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
 							.createImage("resource/images/effects/player/skill3_Demonic_Swords.gif")));
-					skilldamage = (playeratk*8)-monsterdef; // 스킬데미지 = 스킬계수*8 - 몹 방어력
+					skilldamage = (playeratk*6)-monsterdef; // 스킬데미지 = 스킬계수*6 - 몹 방어력
 					if(skilldamage <= 0) {
 						skilldamage = 1; // 최소데미지는 무조건 1
 						current_user_mp -= requiredMp;
 						System.out.println("[info] 남은 마나 : "+current_user_mp);
 						current_monster_hp -= skilldamage;
 					}else {
-						skilldamage = (int)(Math.random()*skilldamage)+1; // 1 ~ 스킬데미지 사이 랜덤 데미지
-						current_user_mp -= requiredMp;
-						current_monster_hp -= skilldamage;
+						int mindam = skilldamage/2;
+						int maxdam = skilldamage;
+						System.out.println("데모닉 소드 최소 데미지 : "+mindam+" 최대 데미지 : "+maxdam);
+						if(mindam == 1 || maxdam == 1) {
+							skilldamage = 1;
+							current_user_mp -= requiredMp;
+							System.out.println("[info] 남은 마나 : "+current_user_mp);
+							current_monster_hp -= skilldamage;
+						}else {
+							skilldamage = (int)(Math.random()*maxdam)+mindam; // 최소데미지 ~ 스킬데미지 사이 랜덤 데미지
+							if(skilldamage > maxdam) {
+								skilldamage = maxdam;
+							}
+							current_user_mp -= requiredMp;
+							System.out.println("[info] 남은 마나 : "+current_user_mp);
+							current_monster_hp -= skilldamage;
+						}
 					}
 					writeLog("스킬 - 데모닉 소드 사용\n"+m_name+" 에게 피해를 "+skilldamage+" 입혔다.");
 					removeEffectTimer = new Timer();
@@ -1232,16 +1293,30 @@ public class GameScreen extends JFrame {
 					return;
 				}else {
 					showUltimateSkill();
-					skilldamage = (playeratk*18)-monsterdef; // 스킬데미지 = 스킬계수*8 - 몹 방어력
+					skilldamage = (playeratk*8)-monsterdef; // 스킬데미지 = 스킬계수*8 - 몹 방어력
 					if(skilldamage <= 0) {
 						skilldamage = 1; // 최소데미지는 무조건 1
 						current_user_mp -= requiredMp;
 						System.out.println("[info] 남은 마나 : "+current_user_mp);
 						current_monster_hp -= skilldamage;
 					}else {
-						skilldamage = (int)(Math.random()*skilldamage)+1; // 1 ~ 스킬데미지 사이 랜덤 데미지
-						current_user_mp -= requiredMp;
-						current_monster_hp -= skilldamage;
+						int mindam = skilldamage/2;
+						int maxdam = skilldamage;
+						System.out.println("디멘션 브레이커 최소 데미지 : "+mindam+" 최대 데미지 : "+maxdam);
+						if(mindam == 1 || maxdam == 1) {
+							skilldamage = 1;
+							current_user_mp -= requiredMp;
+							System.out.println("[info] 남은 마나 : "+current_user_mp);
+							current_monster_hp -= skilldamage;
+						}else {
+							skilldamage = (int)(Math.random()*maxdam)+mindam; // 최소데미지 ~ 스킬데미지 사이 랜덤 데미지
+							if(skilldamage > maxdam) {
+								skilldamage = maxdam;
+							}
+							current_user_mp -= requiredMp;
+							System.out.println("[info] 남은 마나 : "+current_user_mp);
+							current_monster_hp -= skilldamage;
+						}
 					}
 					writeLog("스킬 - 디멘션 브레이커 사용\n"+m_name+" 에게 피해를 "+skilldamage+" 입혔다.");
 					removeEffectTimer = new Timer();
