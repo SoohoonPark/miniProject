@@ -81,9 +81,9 @@ public class GameScreen extends JFrame {
 
 	// 보스몹 이미지들(최상급)
 	private final static Image BOSSPOLYMORPH = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/monsters/boss/bosspolymorph.resized.png");
+			.createImage("resource/images/monsters/boss/bosspolymorph_resized.png");
 	private final static Image BOSSORIGINAL = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/monsters/boss/bossoriginal.resized.png");
+			.createImage("resource/images/monsters/boss/bossoriginal_resized.png");
 	
 	// 버튼 패널 & 로그 패널 배경(테두리)
 	private final static Image LOGBACKGROUND = Toolkit.getDefaultToolkit()
@@ -141,6 +141,7 @@ public class GameScreen extends JFrame {
 	private LinkedList<DSMonsters> lowmonsters = null; // 초급몹정보가 저장돼있는 LinkedList
 	private LinkedList<DSMonsters> middlemonsters = null; // 중급몹정보가 저장돼있는 LinkedList
 	private LinkedList<DSMonsters> highmonsters = null; // 고급몹정보가 저장돼있는 LinkedList
+	private LinkedList<DSMonsters> bossmonsters = null;	// 보스몹정보가 저장돼있는 LinkedList
 	private LinkedList<DSItems> iteminfo; // 게임 내 아이템 정보가 담겨 있는 iteminfo
 	private ArrayList<String> Rewards = new ArrayList<String>(); // 평범해보이는 상자
 	private ArrayList<String> GoodRewards = new ArrayList<String>(); // 괜찮아보이는 상자
@@ -182,6 +183,7 @@ public class GameScreen extends JFrame {
 		lowmonsters = service.monsterData("초급"); // 초급 몹 정보 저장
 		middlemonsters = service.monsterData("중급"); // 중급 몹 정보 저장
 		highmonsters = service.monsterData("고급"); // 고급 몹 정보 저장
+		bossmonsters = service.monsterData("보스"); // 보스 몹 정보 저장
 		iteminfo = service.itemData(); // 아이템 정보 저장
 		exptable = service.expData(); // 경험치 정보 저장(Key - 레벨 / Value - 다음 경험치)
 		
@@ -356,7 +358,7 @@ public class GameScreen extends JFrame {
 					System.out.println("[info] 상자 획득 이벤트 발생");
 					// 1 ~ 10 상자 이벤트 (1 ~ 6 일반 상자, 7 ~ 9 괜찮아 보이는 상자, 10 화려한 상자)
 					int chestevent = (int) (Math.random() * 10) + 1;
-					System.out.println("[info] 발생한 상자 획득 이벤트 : " + chestevent);
+					System.out.println("[info] 발생한 상자 획득 이벤트	 : " + chestevent);
 					createGetItemEvent(chestevent);
 					break;
 				case 3:
@@ -617,17 +619,32 @@ public class GameScreen extends JFrame {
 				JOptionPane.QUESTION_MESSAGE,null,new Object[]{"물론이지!", "아직은 조금 두려워..."},null);
 		switch(select) {
 		case 0: // 'YES'
+			int switchnum = 0;
 			// Phase 1 시작
-			MonsterPanel.setVisible(true);
 			writeLog("\n마지막 전투가 시작되었습니다.\n이 세계의 운명은 용사님의 손에 달려있습니다!");
-
+			battle = true; // 전투 발생 시 true로 전환, 해당 변수는 전투가 종료되면 다시 false로 바뀜
+			System.out.println("[info] 전투 발생");
+			if (buff) {
+				System.out.println("[info] 버프 걸려있음");
+			}
+			System.out.println("[info] 보스 전 - Phase 1 시작");
+			writeLog("\n드래곤이 아직 인간의 형상을 하고 있다는 건 \n용사님을 얕잡아보고 있다는 것입니다.\n방심을 틈타 기회를 노리세요!");
+			createBossMonster(switchnum);
 			// Phase 2 시작
-			
+			if(current_monster_hp == 0) {
+				System.out.println("[info] 보스 전 - Phase 2 시작");
+				writeLog("\n 분노가 극에 달한 드래곤이 본 모습을 드러내었습니다.\n부디 조심하시기 바랍니다!");
+				createBossMonster(switchnum + 1);
+
+			}
 			break;
 		case 1: // 'NO'
 			break;
-		}
+			}
+
+
 	}
+
 
 	// 로그 작성
 	static void writeLog(String text) {
@@ -665,7 +682,7 @@ public class GameScreen extends JFrame {
 			createLowMonster(switchnum);
 		} else if (level >= 11 && level <= 20) { // 11 ~ 20 레벨은 중급 몹
 			createMiddleMonster(switchnum);
-		} else { // 둘 다 아니면 21 ~ 부터니까 고급 몹 생성
+		} else { // 둘 다 아니면 21 ~ 부터니까  고급 몹 생성
 			createHighMonster(switchnum);
 		}
 	}
@@ -1476,12 +1493,12 @@ public class GameScreen extends JFrame {
 	
 	// 보스 몹 기본 정보 저장
 	void settingBossMobInfo(int switchnum) {
-		m_hp = highmonsters.get(switchnum).getM_hp(); // 몹 체력 저장
-		m_name = highmonsters.get(switchnum).getM_name(); // 몹 이름 저장
-		monsteratk = highmonsters.get(switchnum).getM_atk(); // 몹 공격력 저장
-		monsterdef = highmonsters.get(switchnum).getM_def(); // 몹 방어력 저장
-		m_exp = highmonsters.get(switchnum).getM_exp(); // 몹 경험치 저장
-		dropitem = highmonsters.get(switchnum).getMobDrop(); // 몹 드랍템
+		m_hp = bossmonsters.get(switchnum).getM_hp(); // 몹 체력 저장
+		m_name = bossmonsters.get(switchnum).getM_name(); // 몹 이름 저장
+		monsteratk = bossmonsters.get(switchnum).getM_atk(); // 몹 공격력 저장
+		monsterdef = bossmonsters.get(switchnum).getM_def(); // 몹 방어력 저장
+		m_exp = bossmonsters.get(switchnum).getM_exp(); // 몹 경험치 저장
+		dropitem = bossmonsters.get(switchnum).getMobDrop(); // 몹 드랍템
 		System.out.println("몹 이름 : "+m_name);
 		System.out.println("몹 체력 : "+m_hp);
 		System.out.println("몹 공격력 : "+monsteratk);
@@ -1489,7 +1506,7 @@ public class GameScreen extends JFrame {
 		System.out.println("몹 경험치 : "+m_exp);
 		System.out.println("몹 드랍 : "+String.valueOf(dropitem));
 	}
-
+	
 	// 초급 몹 생성
 	public void createLowMonster(int switchnum) {
 		MonsterPanel.setVisible(true);
@@ -1611,7 +1628,7 @@ public class GameScreen extends JFrame {
 		MonsterPanel.setVisible(true);
 		switch (switchnum) {
 		case 0: // Boss Phase1 - Boss Polymorph mode
-			writeLog(highmonsters.get(switchnum).getM_name() + " 이/가 나타났다.\n");
+			writeLog(bossmonsters.get(switchnum).getM_name() + " 이/가 나타났다.\n");
 			settingHighMobInfo(switchnum);
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
@@ -1622,7 +1639,7 @@ public class GameScreen extends JFrame {
 			break;
 
 		case 1: // Boss Phase2 - Boss Original mode
-			writeLog(highmonsters.get(switchnum).getM_name() + " 이/가 나타났다.\n");
+			writeLog(bossmonsters.get(switchnum).getM_name() + " 이/가 나타났다.\n");
 			settingHighMobInfo(switchnum);
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
