@@ -6,7 +6,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -28,6 +32,8 @@ public class MainScreen extends JFrame {
 	private Image btnimgstart_pressed = Toolkit.getDefaultToolkit().createImage("resource/images/button/MainScreen/main_btnstart_pressed.png");
 	private Image btnimgquit = Toolkit.getDefaultToolkit().createImage("resource/images/button/MainScreen/main_btnquit.png");
 	private Image btnimgquit_pressed = Toolkit.getDefaultToolkit().createImage("resource/images/button/MainScreen/main_btnquit_pressed.png");
+	
+	public static Clip playbgm = DSAudio.playTitle();
 
 	// 버튼(게임시작,게임종료)
 	private JButton btnGamestart, btnGameQuit;
@@ -121,5 +127,9 @@ public class MainScreen extends JFrame {
 
 		// 모니터에 해당 Frame 출력
 		setVisible(true);
+		
+		FloatControl gainControl = (FloatControl) playbgm.getControl(FloatControl.Type.MASTER_GAIN);
+		gainControl.setValue(-10.0f); // Reduce volume by 10 decibels.
+		playbgm.start();	
 	}
 }
