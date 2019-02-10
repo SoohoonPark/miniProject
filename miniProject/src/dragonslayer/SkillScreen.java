@@ -86,7 +86,7 @@ public class SkillScreen extends JFrame {
 		SkillMessageLabel2 = new JLabel();
 		SkillMessageLabel2.setBounds(5, 50, 255, 60);
 		SkillMessageLabel2.setForeground(new Color(80, 175, 73));
-		SkillMessageLabel2.setText("<html><p style='font-family:맑은 고딕;'>MP 120 소비, 400% 데미지로 1회 공격<br/>무기 전체를 타오르는 불꽃으로 휘감아 전방을 향해 내려찍는다.</p></html>");
+		SkillMessageLabel2.setText("<html><p style='font-family:맑은 고딕;'>MP 120 소비, 300% 데미지로 1회 공격<br/>무기 전체를 타오르는 불꽃으로 휘감아 전방을 향해 내려찍는다.</p></html>");
 		
 		SkillIconLabel3 = new JLabel(new ImageIcon(Skill3));
 		SkillIconLabel3.setBounds(5, 5, 200, 40);
@@ -96,7 +96,7 @@ public class SkillScreen extends JFrame {
 		SkillMessageLabel3 = new JLabel();
 		SkillMessageLabel3.setBounds(5, 50, 250, 60);
 		SkillMessageLabel3.setForeground(new Color(80, 175, 73));
-		SkillMessageLabel3.setText("<html><p style='font-family:맑은 고딕;'>MP 150 소비, 100% 데미지로 8회 공격<br/>악마의 검을 소환하여 사방으로 휘둘러 적을 섬멸한다.</p></html>");
+		SkillMessageLabel3.setText("<html><p style='font-family:맑은 고딕;'>MP 150 소비, 100% 데미지로 6회 공격<br/>악마의 검을 소환하여 사방으로 휘둘러 적을 섬멸한다.</p></html>");
 		
 		SkillIconLabel4 = new JLabel(new ImageIcon(Skill4));
 		SkillIconLabel4.setBounds(5, 5, 220, 40);
@@ -106,7 +106,7 @@ public class SkillScreen extends JFrame {
 		SkillMessageLabel4 = new JLabel();
 		SkillMessageLabel4.setBounds(5, 35, 270, 100);
 		SkillMessageLabel4.setForeground(new Color(80, 175, 73));
-		SkillMessageLabel4.setText("<html><p style='font-family:맑은 고딕;'>MP 400 소비, 150% 데미지로 10회 공격<br/>어둠의 기운을 담아 공격하여 망자의 표식을 새기고, 마지막 타격에 300% 데미지로 차원 가르기를 사용한다. (궁극기)</p></html>");
+		SkillMessageLabel4.setText("<html><p style='font-family:맑은 고딕;'>MP 400 소비, 60% 데미지로 10회 공격<br/>어둠의 기운을 담아 공격하여 망자의 표식을 새기고, 마지막 타격에 200% 데미지로 차원 가르기를 사용한다. (궁극기)</p></html>");
 		
 		// 스킬 사용 버튼
 		Use1 = new JButton("사용");
