@@ -32,8 +32,6 @@ public class MainScreen extends JFrame {
 	private Image btnimgstart_pressed = Toolkit.getDefaultToolkit().createImage("resource/images/button/MainScreen/main_btnstart_pressed.png");
 	private Image btnimgquit = Toolkit.getDefaultToolkit().createImage("resource/images/button/MainScreen/main_btnquit.png");
 	private Image btnimgquit_pressed = Toolkit.getDefaultToolkit().createImage("resource/images/button/MainScreen/main_btnquit_pressed.png");
-	
-	public static Clip playbgm = DSAudio.playTitle();
 
 	// 버튼(게임시작,게임종료)
 	private JButton btnGamestart, btnGameQuit;
@@ -43,6 +41,9 @@ public class MainScreen extends JFrame {
 	}
 	
 	public MainScreen() {
+		DSAudio audio = DSAudio.getInstance();
+		audio.playTitle();
+
 		setTitle("Dragon Slayer");
 		setSize(700, 525);
 		setLocationRelativeTo(null);
@@ -128,8 +129,6 @@ public class MainScreen extends JFrame {
 		// 모니터에 해당 Frame 출력
 		setVisible(true);
 		
-		FloatControl gainControl = (FloatControl) playbgm.getControl(FloatControl.Type.MASTER_GAIN);
-		gainControl.setValue(-10.0f); // Reduce volume by 10 decibels.
-		playbgm.start();	
+		
 	}
 }

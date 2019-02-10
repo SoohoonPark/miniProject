@@ -35,12 +35,10 @@ import javax.swing.border.LineBorder;
 public class GameScreen extends JFrame {
 	/** 이미지 영역 **/
 	// 게임아이콘
-	private final static Image ICONIMAGE = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/title/titleicon.png");
+	private final static Image ICONIMAGE = Toolkit.getDefaultToolkit().createImage("resource/images/title/titleicon.png");
 
 	// 게임배경화면(사각형 테두리)
-	private final static Image MAINBACKGROUND = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/background/GameScreen/background_border.png");
+	private final static Image MAINBACKGROUND = Toolkit.getDefaultToolkit().createImage("resource/images/background/GameScreen/background_border.png");
 	// 전투배경
 	private final static ImageIcon BATTLEBACKGROUND = new ImageIcon(
 			Toolkit.getDefaultToolkit().createImage("resource/images/background/GameScreen/background_battle.png"));
@@ -53,26 +51,19 @@ public class GameScreen extends JFrame {
 			Toolkit.getDefaultToolkit().createImage("resource/images/background/GameScreen/trap/well_trap.png"));
 
 	// 플레이어 이미지(모험가)
-	private final static Image PLAYERBEGINNER = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/player/playercharacter_beginner.png");
+	private final static Image PLAYERBEGINNER = Toolkit.getDefaultToolkit().createImage("resource/images/player/playercharacter_beginner.png");
 	private final static Image PLAYERWARRIOR = null;
 	private final static Image PLAYERKNIGHT = null;
 
 	// 몹 이미지들(초급)
-	private final static Image SKEL = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/monsters/low_grade/1_skel_warrior_resize.png");
-	private final static Image ORC = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/monsters/low_grade/2_orc_warrior_resize.png");
-	private final static Image GOLEM = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/monsters/low_grade/3_golem_resize.png");
+	private final static Image SKEL = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/low_grade/1_skel_warrior_resize.png");
+	private final static Image ORC = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/low_grade/2_orc_warrior_resize.png");
+	private final static Image GOLEM = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/low_grade/3_golem_resize.png");
 
 	// 몹 이미지들(중급)
-	private final static Image SKELKING = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/monsters/middle_grade/1_skel_king_resize.png");
-	private final static Image HATCHLING = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/monsters/middle_grade/2_Hatchling_resize.png");
-	private final static Image LAGIA = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/monsters/middle_grade/3_Lagiacrus_resize.png");
+	private final static Image SKELKING = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/middle_grade/1_skel_king_resize.png");
+	private final static Image HATCHLING = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/middle_grade/2_Hatchling_resize.png");
+	private final static Image LAGIA = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/middle_grade/3_Lagiacrus_resize.png");
 
 	// 몹 이미지들(고급)
 	private final static Image DRAKE = Toolkit.getDefaultToolkit()
@@ -142,7 +133,6 @@ public class GameScreen extends JFrame {
 	public static Boolean battle = false; // 전투 발생을 알려주는 변수. 전투 발생 시 true로 전환(기본값 false)
 	private Boolean buff = false; // 플레이어 버프 상황(걸려있는지 아닌지)
 	private Thread p_check, m_check; // 플레이어, 몹 상태 확인 Thread
-	private Clip playGamebgm = DSAudio.playGame();
 	private LinkedList<DSMonsters> lowmonsters = null; // 초급몹정보가 저장돼있는 LinkedList
 	private LinkedList<DSMonsters> middlemonsters = null; // 중급몹정보가 저장돼있는 LinkedList
 	private LinkedList<DSMonsters> highmonsters = null; // 고급몹정보가 저장돼있는 LinkedList
@@ -166,8 +156,7 @@ public class GameScreen extends JFrame {
 	private static JLabel mainbackgroundimgLabel, GameScreenimgLabel, monsterimgLabel; // 이미지 라벨들
 	private static JLabel playerattackLabel, monsterattackLabel, playerbeingattackedLabel, monsterbeingattackedLabel;
 	private static JLabel message;
-	public static JLabel SkillEffectLabel1, SkillEffectLabel2, SkillEffectLabel3, SkillEffectLabel4_1,
-			SkillEffectLabel4_2;
+	public static JLabel SkillEffectLabel1, SkillEffectLabel2, SkillEffectLabel3, SkillEffectLabel4_1,SkillEffectLabel4_2;
 
 	private static JPanel CharacterPanel, MonsterPanel; // 캐릭터 이미지가 출력되는 패널, 몹 이미지가 출력되는 패널
 	private static JTextArea logarea;
@@ -187,12 +176,9 @@ public class GameScreen extends JFrame {
 	public GameScreen(String name, int l, String job, int s, int d, int i, int hp, int mp) {
 		System.out.println("[info] GameScreen() 호출");
 		// MainScreen ~ LoadingScreen 에서 사용되던 bgm을 종료하고 GameScreen에서 새로운 bgm 재생
-		if (MainScreen.playbgm.isActive()) {
-			MainScreen.playbgm.stop();
-			FloatControl gainControl = (FloatControl) playGamebgm.getControl(FloatControl.Type.MASTER_GAIN);
-			gainControl.setValue(-10.0f); // Reduce volume by 10 decibels.
-			playGamebgm.start();
-		}
+		DSAudio audio = DSAudio.getInstance();
+		audio.offTitle();
+		audio.playGame();
 		
 		lowmonsters = service.monsterData("초급"); // 초급 몹 정보 저장
 		middlemonsters = service.monsterData("중급"); // 중급 몹 정보 저장
@@ -851,6 +837,7 @@ public class GameScreen extends JFrame {
 
 	// 플레이어 공격(평타)
 	public void attack_player() {
+		DSAudio playerhit = DSAudio.getInstance();
 		if (!battle) {
 			System.out.println("[info] 전투 중이 아닙니다.");
 			return;
@@ -858,7 +845,9 @@ public class GameScreen extends JFrame {
 		writeLog("'" + c_name + "' 의 공격!\n");
 
 		playerattackLabel.setIcon(new ImageIcon(PLAYERBASICATTACK)); // 플레이어 기본공격 이펙트 출력
+		playerhit.playAtk_P();
 		monsterbeingattackedLabel.setIcon(new ImageIcon(BEINGATTACKED)); // 피격 이팩트 출력
+		playerhit.playBeinghit();
 
 		int damage = playeratk - monsterdef; // 데미지는 플레이어 공격력 - 몬스터 방어력
 		System.out.println("나온 데미지 : " + damage);
@@ -901,13 +890,16 @@ public class GameScreen extends JFrame {
 
 	// 몬스터 공격(평타)
 	public static void attack_monster() {
+		DSAudio monsterhit = DSAudio.getInstance();
 		if (!battle) {
 			System.out.println("[info] 전투 중이 아닙니다.");
 			return;
 		}
 		writeLog("'" + m_name + "' 의 공격!");
 		monsterattackLabel.setIcon(new ImageIcon(MONSTERATTACK)); // 몬스터 공격 이펙트 출력
+		monsterhit.playAtk_M();
 		playerbeingattackedLabel.setIcon(new ImageIcon(BEINGATTACKED)); // 피격 이팩트 출력
+		monsterhit.playBeinghit();
 
 		int damage = monsteratk - playerdef; // 데미지는 몬스터 공격력 - 플레이어 방어력
 		if (damage <= 0) { // 몬스터 공격력 - 플레이어 방어력의 결과가 0보다 작거나 같을 경우 (= 플레이어의 방어력이 몬스터의 공격력보다 높을 경우)
