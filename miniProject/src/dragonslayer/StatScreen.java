@@ -16,8 +16,8 @@ import java.awt.event.WindowEvent;
 @SuppressWarnings("serial")
 public class StatScreen extends JFrame{
 	private Image iconimage = Toolkit.getDefaultToolkit().createImage("resource/images/title/titleicon.png");
-	private Image namebgimage = Toolkit.getDefaultToolkit().createImage("resource/images/background/window_namejob.png");
-	private Image statbgimage = Toolkit.getDefaultToolkit().createImage("resource/images/background/window_stat.png");
+	private Image namebgimage = Toolkit.getDefaultToolkit().createImage("resource/images/background/StatScreen/window_namejob.png");
+	private Image statbgimage = Toolkit.getDefaultToolkit().createImage("resource/images/background/StatScreen/window_stat.png");
 	private Image iconstr = Toolkit.getDefaultToolkit().createImage("resource/images/icon/statstr.png");
 	private Image icondex = Toolkit.getDefaultToolkit().createImage("resource/images/icon/statdex.png");
 	private Image iconint = Toolkit.getDefaultToolkit().createImage("resource/images/icon/statint.png");
