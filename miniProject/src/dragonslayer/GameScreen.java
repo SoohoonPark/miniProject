@@ -173,9 +173,9 @@ public class GameScreen extends JFrame {
 	private static LinkedList<DSItems> inven = new LinkedList<DSItems>(); // 플레이어 인벤토리 내용물
 	private static int current_user_hp, current_user_mp; // 현재 플레이어 체력 & 마나
 
-	public static void main(String[] args) {
-		new GameScreen("춘식이",30,"모험가",10,10,10,1200,480);
-	}
+//	public static void main(String[] args) {
+//		new GameScreen("춘식이",30,"모험가",10,10,10,1200,480);
+//	}
 
 	/** 메소드 영역 **/
 	public GameScreen(String name, int l, String job, int s, int d, int i, int hp, int mp) {
@@ -631,7 +631,7 @@ public class GameScreen extends JFrame {
 			writeLog("\n드래곤이 아직 인간의 형상을 하고 있다는 건 \n용사님을 얕잡아보고 있다는 것입니다.\n방심을 틈타 기회를 노리세요!");
 			createBossMonster(switchnum);
 			// Phase 2 시작
-			if(current_monster_hp == 0) {
+			if(current_monster_hp <= 0) {
 				System.out.println("[info] 보스 전 - Phase 2 시작");
 				writeLog("\n 분노가 극에 달한 드래곤이 본 모습을 드러내었습니다.\n부디 조심하시기 바랍니다!");
 				createBossMonster(switchnum + 1);
@@ -1629,7 +1629,7 @@ public class GameScreen extends JFrame {
 		switch (switchnum) {
 		case 0: // Boss Phase1 - Boss Polymorph mode
 			writeLog(bossmonsters.get(switchnum).getM_name() + " 이/가 나타났다.\n");
-			settingHighMobInfo(switchnum);
+			settingBossMobInfo(switchnum);
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp);
@@ -1640,7 +1640,7 @@ public class GameScreen extends JFrame {
 
 		case 1: // Boss Phase2 - Boss Original mode
 			writeLog(bossmonsters.get(switchnum).getM_name() + " 이/가 나타났다.\n");
-			settingHighMobInfo(switchnum);
+			settingBossMobInfo(switchnum);
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp);
