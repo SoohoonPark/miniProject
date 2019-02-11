@@ -952,7 +952,7 @@ public class GameScreen extends JFrame {
 						if (current_user_hp <= 0) {
 							JOptionPane.showMessageDialog(null, "캐릭터 사망", "사망", JOptionPane.INFORMATION_MESSAGE, null);
 							System.exit(0);
-							Thread.currentThread().interrupt();
+//							Thread.currentThread().interrupt();
 						}
 
 						System.out.println("[info] 캐릭터 공격력&방어력 상태 체크..");
