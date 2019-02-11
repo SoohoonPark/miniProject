@@ -15,8 +15,6 @@ import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.FloatControl;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -52,8 +50,8 @@ public class GameScreen extends JFrame {
 
 	// 플레이어 이미지(모험가)
 	private final static Image PLAYERBEGINNER = Toolkit.getDefaultToolkit().createImage("resource/images/player/playercharacter_beginner.png");
-	private final static Image PLAYERWARRIOR = null;
-	private final static Image PLAYERKNIGHT = null;
+	private final static Image PLAYERWARRIOR = Toolkit.getDefaultToolkit().createImage("resource/images/player/playercharacter_warrior.png");
+	private final static Image PLAYERKNIGHT = Toolkit.getDefaultToolkit().createImage("resource/images/player/playercharacter_knight.png");
 
 	// 몹 이미지들(초급)
 	private final static Image SKEL = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/low_grade/1_skel_warrior_resize.png");
@@ -153,7 +151,7 @@ public class GameScreen extends JFrame {
 	private DSService service = new DSService(); // DB 접속 서비스
 
 	private static JButton buttonsearch, buttonattack, buttoninven, buttonequip, buttonstat, buttonskill, buttonexit;
-	private static JLabel mainbackgroundimgLabel, GameScreenimgLabel, monsterimgLabel; // 이미지 라벨들
+	private static JLabel mainbackgroundimgLabel, GameScreenimgLabel, characterLabel, monsterimgLabel; // 이미지 라벨들
 	private static JLabel playerattackLabel, monsterattackLabel, playerbeingattackedLabel, monsterbeingattackedLabel;
 	private static JLabel message;
 	public static JLabel SkillEffectLabel1, SkillEffectLabel2, SkillEffectLabel3, SkillEffectLabel4_1,SkillEffectLabel4_2;
@@ -169,7 +167,7 @@ public class GameScreen extends JFrame {
 	private static int current_user_hp, current_user_mp; // 현재 플레이어 체력 & 마나
 
 	public static void main(String[] args) {
-		new GameScreen("춘식이",30,"모험가",10,10,10,1200,480);
+		new GameScreen("춘식이",30,"모험가",200,200,200,1200,480);
 	}
 
 	/** 메소드 영역 **/
@@ -177,7 +175,7 @@ public class GameScreen extends JFrame {
 		System.out.println("[info] GameScreen() 호출");
 		// MainScreen ~ LoadingScreen 에서 사용되던 bgm을 종료하고 GameScreen에서 새로운 bgm 재생
 		DSAudio audio = DSAudio.getInstance();
-		audio.offTitle();
+//		audio.offTitle();
 		audio.playGame();
 		
 		lowmonsters = service.monsterData("초급"); // 초급 몹 정보 저장
@@ -212,7 +210,8 @@ public class GameScreen extends JFrame {
 		boots = "없음";
 		System.out.println("[info] GameScreen() 필드 초기화 완료.");
 
-		addInventory(new String[] { "단검", "체력 물약", "마나 물약" }); // 기본 템 지급
+//		addInventory(new String[] { "단검", "체력 물약", "마나 물약" }); // 기본 템 지급
+		addInventory(new String[] {"기간틱 액스","미스릴 투구","미스릴 갑옷","미스릴 장갑","미스릴 신발"}); // 테스팅용
 		createGameScreen();
 		checkplayerstatus();
 		checkmonsterstatus();
@@ -245,13 +244,14 @@ public class GameScreen extends JFrame {
 
 		// 캐릭터 이미지 출력되는 패널(체력/마나 막대 + 캐릭터 이미지)
 		CharacterPanel = new JPanel(null);
-		CharacterPanel.setBounds(650, 60, 200, 300);
+		CharacterPanel.setBounds(650, 60, 210, 300);
 		CharacterPanel.setBorder(new LineBorder(Color.BLUE));
 		CharacterPanel.setOpaque(false);
 
 		// 캐릭터 이미지 출력하는 Label
-		JLabel characterLabel = new JLabel(new ImageIcon(PLAYERBEGINNER));
-		characterLabel.setBounds(30, 70, 150, 226);
+		characterLabel = new JLabel(new ImageIcon(PLAYERBEGINNER),SwingConstants.CENTER);
+		characterLabel.setBounds(5, 60, 200, 230);
+		characterLabel.setBorder(new LineBorder(Color.RED));
 
 		UIManager.put("ProgressBar.selectionBackground", Color.BLACK); // bar가 채워지기 전 글자 색
 		UIManager.put("ProgressBar.selectionForeground", Color.BLACK); // bar가 채워진 후 글자 색
@@ -351,25 +351,18 @@ public class GameScreen extends JFrame {
 				int switchnum = (int) (Math.random() * 10) + 1; // 1 ~ 10
 				System.out.println("나온 탐색 분기 : " + switchnum);
 				switch (switchnum) {
-				case 1:
-				case 2:
-				case 3:
-				case 4:
-				case 5:
-				case 6: // 전투 발생
+				case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8:// 전투 발생
 					battle = true; // 전투 발생 시 true로 전환, 해당 변수는 전투가 종료되면 다시 false로 바뀜
 					System.out.println("[info] 전투 발생");
 					createBattle(c_lv); // 플레이어 레벨에 따라서 생성되는 몹의 구간(?)이 달라짐. 1 ~ 10, 11 ~ 20, 21 ~ 30
 					break;
-				case 7:
-				case 8:
+				case 9:
 					System.out.println("[info] 상자 획득 이벤트 발생");
 					// 1 ~ 10 상자 이벤트 (1 ~ 6 일반 상자, 7 ~ 9 괜찮아 보이는 상자, 10 화려한 상자)
 					int chestevent = (int) (Math.random() * 10) + 1;
 					System.out.println("[info] 발생한 상자 획득 이벤트	 : " + chestevent);
 					createGetItemEvent(chestevent);
 					break;
-				case 9:
 				case 10:
 					System.out.println("[info] 특수 이벤트 발생(버프/함정)");
 					int subevent = (int) (Math.random() * 2) + 1; // 1 or 2 랜덤 숫자 (1 : 버프 / 2 : 함정)
@@ -688,9 +681,19 @@ public class GameScreen extends JFrame {
 		}
 		int switchnum = ((int) (Math.random() * 3) + 1) - 1; // 0 ~ 2 랜덤
 		if (level >= 1 && level <= 10) { // 1 ~ 10 레벨은 초급 몹
-			createLowMonster(switchnum);
+			if(switchnum == 2 && c_lv != 5) { // 스위치넘버가 2(골렘) 이고, 캐릭터 레벨이 5가 아닌 경우
+				switchnum = (int)(Math.random() * 2); // 0 ~ 1 랜덤(골렘 빼고 리젠)
+				createLowMonster(switchnum);
+			}else {
+				createLowMonster(switchnum);
+			}
 		} else if (level >= 11 && level <= 20) { // 11 ~ 20 레벨은 중급 몹
-			createMiddleMonster(switchnum);
+			if(switchnum == 2 && c_lv != 15) { // 스위치넘버가 2(라크리 뭐시기) 이고, 캐릭터 레벨이 15가 아닌 경우
+				switchnum = (int)(Math.random() * 2); // 0 ~ 1 랜덤(라크리 뭐시기 빼고 리젠)
+				createMiddleMonster(switchnum);
+			}else {
+				createMiddleMonster(switchnum);
+			}
 		} else { // 둘 다 아니면 21 ~ 부터니까 고급 몹 생성
 			createHighMonster(switchnum);
 		}
@@ -936,9 +939,9 @@ public class GameScreen extends JFrame {
 						Thread.sleep(400);
 						System.out.println("[info] 캐릭터 레벨 체크..");
 						if (c_lv > 10 && c_lv < 30) { // 11 ~ 29 레벨 전사 이미지
-
-						} else { // 기사 이미지
-
+							characterLabel.setIcon(new ImageIcon(PLAYERWARRIOR));
+						} else if (c_lv >= 30){ // 기사 이미지
+							characterLabel.setIcon(new ImageIcon(PLAYERKNIGHT));
 						}
 						System.out.println("[info] 캐릭터 체력 & 마나 상태 체크..");
 						playerHpbar.setValue(current_user_hp);
@@ -1470,9 +1473,9 @@ public class GameScreen extends JFrame {
 	}
 
 	// InventoryScreen에서 경험의 돌을 사용하고 난 후의 캐릭터 경험치 세팅
-	public static void setPlayerExp(int up) {
-		c_exp += up;
-	}
+//	public static void setPlayerExp(int up) {
+//		c_exp += up;
+//	}
 
 	// InventoryScreen에서 캐릭터의 장비 명(무기,투구,갑옷,장갑,신발)을 set함
 	public static void setPlayerEquipNameWeapon(String w) {
@@ -1722,7 +1725,7 @@ public class GameScreen extends JFrame {
 		switch (switchnum) {
 		case 0: // Boss Phase1 - Boss Polymorph mode
 			writeLog(bossmonsters.get(switchnum).getM_name() + " 이/가 나타났다.\n");
-			settingHighMobInfo(switchnum);
+			settingBossMobInfo(switchnum);
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp);
@@ -1733,7 +1736,7 @@ public class GameScreen extends JFrame {
 
 		case 1: // Boss Phase2 - Boss Original mode
 			writeLog(bossmonsters.get(switchnum).getM_name() + " 이/가 나타났다.\n");
-			settingHighMobInfo(switchnum);
+			settingBossMobInfo(switchnum);
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp);
