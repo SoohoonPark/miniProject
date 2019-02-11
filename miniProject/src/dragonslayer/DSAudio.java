@@ -14,11 +14,17 @@ public class DSAudio{
 	private static String beingHit = "resource/sound/being_hit.wav";
 	private static String playeratk = "resource/sound/attack_player.wav";
 	private static String monsteratk = "resource/sound/attack_monster.wav";
+	private static String dragonslasher = "resource/sound/skill_dragonslasher.wav";
+	private static String aurablade = "resource/sound/skill_aurablade.wav";
+	private static String demonicsword = "resource/sound/skill_demonicsword.wav";
 	private static Clip titleclip = null;
 	private static Clip gameclip = null;
 	private static Clip beinghitclip = null;
 	private static Clip playeratkclip = null;
 	private static Clip monsteratkclip = null;
+	private static Clip dragonslasherclip = null;
+	private static Clip aurabladeclip = null;
+	private static Clip demonicswordclip = null;
 	
 	private static DSAudio audio = new DSAudio();
 	private DSAudio() {}
@@ -99,6 +105,46 @@ public class DSAudio{
 			System.out.println("[Error] 오디오 재생 에러(공격음_몹)");
 		}
 	}
+	
+	// 드래곤 슬래셔 효과음
+	public void playDragonSlasher() {
+		try {
+			File bgm = new File(dragonslasher);
+			AudioInputStream ais = AudioSystem.getAudioInputStream(bgm);
+			dragonslasherclip = AudioSystem.getClip();
+			dragonslasherclip.open(ais);
+			dragonslasherclip.start();
+		}catch(Exception e) {
+			System.out.println("[Error] 오디오 재생 에러(효과음_드래곤슬래셔)");
+		}
+	}
+	
+	// 오러 블레이드 효과음
+	public void playAuraBlade() {
+		try {
+			File bgm = new File(aurablade);
+			AudioInputStream ais = AudioSystem.getAudioInputStream(bgm);
+			aurabladeclip = AudioSystem.getClip();
+			aurabladeclip.open(ais);
+			aurabladeclip.start();
+		}catch(Exception e) {
+			System.out.println("[Error] 오디오 재생 에러(효과음_오러블레이드)");
+		}
+	}
+	
+	// 데모닉 소드 효과음
+	public void playDemonicSword() {
+		try {
+			File bgm = new File(demonicsword);
+			AudioInputStream ais = AudioSystem.getAudioInputStream(bgm);
+			demonicswordclip = AudioSystem.getClip();
+			demonicswordclip.open(ais);
+			demonicswordclip.start();
+		}catch(Exception e) {
+			System.out.println("[Error] 오디오 재생 에러(효과음_오러블레이드)");
+		}
+	}
+	
 	
 	static DSAudio getInstance() {
 		return audio;
