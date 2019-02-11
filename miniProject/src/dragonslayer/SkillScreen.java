@@ -5,6 +5,8 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.ImageIcon;
@@ -23,6 +25,9 @@ public class SkillScreen extends JFrame {
 	private Image Skill2 = Toolkit.getDefaultToolkit().createImage("resource/images/icon/skill_2_aura_blade.png");
 	private Image Skill3 = Toolkit.getDefaultToolkit().createImage("resource/images/icon/skill_3_Demonic Swords.PNG");
 	private Image Skill4 = Toolkit.getDefaultToolkit().createImage("resource/images/icon/skill_4_fatal_attack.png");
+	
+	private ImageIcon use = new ImageIcon(Toolkit.getDefaultToolkit().createImage("resource/images/button/SkillScreen/button_skilluse.png"));
+	private ImageIcon use_pressed = new ImageIcon(Toolkit.getDefaultToolkit().createImage("resource/images/button/SkillScreen/button_skilluse_pressed.png"));
 
 	private static JPanel SkillPanel1, SkillPanel2, SkillPanel3, SkillPanel4; // 스킬 정보 출력 패널
 	private static JButton Use1, Use2, Use3, Use4; // 스킬 사용 버튼
@@ -109,8 +114,20 @@ public class SkillScreen extends JFrame {
 		SkillMessageLabel4.setText("<html><p style='font-family:맑은 고딕;'>MP 400 소비, 60% 데미지로 10회 공격<br/>어둠의 기운을 담아 공격하여 망자의 표식을 새기고, 마지막 타격에 200% 데미지로 차원 가르기를 사용한다. (궁극기)</p></html>");
 		
 		// 스킬 사용 버튼
-		Use1 = new JButton("사용");
-		Use1.setBounds(275, 30, 60, 60);
+		Use1 = new JButton(use);
+		Use1.setBounds(275, 40, 60, 45);
+		Use1.setBorderPainted(false);
+		Use1.setFocusPainted(false);
+		Use1.setContentAreaFilled(false);
+		Use1.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				Use1.setIcon(use_pressed);
+			}
+
+			public void mouseReleased(MouseEvent e) {
+				Use1.setIcon(use);
+			}
+		});
 		Use1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -118,8 +135,20 @@ public class SkillScreen extends JFrame {
 			}
 		});
 		
-		Use2 = new JButton("사용");
-		Use2.setBounds(275, 30, 60, 60);
+		Use2 = new JButton(use);
+		Use2.setBounds(275, 40, 60, 45);
+		Use2.setBorderPainted(false);
+		Use2.setFocusPainted(false);
+		Use2.setContentAreaFilled(false);
+		Use2.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				Use2.setIcon(use_pressed);
+			}
+
+			public void mouseReleased(MouseEvent e) {
+				Use2.setIcon(use);
+			}
+		});
 		Use2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -127,8 +156,20 @@ public class SkillScreen extends JFrame {
 			}
 		});
 		
-		Use3 = new JButton("사용");
-		Use3.setBounds(275, 30, 60, 60);
+		Use3 = new JButton(use);
+		Use3.setBounds(275, 40, 60, 45);
+		Use3.setBorderPainted(false);
+		Use3.setFocusPainted(false);
+		Use3.setContentAreaFilled(false);
+		Use3.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				Use3.setIcon(use_pressed);
+			}
+
+			public void mouseReleased(MouseEvent e) {
+				Use3.setIcon(use);
+			}
+		});
 		Use3.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -136,8 +177,20 @@ public class SkillScreen extends JFrame {
 			}
 		});
 		
-		Use4 = new JButton("사용");
-		Use4.setBounds(275, 30, 60, 60);
+		Use4 = new JButton(use);
+		Use4.setBounds(275, 40, 60, 45);
+		Use4.setBorderPainted(false);
+		Use4.setFocusPainted(false);
+		Use4.setContentAreaFilled(false);
+		Use4.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				Use4.setIcon(use_pressed);
+			}
+
+			public void mouseReleased(MouseEvent e) {
+				Use4.setIcon(use);
+			}
+		});
 		Use4.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

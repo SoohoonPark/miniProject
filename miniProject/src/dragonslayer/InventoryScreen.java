@@ -173,12 +173,12 @@ public class InventoryScreen extends JFrame {
 							refreshItemList();
 						}
 					}else {
-						System.out.println("[info] 경험의 돌 사용");
-						System.out.println(inventorydata.get(selecteditemindex).getI_name());
-						GameScreen.setPlayerExp(inventorydata.get(selecteditemindex).getI_regen());
-						GameScreen.writeLog("경험치가 "+inventorydata.get(selecteditemindex).getI_regen()+" 만큼 올랐다.");
-						inventorydata.remove(selecteditemindex);
-						refreshItemList();
+//						System.out.println("[info] 경험의 돌 사용");
+//						System.out.println(inventorydata.get(selecteditemindex).getI_name());
+//						GameScreen.setPlayerExp(inventorydata.get(selecteditemindex).getI_regen());
+//						GameScreen.writeLog("경험치가 "+inventorydata.get(selecteditemindex).getI_regen()+" 만큼 올랐다.");
+//						inventorydata.remove(selecteditemindex);
+//						refreshItemList();
 					}
 					
 				} else {

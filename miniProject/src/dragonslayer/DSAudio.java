@@ -36,6 +36,7 @@ public class DSAudio{
 			titleclip.start();
 		}catch(Exception e) {
 			System.out.println("[Error] 오디오 재생 에러(타이틀)");
+			System.out.println(e.getMessage());
 		}
 	}
 	
@@ -55,7 +56,8 @@ public class DSAudio{
 			gameclip.loop(Clip.LOOP_CONTINUOUSLY);
 			gameclip.start();
 		}catch(Exception e) {
-			System.out.println("[Error] 오디오 재생 에러(타이틀)");
+			System.out.println("[Error] 오디오 재생 에러(게임)");
+			System.out.println(e.getMessage());
 		}
 	}
 	
@@ -68,7 +70,7 @@ public class DSAudio{
 			beinghitclip.open(ais);
 			beinghitclip.start();
 		}catch(Exception e) {
-			System.out.println("[Error] 오디오 재생 에러(타이틀)");
+			System.out.println("[Error] 오디오 재생 에러(피격음)");
 		}
 	}
 	
@@ -81,7 +83,7 @@ public class DSAudio{
 			playeratkclip.open(ais);
 			playeratkclip.start();
 		}catch(Exception e) {
-			System.out.println("[Error] 오디오 재생 에러(타이틀)");
+			System.out.println("[Error] 오디오 재생 에러(공격음_유저)");
 		}
 	}
 	
@@ -94,7 +96,7 @@ public class DSAudio{
 			monsteratkclip.open(ais);
 			monsteratkclip.start();
 		}catch(Exception e) {
-			System.out.println("[Error] 오디오 재생 에러(타이틀)");
+			System.out.println("[Error] 오디오 재생 에러(공격음_몹)");
 		}
 	}
 	

@@ -15,8 +15,6 @@ import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.FloatControl;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -52,9 +50,10 @@ public class GameScreen extends JFrame {
 
 	// 플레이어 이미지(모험가)
 	private final static Image PLAYERBEGINNER = Toolkit.getDefaultToolkit().createImage("resource/images/player/playercharacter_beginner.png");
-	private final static Image PLAYERWARRIOR = null;
-	private final static Image PLAYERKNIGHT = null;
+	private final static Image PLAYERWARRIOR = Toolkit.getDefaultToolkit().createImage("resource/images/player/playercharacter_warrior.png");
+	private final static Image PLAYERKNIGHT = Toolkit.getDefaultToolkit().createImage("resource/images/player/playercharacter_knight.png");
 	private final static Image PLAYERKNIGHT_BOSS = Toolkit.getDefaultToolkit().createImage("resource/images/player/playercharacter_knight_boss.png");
+
 
 	// 몹 이미지들(초급)
 	private final static Image SKEL = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/low_grade/1_skel_warrior_resize.png");
@@ -216,7 +215,8 @@ public class GameScreen extends JFrame {
 		boots = "없음";
 		System.out.println("[info] GameScreen() 필드 초기화 완료.");
 
-		addInventory(new String[] { "단검", "체력 물약", "마나 물약" }); // 기본 템 지급
+//		addInventory(new String[] { "단검", "체력 물약", "마나 물약" }); // 기본 템 지급
+		addInventory(new String[] {"기간틱 액스","미스릴 투구","미스릴 갑옷","미스릴 장갑","미스릴 신발"}); // 테스팅용
 		createGameScreen();
 		checkplayerstatus();
 		checkmonsterstatus();
@@ -249,7 +249,7 @@ public class GameScreen extends JFrame {
 
 		// 캐릭터 이미지 출력되는 패널(체력/마나 막대 + 캐릭터 이미지)
 		CharacterPanel = new JPanel(null);
-		CharacterPanel.setBounds(650, 60, 200, 300);
+		CharacterPanel.setBounds(650, 60, 210, 300);
 		CharacterPanel.setBorder(new LineBorder(Color.BLUE));
 		CharacterPanel.setOpaque(false);
 
@@ -355,25 +355,18 @@ public class GameScreen extends JFrame {
 				int switchnum = (int) (Math.random() * 10) + 1; // 1 ~ 10
 				System.out.println("나온 탐색 분기 : " + switchnum);
 				switch (switchnum) {
-				case 1:
-				case 2:
-				case 3:
-				case 4:
-				case 5:
-				case 6: // 전투 발생
+				case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8:// 전투 발생
 					battle = true; // 전투 발생 시 true로 전환, 해당 변수는 전투가 종료되면 다시 false로 바뀜
 					System.out.println("[info] 전투 발생");
 					createBattle(c_lv); // 플레이어 레벨에 따라서 생성되는 몹의 구간(?)이 달라짐. 1 ~ 10, 11 ~ 20, 21 ~ 30
 					break;
-				case 7:
-				case 8:
+				case 9:
 					System.out.println("[info] 상자 획득 이벤트 발생");
 					// 1 ~ 10 상자 이벤트 (1 ~ 6 일반 상자, 7 ~ 9 괜찮아 보이는 상자, 10 화려한 상자)
 					int chestevent = (int) (Math.random() * 10) + 1;
 					System.out.println("[info] 발생한 상자 획득 이벤트	 : " + chestevent);
 					createGetItemEvent(chestevent);
 					break;
-				case 9:
 				case 10:
 					System.out.println("[info] 특수 이벤트 발생(버프/함정)");
 					int subevent = (int) (Math.random() * 2) + 1; // 1 or 2 랜덤 숫자 (1 : 버프 / 2 : 함정)
@@ -590,7 +583,7 @@ public class GameScreen extends JFrame {
 
 		// 플레이어 피격 이팩트 라벨
 		playerbeingattackedLabel = new JLabel();
-		playerbeingattackedLabel.setBounds(425, 30, 250, 250);
+		playerbeingattackedLabel.setBounds(460, 30, 250, 250);
 
 		// 몬스터 피격 이팩트 라벨
 		monsterbeingattackedLabel = new JLabel();
@@ -702,9 +695,19 @@ public class GameScreen extends JFrame {
 		}
 		int switchnum = ((int) (Math.random() * 3) + 1) - 1; // 0 ~ 2 랜덤
 		if (level >= 1 && level <= 10) { // 1 ~ 10 레벨은 초급 몹
-			createLowMonster(switchnum);
+			if(switchnum == 2 && c_lv != 5) { // 스위치넘버가 2(골렘) 이고, 캐릭터 레벨이 5가 아닌 경우
+				switchnum = (int)(Math.random() * 2); // 0 ~ 1 랜덤(골렘 빼고 리젠)
+				createLowMonster(switchnum);
+			}else {
+				createLowMonster(switchnum);
+			}
 		} else if (level >= 11 && level <= 20) { // 11 ~ 20 레벨은 중급 몹
-			createMiddleMonster(switchnum);
+			if(switchnum == 2 && c_lv != 15) { // 스위치넘버가 2(라크리 뭐시기) 이고, 캐릭터 레벨이 15가 아닌 경우
+				switchnum = (int)(Math.random() * 2); // 0 ~ 1 랜덤(라크리 뭐시기 빼고 리젠)
+				createMiddleMonster(switchnum);
+			}else {
+				createMiddleMonster(switchnum);
+			}
 		} else { // 둘 다 아니면 21 ~ 부터니까 고급 몹 생성
 			createHighMonster(switchnum);
 		}
@@ -950,9 +953,9 @@ public class GameScreen extends JFrame {
 						Thread.sleep(400);
 						System.out.println("[info] 캐릭터 레벨 체크..");
 						if (c_lv > 10 && c_lv < 30) { // 11 ~ 29 레벨 전사 이미지
-
-						} else { // 기사 이미지
-
+							characterLabel.setIcon(new ImageIcon(PLAYERWARRIOR));
+						} else if (c_lv >= 30){ // 기사 이미지
+							characterLabel.setIcon(new ImageIcon(PLAYERKNIGHT));
 						}
 						System.out.println("[info] 캐릭터 체력 & 마나 상태 체크..");
 						playerHpbar.setValue(current_user_hp);
@@ -963,7 +966,7 @@ public class GameScreen extends JFrame {
 						if (current_user_hp <= 0) {
 							JOptionPane.showMessageDialog(null, "캐릭터 사망", "사망", JOptionPane.INFORMATION_MESSAGE, null);
 							System.exit(0);
-							Thread.currentThread().interrupt();
+//							Thread.currentThread().interrupt();
 						}
 
 						System.out.println("[info] 캐릭터 공격력&방어력 상태 체크..");
@@ -1164,7 +1167,7 @@ public class GameScreen extends JFrame {
 					return;
 				} else {
 					SkillEffectLabel1.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
-							.createImage("resource/images/effects/player/skill1_Dragon_Slasher.gif")));
+							.createImage("resource/images/effects/player/skill1_Dragon_Slasher_resize.gif")));
 					skilldamage = (playeratk * 2) - monsterdef; // 스킬데미지 = 스킬계수*2 - 몹 방어력
 					if (skilldamage <= 0) {
 						skilldamage = 1; // 최소데미지는 무조건 1
@@ -1230,7 +1233,7 @@ public class GameScreen extends JFrame {
 					return;
 				} else {
 					SkillEffectLabel2.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
-							.createImage("resource/images/effects/player/skill2_Aura_Blade.gif")));
+							.createImage("resource/images/effects/player/skill2_Aura_Blade_resize.gif")));
 					skilldamage = (playeratk * 3) - monsterdef; // 스킬데미지 = 스킬계수*3 - 몹 방어력
 					if (skilldamage <= 0) {
 						skilldamage = 1; // 최소데미지는 무조건 1
@@ -1296,7 +1299,7 @@ public class GameScreen extends JFrame {
 					return;
 				} else {
 					SkillEffectLabel3.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
-							.createImage("resource/images/effects/player/skill3_Demonic_Swords.gif")));
+							.createImage("resource/images/effects/player/skill3_Demonic_Swords_resize.gif")));
 					skilldamage = (playeratk * 6) - monsterdef; // 스킬데미지 = 스킬계수*6 - 몹 방어력
 					if (skilldamage <= 0) {
 						skilldamage = 1; // 최소데미지는 무조건 1
@@ -1411,9 +1414,9 @@ public class GameScreen extends JFrame {
 		GameScreenimgLabel.setOpaque(true);
 		GameScreenimgLabel.setBackground(Color.WHITE);
 		CharacterPanel.setVisible(false);
-		MonsterPanel.setLocation(400, 40);
+		MonsterPanel.setLocation(350, 40);
 		GameScreenimgLabel.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
-				.createImage("resource/images/effects/player/skill4_Dimension_Breaker_main.gif")));
+				.createImage("resource/images/effects/player/skill4_Dimension_Breaker_main_resize.gif")));
 		Timer changeImg1 = new Timer();
 		Timer changeImg2 = new Timer();
 		TimerTask changeImgTask2 = new TimerTask() {
@@ -1431,7 +1434,7 @@ public class GameScreen extends JFrame {
 			public void run() {
 				// TODO Auto-generated method stub
 				GameScreenimgLabel.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
-						.createImage("resource/images/effects/player/skill4_Dimension_Breaker_sub.gif")));
+						.createImage("resource/images/effects/player/skill4_Dimension_Breaker_sub_resize.gif")));
 				changeImg2.schedule(changeImgTask2, 2650);
 
 			}
@@ -1495,9 +1498,9 @@ public class GameScreen extends JFrame {
 	}
 
 	// InventoryScreen에서 경험의 돌을 사용하고 난 후의 캐릭터 경험치 세팅
-	public static void setPlayerExp(int up) {
-		c_exp += up;
-	}
+//	public static void setPlayerExp(int up) {
+//		c_exp += up;
+//	}
 
 	// InventoryScreen에서 캐릭터의 장비 명(무기,투구,갑옷,장갑,신발)을 set함
 	public static void setPlayerEquipNameWeapon(String w) {
