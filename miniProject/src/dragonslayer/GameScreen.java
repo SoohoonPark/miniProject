@@ -571,7 +571,7 @@ public class GameScreen extends JFrame {
 
 		// 플레이어 피격 이팩트 라벨
 		playerbeingattackedLabel = new JLabel();
-		playerbeingattackedLabel.setBounds(425, 30, 250, 250);
+		playerbeingattackedLabel.setBounds(460, 30, 250, 250);
 
 		// 몬스터 피격 이팩트 라벨
 		monsterbeingattackedLabel = new JLabel();
@@ -1142,7 +1142,7 @@ public class GameScreen extends JFrame {
 					return;
 				} else {
 					SkillEffectLabel1.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
-							.createImage("resource/images/effects/player/skill1_Dragon_Slasher.gif")));
+							.createImage("resource/images/effects/player/skill1_Dragon_Slasher_resize.gif")));
 					skilldamage = (playeratk * 2) - monsterdef; // 스킬데미지 = 스킬계수*2 - 몹 방어력
 					if (skilldamage <= 0) {
 						skilldamage = 1; // 최소데미지는 무조건 1
@@ -1208,7 +1208,7 @@ public class GameScreen extends JFrame {
 					return;
 				} else {
 					SkillEffectLabel2.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
-							.createImage("resource/images/effects/player/skill2_Aura_Blade.gif")));
+							.createImage("resource/images/effects/player/skill2_Aura_Blade_resize.gif")));
 					skilldamage = (playeratk * 3) - monsterdef; // 스킬데미지 = 스킬계수*3 - 몹 방어력
 					if (skilldamage <= 0) {
 						skilldamage = 1; // 최소데미지는 무조건 1
@@ -1274,7 +1274,7 @@ public class GameScreen extends JFrame {
 					return;
 				} else {
 					SkillEffectLabel3.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
-							.createImage("resource/images/effects/player/skill3_Demonic_Swords.gif")));
+							.createImage("resource/images/effects/player/skill3_Demonic_Swords_resize.gif")));
 					skilldamage = (playeratk * 6) - monsterdef; // 스킬데미지 = 스킬계수*6 - 몹 방어력
 					if (skilldamage <= 0) {
 						skilldamage = 1; // 최소데미지는 무조건 1
@@ -1389,9 +1389,9 @@ public class GameScreen extends JFrame {
 		GameScreenimgLabel.setOpaque(true);
 		GameScreenimgLabel.setBackground(Color.WHITE);
 		CharacterPanel.setVisible(false);
-		MonsterPanel.setLocation(400, 40);
+		MonsterPanel.setLocation(350, 40);
 		GameScreenimgLabel.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
-				.createImage("resource/images/effects/player/skill4_Dimension_Breaker_main.gif")));
+				.createImage("resource/images/effects/player/skill4_Dimension_Breaker_main_resize.gif")));
 		Timer changeImg1 = new Timer();
 		Timer changeImg2 = new Timer();
 		TimerTask changeImgTask2 = new TimerTask() {
@@ -1409,7 +1409,7 @@ public class GameScreen extends JFrame {
 			public void run() {
 				// TODO Auto-generated method stub
 				GameScreenimgLabel.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
-						.createImage("resource/images/effects/player/skill4_Dimension_Breaker_sub.gif")));
+						.createImage("resource/images/effects/player/skill4_Dimension_Breaker_sub_resize.gif")));
 				changeImg2.schedule(changeImgTask2, 2650);
 
 			}
