@@ -54,7 +54,6 @@ public class GameScreen extends JFrame {
 	private final static Image PLAYERKNIGHT = Toolkit.getDefaultToolkit().createImage("resource/images/player/playercharacter_knight.png");
 	private final static Image PLAYERKNIGHT_BOSS = Toolkit.getDefaultToolkit().createImage("resource/images/player/playercharacter_knight_boss.png");
 
-
 	// 몹 이미지들(초급)
 	private final static Image SKEL = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/low_grade/1_skel_warrior_resize.png");
 	private final static Image ORC = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/low_grade/2_orc_warrior_resize.png");
@@ -169,7 +168,6 @@ public class GameScreen extends JFrame {
 	private static int def_helmet, def_armor, def_glove, def_boots, atk_weapon; // 캐릭터가 착용하고 있는 아이템의 공&방
 	private static LinkedList<DSItems> inven = new LinkedList<DSItems>(); // 플레이어 인벤토리 내용물
 	private static int current_user_hp, current_user_mp; // 현재 플레이어 체력 & 마나
-
 
 	public static void main(String[] args) {
 		new GameScreen("춘식이",30,"모험가",1000,1000,1000,1200,480);
