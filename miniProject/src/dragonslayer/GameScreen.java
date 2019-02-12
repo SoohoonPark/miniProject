@@ -937,6 +937,8 @@ public class GameScreen extends JFrame {
 		writeLog("'" + m_name + "' 의 공격!");
 		if(battle == true && bossphase2 == true) { // 전투 중이며, 보스전 phase 2가 진행 중이면
 			System.out.println("[Info] 페이즈 2 진행중");
+			DSAudio playdragonattack = DSAudio.getInstance();
+			playdragonattack.playDragonAttack();
 			monsterattackLabel.setIcon(new ImageIcon(BOSSNORMALATTACK)); // 보스 기본 공격 이팩트 출력
 			monsterattackLabel.setBounds(340, 30, 380, 280);
 		}else {
@@ -1126,6 +1128,8 @@ public class GameScreen extends JFrame {
 		playerattackLabel.setIcon(null);
 		monsterattackLabel.setIcon(null);
 
+		DSAudio playdragon = DSAudio.getInstance();
+		playdragon.playDragonSkill();
 		GameScreenimgLabel.setBackground(Color.BLACK);
 		MonsterPanel.setVisible(false);
 		GameScreenimgLabel.setIcon(new ImageIcon(BOSSSKILLATTACK));
@@ -1135,7 +1139,6 @@ public class GameScreen extends JFrame {
 		writeLog("'"+c_name+"' 의 체력이 400 감소했다.");
 		Timer resetbackground = new Timer();
 		TimerTask bgresttask = new TimerTask() {
-			
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
@@ -1186,9 +1189,9 @@ public class GameScreen extends JFrame {
 								JLabel message = new JLabel("<html><body style='background-color:black;'>"
 										+ "<p style='font-family:맑은 고딕; font-size:13px; color:white; text-align:center;'>강대하고도 사악한 용은 쓰러졌습니다."
 										+ "<br/><br/>길고 긴 여정은 이제 끝이 났으며 다른 수많은 이들이 엄두조차 내지 못했던 강대한 시련을 이겨냈습니다."
-										+ "<br/><br/><font color=red>"+c_name+"</font>의 영웅담은 널리 퍼질것입니다...<br/><br/>용을 사냥했다는 증거인 드래곤 슬레이어의 칭호는 당신의 것입니다."
+										+ "<br/><br/><font color=red>"+c_name+"</font>의 영웅담은 널리 퍼질것입니다...<br/><br/>용을 사냥했다는 증거인 드래곤 슬레이어의 칭호는 당신의 것입니다!"
 										+ "<br/><br/><font color=purple>드래곤 슬레이어</font>&nbsp;&nbsp;<font color=red>"+c_name+"</font></p>"
-										+ "<p style='margin-top:50px; margin-bottom:50px; font-family:맑은 고딕; font-size:16px; color:blue; text-align:center;'>Thank you for playing!</p></body></html>");
+										+ "<p style='margin-top:50px; margin-bottom:50px; font-family:맑은 고딕; font-size:16px; color:blue; text-align:center;'>Thank you for playing!<br/>플레이해주셔서 감사합니다.</p></body></html>");
 							
 								 UIManager.put("OptionPane.background",Color.BLACK);
 								 UIManager.put("Panel.background",Color.BLACK);
@@ -1248,7 +1251,6 @@ public class GameScreen extends JFrame {
 		m_check.start();
 	}
 	
-
 	// SkillScreen에서 호출되는 스킬 메소드들
 	static void skill_DragonSlasher() {
 		int requiredLv = 6;

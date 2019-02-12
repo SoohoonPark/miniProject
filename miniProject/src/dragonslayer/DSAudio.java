@@ -23,6 +23,9 @@ public class DSAudio{
 	private static String dimension_2 = "resource/sound/skill_dimension_second.wav";
 	private static String dimension_3 = "resource/sound/skill_dimension_third.wav";
 	private static String dimension_4 = "resource/sound/skill_dimension_fourth.wav";
+	private static String dragonskill1 = "resource/sound/dragon_skill_first.wav";
+	private static String dragonskill2 = "resource/sound/dragon_skill_second.wav";
+	private static String dragonattack = "resource/sound/dragon_attack.wav";
 	
 	private static Clip titleclip = null;
 	private static Clip gameclip = null;
@@ -33,6 +36,7 @@ public class DSAudio{
 	private static Clip aurabladeclip = null;
 	private static Clip demonicswordclip = null;
 	private static Clip dimensionclip1,dimensionclip2,dimensionclip3,dimensionclip4;
+	private static Clip dragonskillclip1,dragonskillclip2,dragonattackclip;
 	
 	private static DSAudio audio = new DSAudio();
 	private DSAudio() {}
@@ -212,6 +216,50 @@ public class DSAudio{
 			secondeffect.schedule(secondeffecttask, 1400); // 첫번째 효과음 재생 후 2초 뒤 실행
 		}catch(Exception e) {
 			System.out.println("[Error] 오디오 재생 에러(효과음_디멘션브레이커)");
+		}
+	}
+	
+	// 용 스킬 효과음
+	public void playDragonSkill() {
+		try {
+			File bgm = new File(dragonskill1);
+			File bgm2 = new File(dragonskill2);
+			AudioInputStream ais = AudioSystem.getAudioInputStream(bgm);
+			AudioInputStream ais2 = AudioSystem.getAudioInputStream(bgm2);
+			
+			dragonskillclip1 = AudioSystem.getClip();
+			dragonskillclip2 = AudioSystem.getClip();
+			
+			dragonskillclip1.open(ais);
+			dragonskillclip2.open(ais2);
+			
+			dragonskillclip1.start();
+			Timer secondeffect = new Timer();
+			TimerTask secondeffecttask = new TimerTask() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					dragonskillclip2.start();
+				}
+			};
+			secondeffect.schedule(secondeffecttask, 2500);
+			
+		}catch(Exception e) {
+			System.out.println("[Error] 오디오 재생 에러(효과음_용스킬)");
+		}
+	}
+	
+	// 용 평타 효과음
+	public void playDragonAttack() {
+		try {
+			File bgm = new File(dragonattack);
+			AudioInputStream ais = AudioSystem.getAudioInputStream(bgm);
+			dragonattackclip = AudioSystem.getClip();
+			dragonattackclip.open(ais);
+			dragonattackclip.start();
+		}catch(Exception e) {
+			System.out.println("[Error] 오디오 재생 에러(효과음_용평타)");
 		}
 	}
 	
