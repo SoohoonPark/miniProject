@@ -184,16 +184,16 @@ public class GameScreen extends JFrame {
 	private static LinkedList<DSItems> inven = new LinkedList<DSItems>(); // 플레이어 인벤토리 내용물
 	private static int current_user_hp, current_user_mp; // 현재 플레이어 체력 & 마나
 
-//	public static void main(String[] args) {
-//		new GameScreen("춘식이", 30, "모험가", 1000, 1000, 1000, 1200, 480);
-//	}
+	public static void main(String[] args) {
+		new GameScreen("춘식이", 30, "모험가", 1000, 1000, 1000, 1200, 480);
+	}
 
 	/** 메소드 영역 **/
 	public GameScreen(String name, int l, String job, int s, int d, int i, int hp, int mp) {
 		System.out.println("[info] GameScreen() 호출");
 		// MainScreen ~ LoadingScreen 에서 사용되던 bgm을 종료하고 GameScreen에서 새로운 bgm 재생
 		DSAudio audio = DSAudio.getInstance();
-		audio.offTitle();
+//		audio.offTitle();
 		audio.playGame();
 
 		lowmonsters = service.monsterData("초급"); // 초급 몹 정보 저장
@@ -1458,6 +1458,8 @@ public class GameScreen extends JFrame {
 		MonsterPanel.setLocation(350, 40);
 		GameScreenimgLabel.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
 				.createImage("resource/images/effects/player/skill4_Dimension_Breaker_main_resize.gif")));
+		DSAudio ultimateskill = DSAudio.getInstance();
+		ultimateskill.playDimensionBreaker();
 		Timer changeImg1 = new Timer();
 		Timer changeImg2 = new Timer();
 		TimerTask changeImgTask2 = new TimerTask() { // 궁극기 연출 후 원 화면으로 복귀
@@ -1466,7 +1468,7 @@ public class GameScreen extends JFrame {
 				// TODO Auto-generated method stub
 				CharacterPanel.setVisible(true);
 				MonsterPanel.setLocation(60, 40);
-				if(bossphase2) {
+				if(bossphase2) { // 보스전 2페이즈 진행 중 일 경우
 					GameScreenimgLabel.setIcon(new ImageIcon(BOSSORIGINAL));
 				}else {
 					GameScreenimgLabel.setIcon(BATTLEBACKGROUND);
@@ -1480,11 +1482,11 @@ public class GameScreen extends JFrame {
 				// TODO Auto-generated method stub
 				GameScreenimgLabel.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
 						.createImage("resource/images/effects/player/skill4_Dimension_Breaker_sub_resize.gif")));
-				changeImg2.schedule(changeImgTask2, 2100); // 2초 뒤 두번째 이펙트로 변경
+				changeImg2.schedule(changeImgTask2, 2100); // 2.1초 뒤 원래 화면으로 돌아가기
 
 			}
 		};
-		changeImg1.schedule(changeImgTask1, 4200);
+		changeImg1.schedule(changeImgTask1, 4200); // 첫 번째 궁극기 스킬 이펙트 실행 후 4.2초 뒤 두번째 스킬 이펙트 실행(첫 번째 스킬 이펙트 길이가 4초라서..)
 	}
 
 	// 인벤토리에 아이템 추가하는 메소드

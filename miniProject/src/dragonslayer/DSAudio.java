@@ -1,6 +1,8 @@
 package dragonslayer;
 
 import java.io.File;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -17,6 +19,11 @@ public class DSAudio{
 	private static String dragonslasher = "resource/sound/skill_dragonslasher.wav";
 	private static String aurablade = "resource/sound/skill_aurablade.wav";
 	private static String demonicsword = "resource/sound/skill_demonicsword.wav";
+	private static String dimension_1 = "resource/sound/skill_dimension_first.wav";
+	private static String dimension_2 = "resource/sound/skill_dimension_second.wav";
+	private static String dimension_3 = "resource/sound/skill_dimension_third.wav";
+	private static String dimension_4 = "resource/sound/skill_dimension_fourth.wav";
+	
 	private static Clip titleclip = null;
 	private static Clip gameclip = null;
 	private static Clip beinghitclip = null;
@@ -25,6 +32,7 @@ public class DSAudio{
 	private static Clip dragonslasherclip = null;
 	private static Clip aurabladeclip = null;
 	private static Clip demonicswordclip = null;
+	private static Clip dimensionclip1,dimensionclip2,dimensionclip3,dimensionclip4;
 	
 	private static DSAudio audio = new DSAudio();
 	private DSAudio() {}
@@ -145,6 +153,62 @@ public class DSAudio{
 		}
 	}
 	
+	// 디멘션 브레이커 효과음
+	public void playDimensionBreaker() {
+		try {
+			File bgm = new File(dimension_1);
+			File bgm2 = new File(dimension_2);
+			File bgm3 = new File(dimension_3);
+			File bgm4 = new File(dimension_4);
+			AudioInputStream ais = AudioSystem.getAudioInputStream(bgm);
+			AudioInputStream ais2 = AudioSystem.getAudioInputStream(bgm2);
+			AudioInputStream ais3 = AudioSystem.getAudioInputStream(bgm3);
+			AudioInputStream ais4 = AudioSystem.getAudioInputStream(bgm4);
+			
+			dimensionclip1 = AudioSystem.getClip();
+			dimensionclip2 = AudioSystem.getClip();
+			dimensionclip3 = AudioSystem.getClip();
+			dimensionclip4 = AudioSystem.getClip();
+			
+			dimensionclip1.open(ais);
+			dimensionclip2.open(ais2);
+			dimensionclip3.open(ais3);
+			dimensionclip4.open(ais4);
+			
+			dimensionclip1.start(); // 첫번째 효과음 재생
+			Timer secondeffect = new Timer();
+			TimerTask secondeffecttask = new TimerTask() {
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					dimensionclip2.start(); // 두번째 효과음 재생
+					Timer thirdeffect = new Timer();
+					TimerTask thirdeffecttask = new TimerTask() {
+						
+						@Override
+						public void run() {
+							// TODO Auto-generated method stub
+							dimensionclip3.start();
+							Timer fourtheffect = new Timer();
+							TimerTask fourtheffecttask = new TimerTask() {
+								
+								@Override
+								public void run() {
+									// TODO Auto-generated method stub
+									dimensionclip4.start();
+								}
+							};
+							fourtheffect.schedule(fourtheffecttask, 1300);
+						}
+					};
+					thirdeffect.schedule(thirdeffecttask, 1400);
+				}
+			};
+			secondeffect.schedule(secondeffecttask, 1400); // 첫번째 효과음 재생 후 2초 뒤 실행
+		}catch(Exception e) {
+			System.out.println("[Error] 오디오 재생 에러(효과음_디멘션브레이커)");
+		}
+	}
 	
 	static DSAudio getInstance() {
 		return audio;
