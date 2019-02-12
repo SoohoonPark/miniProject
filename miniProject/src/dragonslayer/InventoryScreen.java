@@ -52,7 +52,8 @@ public class InventoryScreen extends JFrame {
 		this.current_player_maxmp = maxmp;
 
 		System.out.println("[info] 현재 인벤토리 크기 : " + inventorydata.size());
-		setBounds(1480, 180, 406, 329);
+		setSize(406, 329);
+		setLocation(135, 180);
 		setLayout(null);
 		setResizable(false);
 		setTitle("Inventory");
