@@ -135,6 +135,10 @@ public class GameScreen extends JFrame {
 			.createImage("resource/images/effects/monster/monster_attack_resized.gif");
 	private final static Image BEINGATTACKED = Toolkit.getDefaultToolkit()
 			.createImage("resource/images/effects/both sides/Being attacked_resized.gif");
+	private final static Image BOSSNORMALATTACK = Toolkit.getDefaultToolkit()
+			.createImage("resource/images/effects/monster/boss/Boss Normal attack_resized.gif");
+	private final static Image BOSSSKILLATTACK = Toolkit.getDefaultToolkit()
+			.createImage("resource/images/effects/monster/boss/Boss Skill_resized.gif");
 
 	/** 필드 영역 **/
 	private static String c_name, m_name, c_job; // 캐릭터명 & 몬스터이름
@@ -144,6 +148,7 @@ public class GameScreen extends JFrame {
 	public static Boolean battle = false; // 전투 발생을 알려주는 변수. 전투 발생 시 true로 전환(기본값 false)
 	private static Boolean bossphase2 = false;
 	private static Boolean bossfight = false;
+	private static Boolean skillused = false; // 스킬이 한번만 사용될 수 있도록 제한하는 변수
 
 	private Boolean buff = false; // 플레이어 버프 상황(걸려있는지 아닌지)
 	private Thread p_check, m_check; // 플레이어, 몹 상태 확인 Thread
@@ -175,6 +180,7 @@ public class GameScreen extends JFrame {
 			SkillEffectLabel4_2;
 
 	private static JPanel CharacterPanel, MonsterPanel; // 캐릭터 이미지가 출력되는 패널, 몹 이미지가 출력되는 패널
+	private static JPanel skilleffectpanel; // 공격 및 스킬 이팩트가 출력되는 패널
 	private static JTextArea logarea;
 	private static JScrollPane logscroll;
 	private static JProgressBar playerHpbar, playerMpbar, MonsterHpbar; // 플레이어 체력막대,마나막대, 몹 체력막대
@@ -581,7 +587,7 @@ public class GameScreen extends JFrame {
 
 		ButtonPanel.add(logoLabel);
 
-		JPanel skilleffectpanel = new JPanel(null);
+		skilleffectpanel = new JPanel(null);
 		skilleffectpanel.setBounds(150, 70, 670, 280);
 		skilleffectpanel.setOpaque(false);
 		skilleffectpanel.setBorder(new LineBorder(Color.PINK));
@@ -594,9 +600,7 @@ public class GameScreen extends JFrame {
 		monsterattackLabel = new JLabel();
 		monsterattackLabel.setBounds(320, 30, 201, 253);
 
-		// 보스 공격 & 스킬 이팩트 라벨
-		bossattackLabel = new JLabel();
-		bossattackLabel.setBounds(320, 30, 380, 280);
+		// 보스 스킬 이팩트 라벨
 		bossskillLabel = new JLabel();
 		bossskillLabel.setBounds(320, 30, 950, 330);
 
@@ -631,6 +635,7 @@ public class GameScreen extends JFrame {
 		skilleffectpanel.add(SkillEffectLabel1);
 		skilleffectpanel.add(SkillEffectLabel2);
 		skilleffectpanel.add(SkillEffectLabel3);
+		skilleffectpanel.add(bossskillLabel);
 
 		layer.add(mainbackgroundimgLabel, new Integer(1));
 		layer.add(GameScreenimgLabel, new Integer(2));
@@ -930,6 +935,10 @@ public class GameScreen extends JFrame {
 		writeLog("'" + m_name + "' 의 공격!");
 		monsterattackLabel.setIcon(new ImageIcon(MONSTERATTACK)); // 몬스터 공격 이펙트 출력
 		monsterhit.playAtk_M();
+		if(battle == true && bossphase2 == true) { // 전투 중이며, 보스전 phase 2가 진행 중이면
+			monsterattackLabel.setIcon(new ImageIcon(BOSSNORMALATTACK)); // 보스 기본 공격 이팩트 출력
+			monsterattackLabel.setBounds(340, 30, 380, 280);
+		}
 		playerbeingattackedLabel.setIcon(new ImageIcon(BEINGATTACKED)); // 피격 이팩트 출력
 		monsterhit.playBeinghit();
 
@@ -1116,13 +1125,27 @@ public class GameScreen extends JFrame {
 						MonsterHpbar.setValue(current_monster_hp);
 						MonsterHpbar.setString(current_monster_hp + " / " + m_hp);
 						if (battle == true && bossphase2 == true) {
-							System.out.println("[Info] 보스전 2페이즈 진행중..");
+							System.out.println("[Info] 보스전 페이즈 2 진행중..");
+							if(current_monster_hp >= 1200 && current_monster_hp <= 2400) { // 보스 체력이 60% 이하일 때 스킬 공격 1회 사용
+								bossskillLabel.setIcon(new ImageIcon(BOSSSKILLATTACK));
+								skillused = true;
+								if(skillused == true) {
+									bossskillLabel = null;
+								}
+							}
+							if(current_monster_hp >= 1 && current_monster_hp <= 1199) { // 보스 체력이 30% 이하일 떄 스킬 공격 1회 사용
+								bossskillLabel.setIcon(new ImageIcon(BOSSSKILLATTACK));
+								skillused = true;
+								if(skillused == true) {
+									bossskillLabel = null;
+								}
+							}
 						}
 						if (battle) { // 전투 발생 시
 							// 몹이 죽으면 경험치 & 아이템 획득(전투 종료)
 							if (current_monster_hp <= 0 && battle == true) {
 								if (bossfight) {
-									System.out.println("[Info] 보스전 1페이즈 종료");
+									System.out.println("[Info] 보스전 페이즈 1 종료");
 									writeLog(m_name + "(이/가) 쓰러졌다.");
 									bossphase2 = true;
 									createBossMonster(1); // 2페이즈 돌입
@@ -1798,6 +1821,7 @@ public class GameScreen extends JFrame {
 			CharacterPanel.setLocation(775, 78);
 			playerHpbar.setLocation(10, 60);
 			playerMpbar.setLocation(10, 75);
+			skilleffectpanel.setLocation(300, 70);
 			characterLabel.setIcon(new ImageIcon(PLAYERKNIGHT_BOSS));
 			GameScreenimgLabel.setIcon(new ImageIcon(BOSSORIGINAL));
 			break;
