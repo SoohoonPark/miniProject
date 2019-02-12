@@ -1562,10 +1562,10 @@ public class GameScreen extends JFrame {
 					}
 				}
 			}
-			System.out.println("[info] 현재 인벤토리 사이즈 : " + inven.size());
-			for (int i = 0; i < inven.size(); i++) {
-				System.out.println("[info] 현재 인벤토리에 들어있는 아이템 : " + inven.get(i).getI_name());
-			}
+//			System.out.println("[info] 현재 인벤토리 사이즈 : " + inven.size());
+//			for (int i = 0; i < inven.size(); i++) {
+//				System.out.println("[info] 현재 인벤토리에 들어있는 아이템 : " + inven.get(i).getI_name());
+//			}
 		} catch (Exception e) {
 			System.out.println("[Error] 예외 발생");
 			e.printStackTrace();
