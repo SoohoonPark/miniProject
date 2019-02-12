@@ -75,6 +75,11 @@ public class DSAudio{
 		}
 	}
 	
+	// GameScreen bgm 끔
+	public void offGame() {
+		gameclip.stop();
+	}
+	
 	// 피격음 (플레이어 & 몹 공용)
 	public void playBeinghit() {
 		try {

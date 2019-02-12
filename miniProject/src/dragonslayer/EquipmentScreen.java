@@ -25,7 +25,8 @@ public class EquipmentScreen extends JFrame {
 
 	public EquipmentScreen(ImageIcon character, String weapon, String helmet, String armor, String glove, String boots) {
 		setTitle("Equipment");
-		setBounds(1480, 180, 416, 359);
+		setSize(416, 359);
+		setLocation(135, 180);
 		setIconImage(iconimage);
 		setResizable(false);
 		getContentPane().setBackground(Color.BLACK);

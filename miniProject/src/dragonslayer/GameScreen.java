@@ -859,7 +859,7 @@ public class GameScreen extends JFrame {
 				CharacterPanel.setVisible(true);
 			}
 		};
-		recoverimg.schedule(recovertask, 3000);
+		recoverimg.schedule(recovertask, 2000);
 	}
 
 	// 0 ~ 4 랜덤 만드는 메소드(상자 이벤트에서 사용)
@@ -1129,6 +1129,10 @@ public class GameScreen extends JFrame {
 						MonsterHpbar.setString(current_monster_hp + " / " + m_hp);
 						if (battle == true && bossphase2 == true) {
 							System.out.println("[Info] 보스전 2페이즈 진행중..");
+							if(current_monster_hp <= 0) {
+								System.out.println("[Info] 보스 쥬금");
+								
+							}
 						}
 						if (battle) { // 전투 발생 시
 							// 몹이 죽으면 경험치 & 아이템 획득(전투 종료)
@@ -1249,7 +1253,6 @@ public class GameScreen extends JFrame {
 			return;
 		}
 	}
-	
 
 	static void skill_AuraBlade() {
 		int requiredLv = 12;
