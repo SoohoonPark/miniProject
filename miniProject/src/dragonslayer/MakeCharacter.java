@@ -126,7 +126,8 @@ public class MakeCharacter extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(!(txtname.getText().isEmpty()) && txtname.getText().length() <= 6) {
-					JOptionPane.showMessageDialog(null, "캐릭터를 생성하였습니다.");
+					JLabel message = new JLabel("<html><body><p style='font-family:맑은 고딕;'>캐릭터를 생성하였습니다.<br/>게임을 시작합니다.</p></body></html>");
+					JOptionPane.showMessageDialog(null, message, "캐릭터 생성", JOptionPane.DEFAULT_OPTION, null);
 					new LoadingScreen(txtname.getText());
 					dispose();
 				} else {

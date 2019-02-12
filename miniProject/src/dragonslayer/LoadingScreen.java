@@ -72,6 +72,8 @@ public class LoadingScreen extends JFrame {
 							Thread.sleep(500);
 							new GameScreen(name,1,JOB,STR,DEX,INT,HP,MP); // 게임스크린 클래스에 캐릭터명,레벨,직업,힘,민첩,지능,체력,마나 값을 넘김.
 							dispose();
+							DSAudio stopaudio = DSAudio.getInstance();
+							stopaudio.offTitle();
 							Thread.currentThread().interrupt();	// loadingbar가 100이 되면 스레드 정지
 							System.out.println("[info] loading Thread is interrupted!");
 						}

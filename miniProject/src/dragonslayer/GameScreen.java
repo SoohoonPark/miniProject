@@ -199,7 +199,6 @@ public class GameScreen extends JFrame {
 		System.out.println("[info] GameScreen() 호출");
 		// MainScreen ~ LoadingScreen 에서 사용되던 bgm을 종료하고 GameScreen에서 새로운 bgm 재생
 		DSAudio audio = DSAudio.getInstance();
-		audio.offTitle();
 		audio.playGame();
 
 		lowmonsters = service.monsterData("초급"); // 초급 몹 정보 저장
@@ -1556,7 +1555,6 @@ public class GameScreen extends JFrame {
 	// 인벤토리에 아이템 추가하는 메소드
 	void addInventory(String[] getitem) {
 		try {
-			System.out.println(iteminfo.size());
 			for (int i = 0; i < iteminfo.size(); i++) {
 				for (int j = 0; j < getitem.length; j++) {
 					if (getitem[j].equals(iteminfo.get(i).getI_name())) {
