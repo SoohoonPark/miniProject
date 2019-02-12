@@ -176,8 +176,7 @@ public class GameScreen extends JFrame {
 	private static JLabel playerattackLabel, monsterattackLabel, playerbeingattackedLabel, monsterbeingattackedLabel;
 	private static JLabel bossskillLabel;
 	private static JLabel message;
-	public static JLabel SkillEffectLabel1, SkillEffectLabel2, SkillEffectLabel3, SkillEffectLabel4_1,
-			SkillEffectLabel4_2;
+	public static JLabel SkillEffectLabel1, SkillEffectLabel2, SkillEffectLabel3, SkillEffectLabel4_1,SkillEffectLabel4_2;
 	
 	private static JPanel CharacterPanel, MonsterPanel; // 캐릭터 이미지가 출력되는 패널, 몹 이미지가 출력되는 패널
 	private static JPanel skilleffectpanel; // 공격 및 스킬 이팩트가 출력되는 패널
