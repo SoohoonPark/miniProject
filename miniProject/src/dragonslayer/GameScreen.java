@@ -436,7 +436,7 @@ public class GameScreen extends JFrame {
 						attack_monster();
 					}
 				};
-				mAttackTimer.schedule(mAttackTimerTask, Calendar.getInstance().get(Calendar.MILLISECOND) + 1000);
+				mAttackTimer.schedule(mAttackTimerTask, Calendar.getInstance().get(Calendar.MILLISECOND) + 500);
 			}
 		});
 		ButtonPanel.add(buttonattack);
@@ -672,14 +672,6 @@ public class GameScreen extends JFrame {
 			break;
 		}
 
-	}
-
-	void createFinalBossBattle_Phase2() { // 보스 전 Phase 2
-		bossphase2 = true;
-		// Phase 2 시작
-		createBossMonster(1);
-		System.out.println("[info] 보스 전 - Phase 2 시작");
-		writeLog("\n 분노가 극에 달한 드래곤이 본 모습을 드러내었습니다.\n부디 조심하시기 바랍니다!");
 	}
 
 	// 로그 작성
@@ -934,7 +926,6 @@ public class GameScreen extends JFrame {
 		pAttacktimer.schedule(pAttackTask, 800);
 	}
 	
-
 	// 몬스터 공격(평타)
 	public static void attack_monster() {
 		DSAudio monsterhit = DSAudio.getInstance();
@@ -942,16 +933,19 @@ public class GameScreen extends JFrame {
 			System.out.println("[info] 전투 중이 아닙니다.");
 			return;
 		}
+		
 		writeLog("'" + m_name + "' 의 공격!");
-		monsterattackLabel.setIcon(new ImageIcon(MONSTERATTACK)); // 몬스터 공격 이펙트 출력
-		monsterhit.playAtk_M();
 		if(battle == true && bossphase2 == true) { // 전투 중이며, 보스전 phase 2가 진행 중이면
+			System.out.println("[Info] 페이즈 2 진행중");
 			monsterattackLabel.setIcon(new ImageIcon(BOSSNORMALATTACK)); // 보스 기본 공격 이팩트 출력
 			monsterattackLabel.setBounds(340, 30, 380, 280);
+		}else {
+			monsterattackLabel.setIcon(new ImageIcon(MONSTERATTACK)); // 몬스터 공격 이펙트 출력
+			monsterhit.playAtk_M();
+			playerbeingattackedLabel.setIcon(new ImageIcon(BEINGATTACKED)); // 피격 이팩트 출력
+			monsterhit.playBeinghit();
 		}
-		playerbeingattackedLabel.setIcon(new ImageIcon(BEINGATTACKED)); // 피격 이팩트 출력
-		monsterhit.playBeinghit();
-
+		
 		int damage = monsteratk - playerdef; // 데미지는 몬스터 공격력 - 플레이어 방어력
 		if (damage <= 0) { // 몬스터 공격력 - 플레이어 방어력의 결과가 0보다 작거나 같을 경우 (= 플레이어의 방어력이 몬스터의 공격력보다 높을 경우)
 			damage = 1;
@@ -978,7 +972,6 @@ public class GameScreen extends JFrame {
 		}
 	}
 	
-
 	// 플레이어 상태 확인 Thread 실행 메소드
 	public void checkplayerstatus() {
 		p_check = new Thread(new Runnable() {
@@ -994,7 +987,11 @@ public class GameScreen extends JFrame {
 						if (c_lv > 10 && c_lv < 30) { // 11 ~ 29 레벨 전사 이미지
 							characterLabel.setIcon(new ImageIcon(PLAYERWARRIOR));
 						} else if (c_lv >= 30) { // 기사 이미지
-							characterLabel.setIcon(new ImageIcon(PLAYERKNIGHT));
+							if(bossphase2) {
+								characterLabel.setIcon(new ImageIcon(PLAYERKNIGHT_BOSS));
+							}else {
+								characterLabel.setIcon(new ImageIcon(PLAYERKNIGHT));
+							}
 						}
 						System.out.println("[info] 캐릭터 체력 & 마나 상태 체크..");
 						playerHpbar.setValue(current_user_hp);
@@ -1122,7 +1119,34 @@ public class GameScreen extends JFrame {
 		p_check.start();
 	}
 	
+	// 페이즈 2 보스 스킬 사용 메소드
+	void useDragonSkill() {
+		skillused = true;
+		GameScreenimgLabel.setOpaque(true);
+		playerattackLabel.setIcon(null);
+		monsterattackLabel.setIcon(null);
 
+		GameScreenimgLabel.setBackground(Color.BLACK);
+		MonsterPanel.setVisible(false);
+		GameScreenimgLabel.setIcon(new ImageIcon(BOSSSKILLATTACK));
+		CharacterPanel.setLocation(380, 40);
+		writeLog("'"+m_name+"' 이 강력한 무언가를 사용했다.");
+		current_user_hp -= 400;
+		writeLog("'"+c_name+"' 의 체력이 400 감소했다.");
+		Timer resetbackground = new Timer();
+		TimerTask bgresttask = new TimerTask() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				CharacterPanel.setLocation(775, 78);
+				GameScreenimgLabel.setIcon(new ImageIcon(BOSSORIGINAL));
+				MonsterPanel.setVisible(true);
+			}
+		};
+		resetbackground.schedule(bgresttask, 4800);
+	}
+	
 	// 몹 상태 확인 Thread 실행 메소드
 	public void checkmonsterstatus() {
 		m_check = new Thread(new Runnable() {
@@ -1136,26 +1160,49 @@ public class GameScreen extends JFrame {
 						System.out.println("[info] 몹 체력 상태 체크..");
 						MonsterHpbar.setValue(current_monster_hp);
 						MonsterHpbar.setString(current_monster_hp + " / " + m_hp);
+						// 페이즈 2 돌입
 						if (battle == true && bossphase2 == true) {
 							System.out.println("[Info] 보스전 페이즈 2 진행중..");
 							if(current_monster_hp >= 1200 && current_monster_hp <= 2400) { // 보스 체력이 60% 이하일 때 스킬 공격 1회 사용
-								bossskillLabel.setIcon(new ImageIcon(BOSSSKILLATTACK));
-								skillused = true;
-								if(skillused == true) {
-									bossskillLabel = null;
+								if(!skillused) {
+									useDragonSkill();
 								}
 							}
+							
 							if(current_monster_hp >= 1 && current_monster_hp <= 1199) { // 보스 체력이 30% 이하일 떄 스킬 공격 1회 사용
-								bossskillLabel.setIcon(new ImageIcon(BOSSSKILLATTACK));
-								skillused = true;
-								if(skillused == true) {
-									bossskillLabel = null;
+								if(skillused) {
+									useDragonSkill();
+									skillused = false;
 								}
+							}
+							
+							if(current_monster_hp <= 0) {
+								bossfight = false;
+								bossphase2 = false;
+								battle = false;
+								System.out.println("[Info] 보스전 페이즈 2 종료, 보스 쥬금");
+								GameScreenimgLabel.setIcon(BATTLEBACKGROUND);
+								MonsterPanel.setVisible(false);
+								JLabel message = new JLabel("<html><body style='background-color:black;'>"
+										+ "<p style='font-family:맑은 고딕; font-size:13px; color:white; text-align:center;'>강대하고도 사악한 용은 쓰러졌습니다."
+										+ "<br/><br/>길고 긴 여정은 이제 끝이 났으며 다른 수많은 이들이 엄두조차 내지 못했던 강대한 시련을 이겨냈습니다."
+										+ "<br/><br/><font color=red>"+c_name+"</font>의 영웅담은 널리 퍼질것입니다...<br/><br/>용을 사냥했다는 증거인 드래곤 슬레이어의 칭호는 당신의 것입니다."
+										+ "<br/><br/><font color=purple>드래곤 슬레이어</font>&nbsp;&nbsp;<font color=red>"+c_name+"</font></p>"
+										+ "<p style='margin-top:50px; margin-bottom:50px; font-family:맑은 고딕; font-size:16px; color:blue; text-align:center;'>Thank you for playing!</p></body></html>");
+							
+								 UIManager.put("OptionPane.background",Color.BLACK);
+								 UIManager.put("Panel.background",Color.BLACK);
+								
+								JOptionPane.showMessageDialog(null, message, "Ending", JOptionPane.DEFAULT_OPTION, null);
+								System.exit(0);
 							}
 						}
 						if (battle) { // 전투 발생 시
 							// 몹이 죽으면 경험치 & 아이템 획득(전투 종료)
 							if (current_monster_hp <= 0 && battle == true) {
+								monsterattackLabel.setIcon(null);
+								playerbeingattackedLabel.setIcon(null);
+								playerattackLabel.setIcon(null);
 								if (bossfight) {
 									System.out.println("[Info] 보스전 페이즈 1 종료");
 									writeLog(m_name + "(이/가) 쓰러졌다.");
@@ -1185,12 +1232,10 @@ public class GameScreen extends JFrame {
 										c_str -= (c_lv * 5); // 버프 받은 수치만큼 - 해줘서 원래 능력치로 돌아감
 										c_dex -= (c_lv * 5); // 민첩 수치
 										c_int -= (c_lv * 5); // 지능 수치
-										System.out.println(
-												"[info] 버프 받기 전 능력치 : " + c_str + " / " + c_dex + " / " + c_int);
+										System.out.println("[info] 버프 받기 전 능력치 : " + c_str + " / " + c_dex + " / " + c_int);
 									}
 									MonsterPanel.setVisible(false); // 몹패널 visible을 false
 								}
-
 							}
 						}
 
@@ -1829,6 +1874,8 @@ public class GameScreen extends JFrame {
 			break;
 
 		case 1: // Boss Phase2 - Boss Original mode
+			System.out.println("[info] 보스 전 - Phase 2 시작");
+			writeLog("\n 분노가 극에 달한 드래곤이 본 모습을 드러내었습니다.\n부디 조심하시기 바랍니다!");
 			writeLog(bossmonsters.get(switchnum).getM_name() + " 이/가 나타났다.\n");
 			settingBossMobInfo(switchnum);
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
