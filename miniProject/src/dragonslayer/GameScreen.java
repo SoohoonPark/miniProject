@@ -879,7 +879,7 @@ public class GameScreen extends JFrame {
 			System.out.println("[info] 전투 중이 아닙니다.");
 			return;
 		}
-		writeLog("'" + c_name + "' 의 공격!!\n");
+		writeLog("'" + c_name + "' 의 공격!\n");
 
 		playerattackLabel.setIcon(new ImageIcon(PLAYERBASICATTACK)); // 플레이어 기본공격 이펙트 출력
 		playerhit.playAtk_P();
