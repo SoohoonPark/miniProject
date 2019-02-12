@@ -190,16 +190,16 @@ public class GameScreen extends JFrame {
 	private static LinkedList<DSItems> inven = new LinkedList<DSItems>(); // 플레이어 인벤토리 내용물
 	private static int current_user_hp, current_user_mp; // 현재 플레이어 체력 & 마나
 
-	public static void main(String[] args) {
-		new GameScreen("춘식이", 30, "모험가", 1000, 1000, 1000, 1200, 480);
-	}
+//	public static void main(String[] args) {
+//		new GameScreen("춘식이", 30, "모험가", 1000, 1000, 1000, 1200, 480);
+//	}
 
 	/** 메소드 영역 **/
 	public GameScreen(String name, int l, String job, int s, int d, int i, int hp, int mp) {
 		System.out.println("[info] GameScreen() 호출");
 		// MainScreen ~ LoadingScreen 에서 사용되던 bgm을 종료하고 GameScreen에서 새로운 bgm 재생
 		DSAudio audio = DSAudio.getInstance();
-//		audio.offTitle();
+		audio.offTitle();
 		audio.playGame();
 
 		lowmonsters = service.monsterData("초급"); // 초급 몹 정보 저장
@@ -234,12 +234,11 @@ public class GameScreen extends JFrame {
 		boots = "없음";
 		System.out.println("[info] GameScreen() 필드 초기화 완료.");
 
-//		addInventory(new String[] { "단검", "체력 물약", "마나 물약" }); // 기본 템 지급
-		addInventory(new String[] { "기간틱 액스", "미스릴 투구", "미스릴 갑옷", "미스릴 장갑", "미스릴 신발" }); // 테스팅용
+		addInventory(new String[] {"단검","체력 물약","마나 물약","기간틱 액스","미스릴 투구","미스릴 갑옷","미스릴 장갑","미스릴 신발"}); // 기본 템 지급
+//		addInventory(new String[] { "기간틱 액스", "미스릴 투구", "미스릴 갑옷", "미스릴 장갑", "미스릴 신발" }); // 테스팅용
 		createGameScreen();
 		checkplayerstatus();
 		checkmonsterstatus();
-
 	}
 
 	// 화면 생성 메소드
@@ -264,12 +263,10 @@ public class GameScreen extends JFrame {
 		// 게임진행 이미지 라벨
 		GameScreenimgLabel = new JLabel(BATTLEBACKGROUND);
 		GameScreenimgLabel.setBounds(40, 35, 950, 330);
-		GameScreenimgLabel.setBorder(new LineBorder(Color.WHITE));
 
 		// 캐릭터 이미지 출력되는 패널(체력/마나 막대 + 캐릭터 이미지)
 		CharacterPanel = new JPanel(null);
 		CharacterPanel.setBounds(650, 60, 210, 300);
-		CharacterPanel.setBorder(new LineBorder(Color.BLUE));
 		CharacterPanel.setOpaque(false);
 
 		// 캐릭터 이미지 출력하는 Label
@@ -306,12 +303,10 @@ public class GameScreen extends JFrame {
 		// 몹 이미지 출력 패널(몹 체력 막대 + 몹 이미지)
 		MonsterPanel = new JPanel(null);
 		MonsterPanel.setBounds(60, 40, 350, 320);
-		MonsterPanel.setBorder(new LineBorder(Color.RED));
 		MonsterPanel.setOpaque(false);
 
 		monsterimgLabel = new JLabel("", SwingConstants.CENTER);
 		monsterimgLabel.setBounds(10, 25, 330, 290);
-		monsterimgLabel.setBorder(new LineBorder(Color.CYAN));
 
 		MonsterHpbar = new JProgressBar();
 		MonsterHpbar.setBounds(50, 2, 250, 20);
@@ -590,7 +585,7 @@ public class GameScreen extends JFrame {
 		skilleffectpanel = new JPanel(null);
 		skilleffectpanel.setBounds(150, 70, 670, 280);
 		skilleffectpanel.setOpaque(false);
-		skilleffectpanel.setBorder(new LineBorder(Color.PINK));
+//		skilleffectpanel.setBorder(new LineBorder(Color.PINK));
 
 		// 플레이어 기본 공격 이팩트 라벨
 		playerattackLabel = new JLabel();
@@ -709,8 +704,8 @@ public class GameScreen extends JFrame {
 		if (level >= 1 && level <= 10) { // 1 ~ 10 레벨은 초급 몹
 			System.out.println("[Info] 캐릭터 레벨 : " + c_lv);
 			System.out.println("[Info] 나온 몹 인카운터  : " + switchnum);
-			if (c_lv != 5) { // 캐릭터 레벨이 5가 아닌 경우
-				System.out.println("[Info] 초보자 어드밴티지");
+			if (c_lv <= 5) { // 캐릭터 레벨이 5 이하 인 경우
+				System.out.println("[Info] 초보자 어드밴티지 ");
 				switchnum = (int) (Math.random() * 2); // 0 ~ 1 랜덤(골렘 빼고 리젠)
 				createLowMonster(switchnum);
 			} else {
@@ -718,7 +713,7 @@ public class GameScreen extends JFrame {
 				createLowMonster(switchnum);
 			}
 		} else if (level >= 11 && level <= 20) { // 11 ~ 20 레벨은 중급 몹
-			if (c_lv != 15) { // 캐릭터 레벨이 15가 아닌 경우
+			if (c_lv <= 15) { // 캐릭터 레벨이 15 이하 인 경우
 				switchnum = (int) (Math.random() * 2); // 0 ~ 1 랜덤(라크리 뭐시기 빼고 리젠)
 				createMiddleMonster(switchnum);
 			} else {
@@ -1022,14 +1017,14 @@ public class GameScreen extends JFrame {
 							writeLog("레벨 업!\n레벨이 " + c_lv + " 가 되었다.");
 							int strup, dexup, intup;
 
-							if (c_lv >= 1 && c_lv <= 10) { // 레벨이 1 ~ 10인 경우 스텟 가중치 (1 ~ 5 랜덤), 체력/마나 +40
-								strup = (int) (Math.random() * 5) + 1;
+							if (c_lv >= 1 && c_lv <= 10) { // 레벨이 1 ~ 10인 경우 스텟 가중치 (5 ~ 10 랜덤), 체력/마나 +40
+								strup = (int) (Math.random() * 10) + 5;
 								c_str += strup;
 								writeLog("힘이 " + strup + " 올랐다.");
-								dexup = (int) (Math.random() * 5) + 1;
+								dexup = (int) (Math.random() * 10) + 5;
 								c_dex += dexup;
 								writeLog("민첩이 " + dexup + " 올랐다.");
-								intup = (int) (Math.random() * 5) + 1;
+								intup = (int) (Math.random() * 10) + 5;
 								c_int += intup;
 								writeLog("지능이 " + intup + " 올랐다.");
 								c_hp += 40;
@@ -1045,19 +1040,19 @@ public class GameScreen extends JFrame {
 								playerHpbar.setString(current_user_hp + " / " + c_hp);
 								playerMpbar.setString(current_user_mp + " / " + c_mp);
 
-							} else if (c_lv >= 11 && c_lv <= 20) { // 레벨이 11 ~ 20인 경우 스텟 가중치 (5 ~ 10 랜덤), 체력/마나 +70
-								strup = (int) (Math.random() * 10) + 5;
+							} else if (c_lv >= 11 && c_lv <= 20) { // 레벨이 11 ~ 20인 경우 스텟 가중치 (10 ~ 15 랜덤), 체력/마나 +70
+								strup = (int) (Math.random() * 16) + 10;
 								c_str += strup;
 								writeLog("힘이 " + strup + " 올랐다.");
-								dexup = (int) (Math.random() * 10) + 5;
+								dexup = (int) (Math.random() * 16) + 10;
 								c_dex += dexup;
 								writeLog("민첩이 " + dexup + " 올랐다.");
-								intup = (int) (Math.random() * 10) + 5;
+								intup = (int) (Math.random() * 16) + 10;
 								c_int += intup;
 								writeLog("지능이 " + intup + " 올랐다.");
-								c_hp += 50;
-								c_mp += 10;
-								writeLog("체력이 50 올랐다.\n마나가 10 올랐다.");
+								c_hp += 70;
+								c_mp += 20;
+								writeLog("체력이 70 올랐다.\n마나가 20 올랐다.");
 
 								current_user_hp = c_hp;
 								current_user_mp = c_mp;
@@ -1068,19 +1063,19 @@ public class GameScreen extends JFrame {
 								playerHpbar.setString(current_user_hp + " / " + c_hp);
 								playerMpbar.setString(current_user_mp + " / " + c_mp);
 
-							} else if (c_lv >= 21 && c_lv <= 29) { // 21 ~ 29 스텟 가중치 (10 ~ 15 랜덤), 체력/마나 +100
-								strup = (int) (Math.random() * 15) + 10;
+							} else if (c_lv >= 21 && c_lv <= 29) { // 21 ~ 29 스텟 가중치 (15 ~ 20 랜덤), 체력/마나 +100
+								strup = (int) (Math.random() * 21) + 15;
 								c_str += strup;
 								writeLog("힘이 " + strup + " 올랐다.");
-								dexup = (int) (Math.random() * 15) + 10;
+								dexup = (int) (Math.random() * 21) + 15;
 								c_dex += dexup;
 								writeLog("민첩이 " + dexup + " 올랐다.");
-								intup = (int) (Math.random() * 15) + 10;
+								intup = (int) (Math.random() * 21) + 15;
 								c_int += intup;
 								writeLog("지능이 " + intup + " 올랐다.");
-								c_hp += 60;
-								c_mp += 10;
-								writeLog("체력이 60 올랐다.\n마나가 10 올랐다.");
+								c_hp += 100;
+								c_mp += 30;
+								writeLog("체력이 100 올랐다.\n마나가 30 올랐다.");
 
 								current_user_hp = c_hp;
 								current_user_mp = c_mp;
@@ -1091,12 +1086,12 @@ public class GameScreen extends JFrame {
 								playerHpbar.setString(current_user_hp + " / " + c_hp);
 								playerMpbar.setString(current_user_mp + " / " + c_mp);
 
-							} else { // 30 레벨 달성(만렙) 올스탯+50, 체,마 + 500
+							} else { // 30 레벨 달성(만렙) 올스탯+80, 체,마 + 500
 								c_hp += 300;
 								c_mp += 300;
-								c_str += 50;
-								c_dex += 50;
-								c_int += 50;
+								c_str += 80;
+								c_dex += 80;
+								c_int += 80;
 								writeLog("레벨 30이 되었다.\n체력이 300 올랐다.\n마나가 300 올랐다.\n모든 능력치가 50 올랐다.");
 
 								current_user_hp = c_hp;
@@ -1612,11 +1607,6 @@ public class GameScreen extends JFrame {
 		c_dex += up;
 		c_int += up;
 	}
-
-	// InventoryScreen에서 경험의 돌을 사용하고 난 후의 캐릭터 경험치 세팅
-//	public static void setPlayerExp(int up) {
-//		c_exp += up;
-//	}
 
 	// InventoryScreen에서 캐릭터의 장비 명(무기,투구,갑옷,장갑,신발)을 set함
 	public static void setPlayerEquipNameWeapon(String w) {
