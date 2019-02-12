@@ -174,7 +174,7 @@ public class GameScreen extends JFrame {
 	private static JButton buttonsearch, buttonattack, buttoninven, buttonequip, buttonstat, buttonskill, buttonexit;
 	private static JLabel mainbackgroundimgLabel, GameScreenimgLabel, characterLabel, monsterimgLabel; // 이미지 라벨들
 	private static JLabel playerattackLabel, monsterattackLabel, playerbeingattackedLabel, monsterbeingattackedLabel;
-	private static JLabel bossattackLabel, bossskillLabel;
+	private static JLabel bossskillLabel;
 	private static JLabel message;
 	public static JLabel SkillEffectLabel1, SkillEffectLabel2, SkillEffectLabel3, SkillEffectLabel4_1,
 			SkillEffectLabel4_2;
