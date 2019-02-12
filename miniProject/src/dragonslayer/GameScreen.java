@@ -1555,7 +1555,6 @@ public class GameScreen extends JFrame {
 	// 인벤토리에 아이템 추가하는 메소드
 	void addInventory(String[] getitem) {
 		try {
-			
 			for (int i = 0; i < iteminfo.size(); i++) {
 				for (int j = 0; j < getitem.length; j++) {
 					if (getitem[j].equals(iteminfo.get(i).getI_name())) {
