@@ -233,7 +233,7 @@ public class GameScreen extends JFrame {
 		boots = "없음";
 		System.out.println("[info] GameScreen() 필드 초기화 완료.");
 
-		addInventory(new String[] { "단검", "체력 물약", "마나 물약", "기간틱 액스", "미스릴 투구", "미스릴 갑옷", "미스릴 장갑", "미스릴 신발" }); // 기본 템
+		addInventory(new String[] { "단검", "체력 물약", "마나 물약", "체력 물약", "마나 물약" }); // 기본 템
 																													// 지급
 //		addInventory(new String[] { "기간틱 액스", "미스릴 투구", "미스릴 갑옷", "미스릴 장갑", "미스릴 신발" }); // 테스팅용
 		createGameScreen();
@@ -552,9 +552,9 @@ public class GameScreen extends JFrame {
 				// JOptionPane 버튼 글자 스타일 설정
 				UIManager.put("OptionPane.buttonFont", new Font("맑은 고딕", Font.PLAIN, 14));
 				JLabel message = new JLabel(
-						"<html><p style='font-family:맑은 고딕;'>정말 가실꺼에요?<br/>아직 용사님의 도움을 필요로 하는 곳이 많아요!!!</p></html>");
+						"<html><p style='font-family:맑은 고딕;'>정말 가실꺼에요?<br/>아직 용사님의 도움을 필요로 하는 곳이 많아요!!</p></html>");
 				int a = JOptionPane.showOptionDialog(null, message, "게임종료", JOptionPane.YES_NO_OPTION,
-						JOptionPane.QUESTION_MESSAGE, null, new Object[] { "미안하지만, 지금은 좀 바빠.", "내 도움이 필요한 곳이 어디야??" },
+						JOptionPane.QUESTION_MESSAGE, null, new Object[] { "미안하지만, 지금은 좀 바빠.", "그래? 내 도움이 필요한 곳이 어디야??" },
 						null);
 				if (a == 0) { // 확인 버튼
 					System.exit(1);
@@ -661,7 +661,7 @@ public class GameScreen extends JFrame {
 			System.out.println("[info] 전투 발생");
 			createBossMonster(0);
 			System.out.println("[info] 보스 전 - Phase 1 시작");
-			writeLog("\n드래곤이 아직 인간의 형상을 하고 있다는 건 \n용사님을 얕잡아보고 있다는 것입니다.\n방심을 틈타 기회를 노리세요!");
+			writeLog("\n드래곤이 인간의 형상을 하고 있다는 건 \n용사님을 얕잡아보고 있다는 것입니다.\n방심을 틈타 기회를 노리세요!");
 			break;
 		case 1: // 'NO'
 			break;
@@ -733,7 +733,7 @@ public class GameScreen extends JFrame {
 	public void createGetItemEvent(int event) {
 		try {
 			if (event >= 1 && event <= 6) { // 1 ~ 6 : 일반 상자
-				writeLog("평범해 보이는 상자를 발견하고 상자를 열었다.");
+				writeLog("평범해 보이는 상자를 발견했다.");
 				// '하급' 키워드가 들어간 아이템 명을 담을 문자열 리스트
 				for (int i = 0; i < iteminfo.size(); i++) {
 					if (iteminfo.get(i).getI_name().contains("하급")) {
@@ -753,7 +753,7 @@ public class GameScreen extends JFrame {
 				Rewards.clear(); // 보상 획득 후 기존 리스트 내용 초기화
 
 			} else if (event >= 7 && event < 10) { // 7 ~ 9 : 괜찮아 보이는 상자
-				writeLog("괜찮아 보이는 상자를 발견하고 상자를 열었다.");
+				writeLog("괜찮아 보이는 상자를 발견했다.");
 				// '중급' 키워드가 들어간 아이템 명을 담을 문자열 리스트
 				for (int i = 0; i < iteminfo.size(); i++) {
 					if (iteminfo.get(i).getI_name().contains("중급")) {
@@ -773,7 +773,7 @@ public class GameScreen extends JFrame {
 				GoodRewards.clear();
 
 			} else { // 10 : 화려해 보이는 상자
-				writeLog("화려해 보이는 상자를 발견하고 상자를 열었다.");
+				writeLog("화려해 보이는 상자를 발견했다.");
 				// '고오급' 키워드가 들어간 아이템 명을 담을 문자열 리스트
 				for (int i = 0; i < iteminfo.size(); i++) {
 					if (iteminfo.get(i).getI_name().contains("고오급")) {
@@ -821,15 +821,15 @@ public class GameScreen extends JFrame {
 			System.out.println("[info] 함정 이벤트 발생");
 			int randomtrap = (int) (Math.random() * 3) + 1; // 1 ~ 3 랜덤 트랩 발생
 			if (randomtrap == 1) { // 1은 불 함정
-				writeLog("벽에서 불이 뿜어져나왔다.");
+				writeLog("함정 발동 : 외벽에서 뜨거운 불이 뿜어져 나왔다.\n체력이 감소했다.");
 				current_user_hp -= (c_lv * 2); // 캐릭터 레벨 * 2 수치 만큼 체력 깎임
 				setBackgroundimg(FIRETRAP, BATTLEBACKGROUND);
 			} else if (randomtrap == 2) { // 2는 가시(바닥) 함정
-				writeLog("바닥의 가시를 밟았다.");
+				writeLog("함정 발동 : 바닥에서 날카로운 가시가 솟구쳐 올라왔다.\n체력이 감소했다.");
 				current_user_hp -= (c_lv * 3); // 캐릭터 레벨 * 3 수치 만큼 체력 깎임
 				setBackgroundimg(SPIKETRAP, BATTLEBACKGROUND);
 			} else { // 3은 우물 함정
-				writeLog("우물안의 물을 마셨다");
+				writeLog("함정발동 : 오염된 우물안의 물을 마셨다.\n체력이 감소했다.");
 				current_user_hp -= (c_lv * 4); // 캐릭터 레벨 * 4 수치 만큼 체력 깎임
 				setBackgroundimg(WELLTRAP, BATTLEBACKGROUND);
 			}
@@ -1001,7 +1001,7 @@ public class GameScreen extends JFrame {
 						if (current_user_hp <= 0) {
 							JLabel message = new JLabel("<html><body style='background-color:black;'>"
 									+ "<p style='font-family:맑은 고딕; font-size:13px; color:white; text-align:center;'>"
-									+ "용을 죽이고 평화를 되찾겠다는 바람과는 달리 힘이 부족하여 이 자리에서 쓰러졌습니다...<br/><br/>다음번의 도전에서는 이렇게 쓰러지면 안됩니다..!"
+									+ "캐릭터가 전사하였습니다.<br/><br/>용사님이 돌아오실 때까지 저희가 막아내고 있겠습니다!!"
 									+ "</p></body></html>");
 
 							UIManager.put("OptionPane.background", Color.BLACK);
@@ -1164,13 +1164,19 @@ public class GameScreen extends JFrame {
 									GameScreenimgLabel.setIcon(BATTLEBACKGROUND);
 									MonsterPanel.setVisible(false);
 									JLabel message = new JLabel("<html><body style='background-color:black;'>"
-											+ "<p style='font-family:맑은 고딕; font-size:13px; color:white; text-align:center;'>강대하고도 사악한 용은 쓰러졌습니다."
-											+ "<br/><br/>길고 긴 여정은 이제 끝이 났으며 다른 수많은 이들이 엄두조차 내지 못했던 강대한 시련을 이겨냈습니다."
-											+ "<br/><br/><font color=red>" + c_name
-											+ "</font>의 영웅담은 널리 퍼질것입니다...<br/><br/>용을 사냥했다는 증거인 드래곤 슬레이어의 칭호는 당신의 것입니다!"
+											+ "<p style='font-family:맑은 고딕; font-size:13px; color:white; text-align:center;'>"
+											+ "드래곤의 압도적인 힘에 눌려 쓰러지기를 수 차례...<br/>높이 뛰어오른 용사는 마지막 힘을  쏟아내어 드래곤의 심장에 검을 박아넣었다."
+											+ "<br/>검이 지나간 상처 사이로 검붉은 피가 뿜어져 나왔고,"
+											+ "<br/>철옹성 같기만 하던 거대한 드래곤의 몸이 서서히 무너져 내렸다."
+											+ "<br/><br/>'챙그랑!!!!!'<br/>용사의 손에 붙들려 있던 검이 땅으로 떨어지며 맑은 소리를 울렸다."
+											+ "<br/>'용사님! 정신차리십시오!'<br/>뒤늦게 도착한 지원군이 달려오며 쓰러지는 용사를 끌어안았다."
+											+ "<br/>용사는 흐려져 가는 의식 사이로 희미한 미소를 지으며 나지막이 중얼거렸다.<br/>'이제 되었다...'<br/>"
+											+ "<br/>. . . . .<br/>. . .<br/>."
+											+ "<br/><br/><br/><br/><br/><br/>축하합니다! 험난하기만 하였던 길고 긴 여정이 드디어 끝이 났군요."
+											+ "<br/>마침내 사악한 드래곤이 사라지고 세상은 평화를 되찾았습니다."
 											+ "<br/><br/><font color=purple>드래곤 슬레이어</font>&nbsp;&nbsp;<font color=red>"
-											+ c_name + "</font></p>"
-											+ "<p style='margin-top:50px; margin-bottom:50px; font-family:맑은 고딕; font-size:16px; color:blue; text-align:center;'>Thank you for playing!<br/>플레이해주셔서 감사합니다.</p></body></html>");
+											+ c_name + "</font>님의 위대한 영웅담은 후대에도 널리 퍼질 것입니다!</p>"
+											+ "<p style='margin-top:50px; margin-bottom:50px; font-family:맑은 고딕; font-size:16px; color:blue; text-align:center;'>지금까지 드래곤 슬레이어와 함께 해주셔서 감사합니다.</p></body></html>");
 
 									UIManager.put("OptionPane.background", Color.BLACK);
 									UIManager.put("Panel.background", Color.BLACK);
@@ -1400,7 +1406,7 @@ public class GameScreen extends JFrame {
 
 	static void skill_DemonicSword() {
 		int requiredLv = 18;
-		int requiredMp = 150;
+		int requiredMp = 170;
 		int skilldamage = 0;
 		Timer removeEffectTimer;
 		TimerTask removeEffectTask;
@@ -1420,7 +1426,7 @@ public class GameScreen extends JFrame {
 					demonic.playDemonicSword();
 					SkillEffectLabel3.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
 							.createImage("resource/images/effects/player/skill3_Demonic_Swords_resize.gif")));
-					skilldamage = (playeratk * 6) - monsterdef; // 스킬데미지 = 스킬계수*6 - 몹 방어력
+					skilldamage = (playeratk * 4) - monsterdef; // 스킬데미지 = 스킬계수*6 - 몹 방어력
 					if (skilldamage <= 0) {
 						skilldamage = 1; // 최소데미지는 무조건 1
 						current_user_mp -= requiredMp;

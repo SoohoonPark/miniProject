@@ -100,7 +100,7 @@ public class SkillScreen extends JFrame {
 		SkillMessageLabel3 = new JLabel();
 		SkillMessageLabel3.setBounds(5, 50, 250, 60);
 		SkillMessageLabel3.setForeground(new Color(80, 175, 73));
-		SkillMessageLabel3.setText("<html><p style='font-family:맑은 고딕;'>MP 150 소비, 100% 데미지로 6회 공격<br/>악마의 검을 소환하여 사방으로 휘둘러 적을 섬멸한다.</p></html>");
+		SkillMessageLabel3.setText("<html><p style='font-family:맑은 고딕;'>MP 170 소비, 80% 데미지로 5회 공격<br/>악마의 검을 소환하여 사방으로 휘둘러 적을 섬멸한다.</p></html>");
 		
 		SkillIconLabel4 = new JLabel(new ImageIcon(Skill4));
 		SkillIconLabel4.setBounds(5, 5, 220, 40);
