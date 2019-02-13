@@ -302,7 +302,7 @@ public class DSAudio{
 			dragonroarclip = AudioSystem.getClip();
 			dragonroarclip.open(ais);
 			FloatControl gainControl = (FloatControl) dragonroarclip.getControl(FloatControl.Type.MASTER_GAIN);
-			gainControl.setValue(6.0f); // Reduce volume by 10 decibels.
+			gainControl.setValue(6.0f); // set volume by 6(this audio maximum) decibels.
 			dragonroarclip.start();
 		}catch(Exception e) {
 			System.out.println("[Error] 오디오 재생 에러(효과음_용포효)");
