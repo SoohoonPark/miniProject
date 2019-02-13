@@ -107,8 +107,15 @@ public class MainScreen extends JFrame {
 		btnGameQuit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "게임을 종료하시겠습니까?");
-				System.exit(1);
+				JLabel message = new JLabel("<html><body><p style='font-family:맑은 고딕; font-size:11px;'>게임을 종료하시겠습니까?</p></body></html>");
+				int a = JOptionPane.showConfirmDialog(null,message,"게임종료",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+				switch(a) {
+				case 0:
+					System.exit(1);
+					break;
+				case 1:
+					break;
+				}
 			}
 		});
 
@@ -123,7 +130,5 @@ public class MainScreen extends JFrame {
 
 		// 모니터에 해당 Frame 출력
 		setVisible(true);
-		
-		
 	}
 }

@@ -18,9 +18,9 @@ public class LoadingScreen extends JFrame {
 	private Image iconimage = Toolkit.getDefaultToolkit().createImage("resource/images/title/titleicon.png");
 	private JProgressBar loadingbar;
 	
-	private String name;
-	private final static int STR = 10, DEX = 10, INT = 10, HP = 100, MP = 50;
-	private final static String JOB = "모험가";
+	private String name; // 캐릭터명
+	private final static int STR = 10, DEX = 10, INT = 10, HP = 100, MP = 50; // 기본 스탯
+	private final static String JOB = "모험가"; // 초기 직업(모험가 - 전사 - 기사)
 
 	public LoadingScreen(String n) {
 		this.name = n;

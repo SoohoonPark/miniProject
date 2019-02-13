@@ -176,8 +176,9 @@ public class GameScreen extends JFrame {
 	private static JLabel playerattackLabel, monsterattackLabel, playerbeingattackedLabel, monsterbeingattackedLabel;
 	private static JLabel bossskillLabel;
 	private static JLabel message;
-	public static JLabel SkillEffectLabel1, SkillEffectLabel2, SkillEffectLabel3, SkillEffectLabel4_1,SkillEffectLabel4_2;
-	
+	public static JLabel SkillEffectLabel1, SkillEffectLabel2, SkillEffectLabel3, SkillEffectLabel4_1,
+			SkillEffectLabel4_2;
+
 	private static JPanel CharacterPanel, MonsterPanel; // 캐릭터 이미지가 출력되는 패널, 몹 이미지가 출력되는 패널
 	private static JPanel skilleffectpanel; // 공격 및 스킬 이팩트가 출력되는 패널
 	private static JTextArea logarea;
@@ -207,22 +208,22 @@ public class GameScreen extends JFrame {
 		iteminfo = service.itemData(); // 아이템 정보 저장
 		exptable = service.expData(); // 경험치 정보 저장(Key - 레벨 / Value - 다음 경험치)
 
-		this.c_name = name; // 캐릭터명
-		this.c_job = job; // 직업
-		this.c_lv = l; // 레벨
-		this.c_str = s; // 힘
-		this.playeratk = (c_str / 2) + atk_weapon; // 캐릭터 공격력은 (힘/2)+장비공격력
-		this.c_dex = d; // 민첩
-		this.playerdef = (c_dex / 5) + equipdef; // 캐릭터 방어력은 (민첩/5)+장비방어력
-		this.c_int = i; // 지능
+		GameScreen.c_name = name; // 캐릭터명
+		GameScreen.c_job = job; // 직업
+		GameScreen.c_lv = l; // 레벨
+		GameScreen.c_str = s; // 힘
+		GameScreen.playeratk = (c_str / 2) + atk_weapon; // 캐릭터 공격력은 (힘/2)+장비공격력
+		GameScreen.c_dex = d; // 민첩
+		GameScreen.playerdef = (c_dex / 5) + equipdef; // 캐릭터 방어력은 (민첩/5)+장비방어력
+		GameScreen.c_int = i; // 지능
 
-		this.c_hp = hp; // 체력
-		this.current_user_hp = c_hp; // 플레이어 현재 체력
-		this.c_mp = mp + (c_int * 2); // 마나는 기본 마나값 + 지능*2
-		this.current_user_mp = c_mp; // 플레이어 현재 마나
+		GameScreen.c_hp = hp; // 체력
+		GameScreen.current_user_hp = c_hp; // 플레이어 현재 체력
+		GameScreen.c_mp = mp + (c_int * 2); // 마나는 기본 마나값 + 지능*2
+		GameScreen.current_user_mp = c_mp; // 플레이어 현재 마나
 
-		this.c_exp = 0; // 초기 경험치 보유량 0
-		this.c_next_exp = exptable.get(c_lv); // 다음 경험치 요구량 50
+		GameScreen.c_exp = 0; // 초기 경험치 보유량 0
+		GameScreen.c_next_exp = exptable.get(c_lv); // 다음 경험치 요구량 50
 
 		// 장비 기본값은 "없음"
 		weapon = "없음";
@@ -232,7 +233,8 @@ public class GameScreen extends JFrame {
 		boots = "없음";
 		System.out.println("[info] GameScreen() 필드 초기화 완료.");
 
-		addInventory(new String[] {"단검","체력 물약","마나 물약","기간틱 액스","미스릴 투구","미스릴 갑옷","미스릴 장갑","미스릴 신발"}); // 기본 템 지급
+		addInventory(new String[] { "단검", "체력 물약", "마나 물약", "기간틱 액스", "미스릴 투구", "미스릴 갑옷", "미스릴 장갑", "미스릴 신발" }); // 기본 템
+																													// 지급
 //		addInventory(new String[] { "기간틱 액스", "미스릴 투구", "미스릴 갑옷", "미스릴 장갑", "미스릴 신발" }); // 테스팅용
 		createGameScreen();
 		checkplayerstatus();
@@ -918,7 +920,7 @@ public class GameScreen extends JFrame {
 		};
 		pAttacktimer.schedule(pAttackTask, 800);
 	}
-	
+
 	// 몬스터 공격(평타)
 	public static void attack_monster() {
 		DSAudio monsterhit = DSAudio.getInstance();
@@ -926,21 +928,21 @@ public class GameScreen extends JFrame {
 			System.out.println("[info] 전투 중이 아닙니다.");
 			return;
 		}
-		
+
 		writeLog("'" + m_name + "' 의 공격!");
-		if(battle == true && bossphase2 == true) { // 전투 중이며, 보스전 phase 2가 진행 중이면
+		if (battle == true && bossphase2 == true) { // 전투 중이며, 보스전 phase 2가 진행 중이면
 			System.out.println("[Info] 페이즈 2 진행중");
 			DSAudio playdragonattack = DSAudio.getInstance();
 			playdragonattack.playDragonAttack();
 			monsterattackLabel.setIcon(new ImageIcon(BOSSNORMALATTACK)); // 보스 기본 공격 이팩트 출력
 			monsterattackLabel.setBounds(340, 30, 380, 280);
-		}else {
+		} else {
 			monsterattackLabel.setIcon(new ImageIcon(MONSTERATTACK)); // 몬스터 공격 이펙트 출력
 			monsterhit.playAtk_M();
 			playerbeingattackedLabel.setIcon(new ImageIcon(BEINGATTACKED)); // 피격 이팩트 출력
 			monsterhit.playBeinghit();
 		}
-		
+
 		int damage = monsteratk - playerdef; // 데미지는 몬스터 공격력 - 플레이어 방어력
 		if (damage <= 0) { // 몬스터 공격력 - 플레이어 방어력의 결과가 0보다 작거나 같을 경우 (= 플레이어의 방어력이 몬스터의 공격력보다 높을 경우)
 			damage = 1;
@@ -966,7 +968,7 @@ public class GameScreen extends JFrame {
 			mAttackEnd.schedule(mAttackEndTask, Calendar.getInstance().get(Calendar.MILLISECOND) + 300);
 		}
 	}
-	
+
 	// 플레이어 상태 확인 Thread 실행 메소드
 	public void checkplayerstatus() {
 		p_check = new Thread(new Runnable() {
@@ -977,14 +979,16 @@ public class GameScreen extends JFrame {
 
 				while (!Thread.currentThread().isInterrupted()) {
 					try {
-						Thread.sleep(400);
+						Thread.sleep(300);
 						System.out.println("[info] 캐릭터 레벨 체크..");
 						if (c_lv > 10 && c_lv < 30) { // 11 ~ 29 레벨 전사 이미지
+							c_job = "전사"; // 11 ~ 29 레벨 직업은 전사
 							characterLabel.setIcon(new ImageIcon(PLAYERWARRIOR));
 						} else if (c_lv >= 30) { // 기사 이미지
-							if(bossphase2) {
+							c_job = "기사"; // 만렙(30) 직업은 기사
+							if (bossphase2) {
 								characterLabel.setIcon(new ImageIcon(PLAYERKNIGHT_BOSS));
-							}else {
+							} else {
 								characterLabel.setIcon(new ImageIcon(PLAYERKNIGHT));
 							}
 						}
@@ -995,9 +999,16 @@ public class GameScreen extends JFrame {
 						playerMpbar.setString(current_user_mp + " / " + c_mp);
 
 						if (current_user_hp <= 0) {
-							JOptionPane.showMessageDialog(null, "캐릭터 사망", "사망", JOptionPane.INFORMATION_MESSAGE, null);
+							JLabel message = new JLabel("<html><body style='background-color:black;'>"
+									+ "<p style='font-family:맑은 고딕; font-size:13px; color:white; text-align:center;'>"
+									+ "용을 죽이고 평화를 되찾겠다는 바람과는 달리 힘이 부족하여 이 자리에서 쓰러졌습니다...<br/><br/>다음번의 도전에서는 이렇게 쓰러지면 안됩니다..!"
+									+ "</p></body></html>");
+
+							UIManager.put("OptionPane.background", Color.BLACK);
+							UIManager.put("Panel.background", Color.BLACK);
+
+							JOptionPane.showMessageDialog(null, message, "캐릭터 사망", JOptionPane.DEFAULT_OPTION, null);
 							System.exit(0);
-//							Thread.currentThread().interrupt();
 						}
 
 						System.out.println("[info] 캐릭터 공격력&방어력 상태 체크..");
@@ -1015,7 +1026,7 @@ public class GameScreen extends JFrame {
 							writeLog("레벨 업!\n레벨이 " + c_lv + " 가 되었다.");
 							int strup, dexup, intup;
 
-							if (c_lv >= 1 && c_lv <= 10) { // 레벨이 1 ~ 10인 경우 스텟 가중치 (5 ~ 10 랜덤), 체력/마나 +40
+							if (c_lv >= 1 && c_lv <= 10) { // 레벨이 1 ~ 10인 경우 스텟 가중치 (5 ~ 10 랜덤), 체력 +40 /마나 +10
 								strup = (int) (Math.random() * 10) + 5;
 								c_str += strup;
 								writeLog("힘이 " + strup + " 올랐다.");
@@ -1038,7 +1049,8 @@ public class GameScreen extends JFrame {
 								playerHpbar.setString(current_user_hp + " / " + c_hp);
 								playerMpbar.setString(current_user_mp + " / " + c_mp);
 
-							} else if (c_lv >= 11 && c_lv <= 20) { // 레벨이 11 ~ 20인 경우 스텟 가중치 (10 ~ 15 랜덤), 체력/마나 +70
+							} else if (c_lv >= 11 && c_lv <= 20) { // 레벨이 11 ~ 20인 경우 스텟 가중치 (10 ~ 15 랜덤), 체력 + 70 /마나 +
+																	// 30
 								strup = (int) (Math.random() * 16) + 10;
 								c_str += strup;
 								writeLog("힘이 " + strup + " 올랐다.");
@@ -1061,7 +1073,7 @@ public class GameScreen extends JFrame {
 								playerHpbar.setString(current_user_hp + " / " + c_hp);
 								playerMpbar.setString(current_user_mp + " / " + c_mp);
 
-							} else if (c_lv >= 21 && c_lv <= 29) { // 21 ~ 29 스텟 가중치 (15 ~ 20 랜덤), 체력/마나 +100
+							} else if (c_lv >= 21 && c_lv <= 29) { // 21 ~ 29 스텟 가중치 (15 ~ 20 랜덤), 체력 + 100 /마나 + 30
 								strup = (int) (Math.random() * 21) + 15;
 								c_str += strup;
 								writeLog("힘이 " + strup + " 올랐다.");
@@ -1090,7 +1102,7 @@ public class GameScreen extends JFrame {
 								c_str += 80;
 								c_dex += 80;
 								c_int += 80;
-								writeLog("레벨 30이 되었다.\n체력이 300 올랐다.\n마나가 300 올랐다.\n모든 능력치가 50 올랐다.");
+								writeLog("레벨 30이 되었다.\n체력이 300 올랐다.\n마나가 300 올랐다.\n모든 능력치가 80 올랐다.");
 
 								current_user_hp = c_hp;
 								current_user_mp = c_mp;
@@ -1113,6 +1125,112 @@ public class GameScreen extends JFrame {
 		});
 		p_check.start();
 	}
+
+	// 몹 상태 확인 Thread 실행 메소드
+	public void checkmonsterstatus() {
+		m_check = new Thread(new Runnable() {
+				@Override
+			public void run() {
+					// TODO Auto-generated method stub
+					System.out.println("[info] m_check 쓰레드 실행");
+					while (!Thread.currentThread().isInterrupted()) {
+						try {
+							Thread.sleep(300);
+							System.out.println("[info] 몹 체력 상태 체크..");
+							MonsterHpbar.setValue(current_monster_hp);
+							MonsterHpbar.setString(current_monster_hp + " / " + m_hp);
+							// 페이즈 2 돌입
+							if (battle == true && bossphase2 == true) {
+								System.out.println("[Info] 보스전 페이즈 2 진행중..");
+								if (current_monster_hp >= 1200 && current_monster_hp <= 2400) { // 보스 체력이 60% 이하일 때 스킬 공격 1회
+																								// 사용
+									if (!skillused) {
+										useDragonSkill();
+									}
+								}
+
+								if (current_monster_hp >= 1 && current_monster_hp <= 1199) { // 보스 체력이 30% 이하일 떄 스킬 공격 1회 사용
+									if (skillused) {
+										useDragonSkill();
+										skillused = false;
+									}
+								}
+
+								if (current_monster_hp <= 0) {
+									bossfight = false;
+									bossphase2 = false;
+									battle = false;
+									System.out.println("[Info] 보스전 페이즈 2 종료, 보스 쥬금");
+									GameScreenimgLabel.setIcon(BATTLEBACKGROUND);
+									MonsterPanel.setVisible(false);
+									JLabel message = new JLabel("<html><body style='background-color:black;'>"
+											+ "<p style='font-family:맑은 고딕; font-size:13px; color:white; text-align:center;'>강대하고도 사악한 용은 쓰러졌습니다."
+											+ "<br/><br/>길고 긴 여정은 이제 끝이 났으며 다른 수많은 이들이 엄두조차 내지 못했던 강대한 시련을 이겨냈습니다."
+											+ "<br/><br/><font color=red>" + c_name
+											+ "</font>의 영웅담은 널리 퍼질것입니다...<br/><br/>용을 사냥했다는 증거인 드래곤 슬레이어의 칭호는 당신의 것입니다!"
+											+ "<br/><br/><font color=purple>드래곤 슬레이어</font>&nbsp;&nbsp;<font color=red>"
+											+ c_name + "</font></p>"
+											+ "<p style='margin-top:50px; margin-bottom:50px; font-family:맑은 고딕; font-size:16px; color:blue; text-align:center;'>Thank you for playing!<br/>플레이해주셔서 감사합니다.</p></body></html>");
+
+									UIManager.put("OptionPane.background", Color.BLACK);
+									UIManager.put("Panel.background", Color.BLACK);
+
+									JOptionPane.showMessageDialog(null, message, "Ending", JOptionPane.DEFAULT_OPTION,
+											null);
+									System.exit(0);
+								}
+							}
+							if (battle) { // 전투 발생 시
+								// 몹이 죽으면 경험치 & 아이템 획득(전투 종료)
+								if (current_monster_hp <= 0 && battle == true) {
+									monsterattackLabel.setIcon(null);
+									playerbeingattackedLabel.setIcon(null);
+									playerattackLabel.setIcon(null);
+									if (bossfight) {
+										System.out.println("[Info] 보스전 페이즈 1 종료");
+										writeLog(m_name + "(이/가) 쓰러졌다.");
+										bossphase2 = true;
+										createBossMonster(1); // 2페이즈 돌입
+									} else {
+										writeLog(m_name + "(이/가) 쓰러졌다.");
+										writeLog("경험치가 " + m_exp + " 올랐습니다.");
+										if (c_lv == 30) {
+											m_exp = 0; // 만렙일 시 경험치 획득 X
+										}
+										c_exp += m_exp; // 현재 경험치에 몹 경험치를 더함(경험치 획득)
+										addInventory(dropitem); // 몹이 드랍한 아이템 인벤토리에 추가
+										for (int i = 0; i < dropitem.length; i++) {
+											writeLog(dropitem[i] + " (을/를) 얻었다.");
+										}
+										battle = false; // 전투 종료
+										if (buff) { // 버프가 걸려있는 경우 전투 종료 후 버프를 해제 해야함
+											buff = false; // 버프 상태 해제(전투 종료)
+											if (c_lv != prevlv) { // 현재 레벨과 버프받기전 레벨이 같지 않은 경우(즉, 버프 받고 레벨업 한 경우)
+												writeLog("요정에게서 받은 버프가 사라졌다.");
+												c_str -= (prevlv * 5); // 버프 받은 수치만큼 - 해줘서 원래 능력치로 돌아감
+												c_dex -= (prevlv * 5); // 민첩 수치
+												c_int -= (prevlv * 5); // 지능 수치
+											}
+											writeLog("요정에게서 받은 버프가 사라졌다.");
+											c_str -= (c_lv * 5); // 버프 받은 수치만큼 - 해줘서 원래 능력치로 돌아감
+											c_dex -= (c_lv * 5); // 민첩 수치
+											c_int -= (c_lv * 5); // 지능 수치
+											System.out.println(
+													"[info] 버프 받기 전 능력치 : " + c_str + " / " + c_dex + " / " + c_int);
+										}
+										MonsterPanel.setVisible(false); // 몹패널 visible을 false
+									}
+								}
+							}
+
+						} catch (Exception e) {
+							System.out.println("[Error] m_check 쓰레드 에러");
+						}
+					}
+				}
+			});
+			m_check.start();
+		}
 	
 	// 페이즈 2 보스 스킬 사용 메소드
 	void useDragonSkill() {
@@ -1127,9 +1245,9 @@ public class GameScreen extends JFrame {
 		MonsterPanel.setVisible(false);
 		GameScreenimgLabel.setIcon(new ImageIcon(BOSSSKILLATTACK));
 		CharacterPanel.setLocation(380, 40);
-		writeLog("'"+m_name+"' 이 강력한 무언가를 사용했다.");
+		writeLog("'" + m_name + "' 이 강력한 무언가를 사용했다.");
 		current_user_hp -= 400;
-		writeLog("'"+c_name+"' 의 체력이 400 감소했다.");
+		writeLog("'" + c_name + "' 의 체력이 400 감소했다.");
 		Timer resetbackground = new Timer();
 		TimerTask bgresttask = new TimerTask() {
 			@Override
@@ -1142,108 +1260,7 @@ public class GameScreen extends JFrame {
 		};
 		resetbackground.schedule(bgresttask, 4800);
 	}
-	
-	// 몹 상태 확인 Thread 실행 메소드
-	public void checkmonsterstatus() {
-		m_check = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				System.out.println("[info] m_check 쓰레드 실행");
-				while (!Thread.currentThread().isInterrupted()) {
-					try {
-						Thread.sleep(400);
-						System.out.println("[info] 몹 체력 상태 체크..");
-						MonsterHpbar.setValue(current_monster_hp);
-						MonsterHpbar.setString(current_monster_hp + " / " + m_hp);
-						// 페이즈 2 돌입
-						if (battle == true && bossphase2 == true) {
-							System.out.println("[Info] 보스전 페이즈 2 진행중..");
-							if(current_monster_hp >= 1200 && current_monster_hp <= 2400) { // 보스 체력이 60% 이하일 때 스킬 공격 1회 사용
-								if(!skillused) {
-									useDragonSkill();
-								}
-							}
-							
-							if(current_monster_hp >= 1 && current_monster_hp <= 1199) { // 보스 체력이 30% 이하일 떄 스킬 공격 1회 사용
-								if(skillused) {
-									useDragonSkill();
-									skillused = false;
-								}
-							}
-							
-							if(current_monster_hp <= 0) {
-								bossfight = false;
-								bossphase2 = false;
-								battle = false;
-								System.out.println("[Info] 보스전 페이즈 2 종료, 보스 쥬금");
-								GameScreenimgLabel.setIcon(BATTLEBACKGROUND);
-								MonsterPanel.setVisible(false);
-								JLabel message = new JLabel("<html><body style='background-color:black;'>"
-										+ "<p style='font-family:맑은 고딕; font-size:13px; color:white; text-align:center;'>강대하고도 사악한 용은 쓰러졌습니다."
-										+ "<br/><br/>길고 긴 여정은 이제 끝이 났으며 다른 수많은 이들이 엄두조차 내지 못했던 강대한 시련을 이겨냈습니다."
-										+ "<br/><br/><font color=red>"+c_name+"</font>의 영웅담은 널리 퍼질것입니다...<br/><br/>용을 사냥했다는 증거인 드래곤 슬레이어의 칭호는 당신의 것입니다!"
-										+ "<br/><br/><font color=purple>드래곤 슬레이어</font>&nbsp;&nbsp;<font color=red>"+c_name+"</font></p>"
-										+ "<p style='margin-top:50px; margin-bottom:50px; font-family:맑은 고딕; font-size:16px; color:blue; text-align:center;'>Thank you for playing!<br/>플레이해주셔서 감사합니다.</p></body></html>");
-							
-								 UIManager.put("OptionPane.background",Color.BLACK);
-								 UIManager.put("Panel.background",Color.BLACK);
-								
-								JOptionPane.showMessageDialog(null, message, "Ending", JOptionPane.DEFAULT_OPTION, null);
-								System.exit(0);
-							}
-						}
-						if (battle) { // 전투 발생 시
-							// 몹이 죽으면 경험치 & 아이템 획득(전투 종료)
-							if (current_monster_hp <= 0 && battle == true) {
-								monsterattackLabel.setIcon(null);
-								playerbeingattackedLabel.setIcon(null);
-								playerattackLabel.setIcon(null);
-								if (bossfight) {
-									System.out.println("[Info] 보스전 페이즈 1 종료");
-									writeLog(m_name + "(이/가) 쓰러졌다.");
-									bossphase2 = true;
-									createBossMonster(1); // 2페이즈 돌입
-								} else {
-									writeLog(m_name + "(이/가) 쓰러졌다.");
-									writeLog("경험치가 " + m_exp + " 올랐습니다.");
-									if (c_lv == 30) {
-										m_exp = 0; // 만렙일 시 경험치 획득 X
-									}
-									c_exp += m_exp; // 현재 경험치에 몹 경험치를 더함(경험치 획득)
-									addInventory(dropitem); // 몹이 드랍한 아이템 인벤토리에 추가
-									for (int i = 0; i < dropitem.length; i++) {
-										writeLog(dropitem[i] + " (을/를) 얻었다.");
-									}
-									battle = false; // 전투 종료
-									if (buff) { // 버프가 걸려있는 경우 전투 종료 후 버프를 해제 해야함
-										buff = false; // 버프 상태 해제(전투 종료)
-										if (c_lv != prevlv) { // 현재 레벨과 버프받기전 레벨이 같지 않은 경우(즉, 버프 받고 레벨업 한 경우)
-											writeLog("요정에게서 받은 버프가 사라졌다.");
-											c_str -= (prevlv * 5); // 버프 받은 수치만큼 - 해줘서 원래 능력치로 돌아감
-											c_dex -= (prevlv * 5); // 민첩 수치
-											c_int -= (prevlv * 5); // 지능 수치
-										}
-										writeLog("요정에게서 받은 버프가 사라졌다.");
-										c_str -= (c_lv * 5); // 버프 받은 수치만큼 - 해줘서 원래 능력치로 돌아감
-										c_dex -= (c_lv * 5); // 민첩 수치
-										c_int -= (c_lv * 5); // 지능 수치
-										System.out.println("[info] 버프 받기 전 능력치 : " + c_str + " / " + c_dex + " / " + c_int);
-									}
-									MonsterPanel.setVisible(false); // 몹패널 visible을 false
-								}
-							}
-						}
 
-					} catch (Exception e) {
-						System.out.println("[Error] m_check 쓰레드 에러");
-					}
-				}
-			}
-		});
-		m_check.start();
-	}
-	
 	// SkillScreen에서 호출되는 스킬 메소드들
 	static void skill_DragonSlasher() {
 		int requiredLv = 6;
@@ -1530,9 +1547,9 @@ public class GameScreen extends JFrame {
 				// TODO Auto-generated method stub
 				CharacterPanel.setVisible(true);
 				MonsterPanel.setLocation(60, 40);
-				if(bossphase2) { // 보스전 2페이즈 진행 중 일 경우
+				if (bossphase2) { // 보스전 2페이즈 진행 중 일 경우
 					GameScreenimgLabel.setIcon(new ImageIcon(BOSSORIGINAL));
-				}else {
+				} else {
 					GameScreenimgLabel.setIcon(BATTLEBACKGROUND);
 				}
 			}
