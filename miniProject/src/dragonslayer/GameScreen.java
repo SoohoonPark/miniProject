@@ -147,9 +147,9 @@ public class GameScreen extends JFrame {
 	private static LinkedList<DSItems> inven = new LinkedList<DSItems>(); // 플레이어 인벤토리 내용물
 	private static int current_user_hp, current_user_mp; // 현재 플레이어 체력 & 마나
 
-	public static void main(String[] args) {
-		new GameScreen("춘식이", 30, "모험가", 1000, 1000, 1000, 1400, 880);
-	}
+//	public static void main(String[] args) {
+//		new GameScreen("춘식이", 30, "모험가", 1000, 1000, 1000, 1400, 880);
+//	}
 
 	/** 메소드 영역 **/
 	public GameScreen(String name, int l, String job, int s, int d, int i, int hp, int mp) {
@@ -612,7 +612,7 @@ public class GameScreen extends JFrame {
 			battle = true;
 			bossfight = true;
 			// Phase 1 시작
-			writeLog("마지막 전투가 시작되었습니다.\n이 세계의 운명은 용사님의 손에 달려있습니다!");
+			writeLog("\n\n마지막 전투가 시작되었습니다.\n이 세계의 운명은 용사님의 손에 달려있습니다!");
 			System.out.println("[info] 전투 발생");
 			createBossMonster(0);
 			System.out.println("[info] 보스 전 - Phase 1 시작");
@@ -684,7 +684,7 @@ public class GameScreen extends JFrame {
 	public void createGetItemEvent(int event) {
 		try {
 			if (event >= 1 && event <= 6) { // 1 ~ 6 : 일반 상자
-				writeLog("평범해 보이는 상자를 발견했다.");
+				writeLog("\n평범해 보이는 상자를 발견했다.");
 				// '하급' 키워드가 들어간 아이템 명을 담을 문자열 리스트
 				for (int i = 0; i < iteminfo.size(); i++) {
 					if (iteminfo.get(i).getI_name().contains("하급")) {
@@ -704,7 +704,7 @@ public class GameScreen extends JFrame {
 				Rewards.clear(); // 보상 획득 후 기존 리스트 내용 초기화
 
 			} else if (event >= 7 && event < 10) { // 7 ~ 9 : 괜찮아 보이는 상자
-				writeLog("괜찮아 보이는 상자를 발견했다.");
+				writeLog("\n괜찮아 보이는 상자를 발견했다.");
 				// '중급' 키워드가 들어간 아이템 명을 담을 문자열 리스트
 				for (int i = 0; i < iteminfo.size(); i++) {
 					if (iteminfo.get(i).getI_name().contains("중급")) {
@@ -724,7 +724,7 @@ public class GameScreen extends JFrame {
 				GoodRewards.clear();
 
 			} else { // 10 : 화려해 보이는 상자
-				writeLog("화려해 보이는 상자를 발견했다.");
+				writeLog("\n화려해 보이는 상자를 발견했다.");
 				// '고오급' 키워드가 들어간 아이템 명을 담을 문자열 리스트
 				for (int i = 0; i < iteminfo.size(); i++) {
 					if (iteminfo.get(i).getI_name().contains("고오급")) {
@@ -761,7 +761,7 @@ public class GameScreen extends JFrame {
 			System.out.println("[info] 버프 이벤트 발생");
 			buff = true;
 			prevlv = c_lv; // 레벨업 후의 버프 수치랑 레벨업 전의 버프 수치랑 달라지는것을 방지하기 위한 변수.
-			writeLog("요정의 축복을 받아 능력치가 일시적으로 향상되었습니다.\n(해당 버프는 다음 첫 전투에만 적용됩니다.)");
+			writeLog("\n요정의 축복을 받아 능력치가 일시적으로 향상되었습니다.\n(해당 버프는 다음 첫 전투에만 적용됩니다.)");
 			// 능력치 버프는 기존 능력치 + 현재 캐릭터 레벨*5 만큼 증가시킴
 			c_str += (c_lv * 5);
 			c_dex += (c_lv * 5);
@@ -774,16 +774,16 @@ public class GameScreen extends JFrame {
 			DSAudio trap = DSAudio.getInstance();
 			trap.playTrapScream();
 			if (randomtrap == 1) { // 1은 불 함정
-				writeLog("함정 발동 : 외벽에서 뜨거운 불이 뿜어져 나왔다.\n체력이 감소했다.");
-				current_user_hp -= (c_lv * 2); // 캐릭터 레벨 * 2 수치 만큼 체력 깎임
+				writeLog("\n함정 발동 : 외벽에서 뜨거운 불이 뿜어져 나왔다.\n체력이 감소했다.");
+				current_user_hp -= (c_lv * 20); // 캐릭터 레벨 * 2 수치 만큼 체력 깎임
 				setBackgroundimg(FIRETRAP, BATTLEBACKGROUND);
 			} else if (randomtrap == 2) { // 2는 가시(바닥) 함정
-				writeLog("함정 발동 : 바닥에서 날카로운 가시가 솟구쳐 올라왔다.\n체력이 감소했다.");
-				current_user_hp -= (c_lv * 3); // 캐릭터 레벨 * 3 수치 만큼 체력 깎임
+				writeLog("\n함정 발동 : 바닥에서 날카로운 가시가 솟구쳐 올라왔다.\n체력이 감소했다.");
+				current_user_hp -= (c_lv * 30); // 캐릭터 레벨 * 3 수치 만큼 체력 깎임
 				setBackgroundimg(SPIKETRAP, BATTLEBACKGROUND);
 			} else { // 3은 우물 함정
-				writeLog("함정발동 : 오염된 우물안의 물을 마셨다.\n체력이 감소했다.");
-				current_user_hp -= (c_lv * 4); // 캐릭터 레벨 * 4 수치 만큼 체력 깎임
+				writeLog("\n함정발동 : 오염된 우물안의 물을 마셨다.\n체력이 감소했다.");
+				current_user_hp -= (c_lv * 40); // 캐릭터 레벨 * 4 수치 만큼 체력 깎임
 				setBackgroundimg(WELLTRAP, BATTLEBACKGROUND);
 			}
 			break;
@@ -976,7 +976,7 @@ public class GameScreen extends JFrame {
 						// 레벨업(현재 경험치가 다음 경험치보다 크거나 같을 때)
 						if (c_exp >= c_next_exp) {
 							c_lv++;
-							writeLog("레벨 업!\n레벨이 " + c_lv + " 가 되었다.");
+							writeLog("\n---------- 레벨 업 ----------\n캐릭터 레벨이 " + c_lv + " 가 되었다.\n");
 							int strup, dexup, intup;
 
 							if (c_lv >= 1 && c_lv <= 10) { // 레벨이 1 ~ 10인 경우 스텟 가중치 (5 ~ 10 랜덤), 체력 +40 /마나 +10
@@ -1147,7 +1147,7 @@ public class GameScreen extends JFrame {
 									playerattackLabel.setIcon(null);
 									if (bossfight) {
 										System.out.println("[Info] 보스전 페이즈 1 종료");
-										writeLog(m_name + "(이/가) 쓰러졌다.");
+										writeLog("\n" + m_name + "(이/가) 쓰러졌다.");
 										bossphase2 = true;
 										createBossMonster(1); // 2페이즈 돌입
 									} else {
@@ -1165,12 +1165,12 @@ public class GameScreen extends JFrame {
 										if (buff) { // 버프가 걸려있는 경우 전투 종료 후 버프를 해제 해야함
 											buff = false; // 버프 상태 해제(전투 종료)
 											if (c_lv != prevlv) { // 현재 레벨과 버프받기전 레벨이 같지 않은 경우(즉, 버프 받고 레벨업 한 경우)
-												writeLog("요정에게서 받은 버프가 사라졌다.");
+												writeLog("\n요정에게서 받은 버프가 사라졌다.");
 												c_str -= (prevlv * 5); // 버프 받은 수치만큼 - 해줘서 원래 능력치로 돌아감
 												c_dex -= (prevlv * 5); // 민첩 수치
 												c_int -= (prevlv * 5); // 지능 수치
 											}
-											writeLog("요정에게서 받은 버프가 사라졌다.");
+											writeLog("\n요정에게서 받은 버프가 사라졌다.");
 											c_str -= (c_lv * 5); // 버프 받은 수치만큼 - 해줘서 원래 능력치로 돌아감
 											c_dex -= (c_lv * 5); // 민첩 수치
 											c_int -= (c_lv * 5); // 지능 수치
@@ -1203,9 +1203,9 @@ public class GameScreen extends JFrame {
 		MonsterPanel.setVisible(false);
 		GameScreenimgLabel.setIcon(new ImageIcon(BOSSSKILLATTACK));
 		CharacterPanel.setLocation(380, 40);
-		writeLog("'" + m_name + "' 이 강력한 무언가를 사용했다.");
-		current_user_hp -= 400;
-		writeLog("'" + c_name + "' 의 체력이 400 감소했다.");
+		writeLog("'" + m_name + "' 이 강력한 브레스를 사용했다.");
+		current_user_hp -= 700;
+		writeLog("'" + c_name + "' 의 체력이 700 감소했다.");
 		Timer resetbackground = new Timer();
 		TimerTask bgresettask = new TimerTask() {
 			@Override
@@ -1267,7 +1267,7 @@ public class GameScreen extends JFrame {
 							current_monster_hp -= skilldamage;
 						}
 					}
-					writeLog("스킬 - 드래곤 슬래셔 사용\n" + m_name + " 에게 피해를 " + skilldamage + " 입혔다.");
+					writeLog("\n스킬 - 드래곤 슬래셔 사용\n" + m_name + " 에게 피해를 " + skilldamage + " 입혔다.");
 					removeEffectTimer = new Timer();
 					removeEffectTask = new TimerTask() {
 
@@ -1335,7 +1335,7 @@ public class GameScreen extends JFrame {
 							current_monster_hp -= skilldamage;
 						}
 					}
-					writeLog("스킬 - 오러 블레이드 사용\n" + m_name + " 에게 피해를 " + skilldamage + " 입혔다.");
+					writeLog("\n스킬 - 오러 블레이드 사용\n" + m_name + " 에게 피해를 " + skilldamage + " 입혔다.");
 					removeEffectTimer = new Timer();
 					removeEffectTask = new TimerTask() {
 
@@ -1403,7 +1403,7 @@ public class GameScreen extends JFrame {
 							current_monster_hp -= skilldamage;
 						}
 					}
-					writeLog("스킬 - 데모닉 소드 사용\n" + m_name + " 에게 피해를 " + skilldamage + " 입혔다.");
+					writeLog("\n스킬 - 데모닉 소드 사용\n" + m_name + " 에게 피해를 " + skilldamage + " 입혔다.");
 					removeEffectTimer = new Timer();
 					removeEffectTask = new TimerTask() {
 
@@ -1468,7 +1468,7 @@ public class GameScreen extends JFrame {
 							current_monster_hp -= skilldamage;
 						}
 					}
-					writeLog("스킬 - 디멘션 브레이커 사용\n" + m_name + " 에게 피해를 " + skilldamage + " 입혔다.");
+					writeLog("\n스킬 - 디멘션 브레이커 사용\n" + m_name + " 에게 피해를 " + skilldamage + " 입혔다.");
 					removeEffectTimer = new Timer();
 					removeEffectTask = new TimerTask() {
 						@Override
@@ -1708,7 +1708,7 @@ public class GameScreen extends JFrame {
 		switch (switchnum) {
 		case 0: // Skelwarrior
 			monsterimgLabel.setIcon(new ImageIcon(SKEL));
-			writeLog(lowmonsters.get(switchnum).getM_name() + " 이/가 나타났다.\n");
+			writeLog("\n" + lowmonsters.get(switchnum).getM_name() + " 이/가 나타났다.\n");
 			settingLowMobInfo(switchnum);
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
@@ -1718,7 +1718,7 @@ public class GameScreen extends JFrame {
 			break;
 		case 1: // Orcwarrior
 			monsterimgLabel.setIcon(new ImageIcon(ORC));
-			writeLog(lowmonsters.get(switchnum).getM_name() + " 이/가 나타났다.\n");
+			writeLog("\n" + lowmonsters.get(switchnum).getM_name() + " 이/가 나타났다.\n");
 			settingLowMobInfo(switchnum);
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
@@ -1728,7 +1728,7 @@ public class GameScreen extends JFrame {
 			break;
 		case 2: // Golem
 			monsterimgLabel.setIcon(new ImageIcon(GOLEM));
-			writeLog(lowmonsters.get(switchnum).getM_name() + " 이/가 나타났다.\n");
+			writeLog("\n" + lowmonsters.get(switchnum).getM_name() + " 이/가 나타났다.\n");
 			settingLowMobInfo(switchnum);
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
@@ -1744,7 +1744,7 @@ public class GameScreen extends JFrame {
 		MonsterPanel.setVisible(true);
 		switch (swtichnum) {
 		case 0: // SkelKing
-			writeLog(middlemonsters.get(swtichnum).getM_name() + " 이/가 나타났다.\n");
+			writeLog("\n" + middlemonsters.get(swtichnum).getM_name() + " 이/가 나타났다.\n");
 			settingMiddleMobInfo(swtichnum);
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
@@ -1754,7 +1754,7 @@ public class GameScreen extends JFrame {
 			monsterimgLabel.setIcon(new ImageIcon(SKELKING));
 			break;
 		case 1: // Hatchling
-			writeLog(middlemonsters.get(swtichnum).getM_name() + " 이/가 나타났다.\n");
+			writeLog("\n" + middlemonsters.get(swtichnum).getM_name() + " 이/가 나타났다.\n");
 			settingMiddleMobInfo(swtichnum);
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
@@ -1764,7 +1764,7 @@ public class GameScreen extends JFrame {
 			monsterimgLabel.setIcon(new ImageIcon(HATCHLING));
 			break;
 		case 2: // Lagiacrus
-			writeLog(middlemonsters.get(swtichnum).getM_name() + " 이/가 나타났다.\n");
+			writeLog("\n" + middlemonsters.get(swtichnum).getM_name() + " 이/가 나타났다.\n");
 			settingMiddleMobInfo(swtichnum);
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
@@ -1781,7 +1781,7 @@ public class GameScreen extends JFrame {
 		MonsterPanel.setVisible(true);
 		switch (switchnum) {
 		case 0: // Drake
-			writeLog(highmonsters.get(switchnum).getM_name() + " 이/가 나타났다.\n");
+			writeLog("\n" + highmonsters.get(switchnum).getM_name() + " 이/가 나타났다.\n");
 			settingHighMobInfo(switchnum);
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
@@ -1792,7 +1792,7 @@ public class GameScreen extends JFrame {
 			break;
 
 		case 1: // Chimera
-			writeLog(highmonsters.get(switchnum).getM_name() + " 이/가 나타났다.\n");
+			writeLog("\n" + highmonsters.get(switchnum).getM_name() + " 이/가 나타났다.\n");
 			settingHighMobInfo(switchnum);
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
@@ -1803,7 +1803,7 @@ public class GameScreen extends JFrame {
 			break;
 
 		case 2: // IceDragon
-			writeLog(highmonsters.get(switchnum).getM_name() + " 이/가 나타났다.\n");
+			writeLog("\n" + highmonsters.get(switchnum).getM_name() + " 이/가 나타났다.\n");
 			settingHighMobInfo(switchnum);
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
@@ -1820,7 +1820,7 @@ public class GameScreen extends JFrame {
 		MonsterPanel.setVisible(true);
 		switch (switchnum) {
 		case 0: // Boss Phase1 - Boss Polymorph mode
-			writeLog(bossmonsters.get(switchnum).getM_name() + " 이/가 나타났다.\n");
+			writeLog("\n" + bossmonsters.get(switchnum).getM_name() + " 이/가 나타났다.\n");
 			settingBossMobInfo(switchnum);
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
