@@ -190,16 +190,16 @@ public class GameScreen extends JFrame {
 	private static LinkedList<DSItems> inven = new LinkedList<DSItems>(); // 플레이어 인벤토리 내용물
 	private static int current_user_hp, current_user_mp; // 현재 플레이어 체력 & 마나
 
-	public static void main(String[] args) {
-		new GameScreen("춘식이", 30, "모험가", 1000, 1000, 1000, 1400, 880);
-	}
+//	public static void main(String[] args) {
+//		new GameScreen("춘식이", 30, "모험가", 1000, 1000, 1000, 1400, 880);
+//	}
 
 	/** 메소드 영역 **/
 	public GameScreen(String name, int l, String job, int s, int d, int i, int hp, int mp) {
 		System.out.println("[info] GameScreen() 호출");
 		// MainScreen ~ LoadingScreen 에서 사용되던 bgm을 종료하고 GameScreen에서 새로운 bgm 재생
 		DSAudio audio = DSAudio.getInstance();
-//		audio.offTitle();
+		audio.offTitle();
 		audio.playGame();
 
 		lowmonsters = service.monsterData("초급"); // 초급 몹 정보 저장
@@ -499,7 +499,6 @@ public class GameScreen extends JFrame {
 		buttonstat.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
 				new StatScreen(c_name, c_job, c_lv, c_str, c_dex, c_int, playeratk, playerdef, c_exp, c_next_exp);
 				buttonstat.setEnabled(false);
 			}
@@ -570,10 +569,9 @@ public class GameScreen extends JFrame {
 			public void mouseClicked(MouseEvent m) {
 				if (c_lv == 30) {
 					createFinalBossBattle_Phase1();
-
 				} else {
-					JLabel message = new JLabel(
-							"<html><p style='font-family:맑은 고딕;'>레벨이 부족하여 보스의 방에 입장할 수 없습니다.</p></html>");
+					JLabel message = new JLabel("<html><p style='font-family:맑은 고딕;'>"
+							+ "레벨이 부족하여 보스의 방에 입장할 수 없습니다.</p></html>");
 					JOptionPane.showMessageDialog(null, message, "최후의 결전", JOptionPane.ERROR_MESSAGE);
 				}
 			}
@@ -584,7 +582,6 @@ public class GameScreen extends JFrame {
 		skilleffectpanel = new JPanel(null);
 		skilleffectpanel.setBounds(150, 70, 670, 280);
 		skilleffectpanel.setOpaque(false);
-//		skilleffectpanel.setBorder(new LineBorder(Color.PINK));
 
 		// 플레이어 기본 공격 이팩트 라벨
 		playerattackLabel = new JLabel();
@@ -656,11 +653,11 @@ public class GameScreen extends JFrame {
 			battle = true;
 			bossfight = true;
 			// Phase 1 시작
-			writeLog("\n마지막 전투가 시작되었습니다.\n이 세계의 운명은 용사님의 손에 달려있습니다!");
+			writeLog("마지막 전투가 시작되었습니다.\n이 세계의 운명은 용사님의 손에 달려있습니다!");
 			System.out.println("[info] 전투 발생");
 			createBossMonster(0);
 			System.out.println("[info] 보스 전 - Phase 1 시작");
-			writeLog("\n드래곤이 아직 인간의 형상을 하고 있다는 건 \n용사님을 얕잡아보고 있다는 것입니다.\n방심을 틈타 기회를 노리세요!");
+			writeLog("드래곤이 아직 인간의 형상을 하고 있다는 건 \n용사님을 얕잡아보고 있다는 것입니다.\n방심을 틈타 기회를 노리세요!");
 			break;
 		case 1: // 'NO'
 			break;
@@ -701,14 +698,10 @@ public class GameScreen extends JFrame {
 		}
 		int switchnum = (int) (Math.random() * 3); // 0 ~ 2 랜덤
 		if (level >= 1 && level <= 10) { // 1 ~ 10 레벨은 초급 몹
-			System.out.println("[Info] 캐릭터 레벨 : " + c_lv);
-			System.out.println("[Info] 나온 몹 인카운터  : " + switchnum);
 			if (c_lv <= 5) { // 캐릭터 레벨이 5 이하 인 경우
-				System.out.println("[Info] 초보자 어드밴티지 ");
 				switchnum = (int) (Math.random() * 2); // 0 ~ 1 랜덤(골렘 빼고 리젠)
 				createLowMonster(switchnum);
 			} else {
-				System.out.println("[Info] 초보자 어드밴티지 해제");
 				createLowMonster(switchnum);
 			}
 		} else if (level >= 11 && level <= 20) { // 11 ~ 20 레벨은 중급 몹
@@ -720,7 +713,7 @@ public class GameScreen extends JFrame {
 			}
 		} else { // 둘 다 아니면 21 ~ 부터니까 고급 몹 생성
 			if (c_lv != 25) {
-				switchnum = (int) (Math.random() * 2); // 0 ~ 1 랜덤(라크리 뭐시기 빼고 리젠)
+				switchnum = (int) (Math.random() * 2); // 0 ~ 1 랜덤(아이스 드래곤 빼고 리젠)
 				createHighMonster(switchnum);
 			} else {
 				createHighMonster(switchnum);
@@ -1223,7 +1216,6 @@ public class GameScreen extends JFrame {
 									}
 								}
 							}
-
 						} catch (Exception e) {
 							System.out.println("[Error] m_check 쓰레드 에러");
 						}
@@ -1250,7 +1242,7 @@ public class GameScreen extends JFrame {
 		current_user_hp -= 400;
 		writeLog("'" + c_name + "' 의 체력이 400 감소했다.");
 		Timer resetbackground = new Timer();
-		TimerTask bgresttask = new TimerTask() {
+		TimerTask bgresettask = new TimerTask() {
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
@@ -1259,7 +1251,7 @@ public class GameScreen extends JFrame {
 				MonsterPanel.setVisible(true);
 			}
 		};
-		resetbackground.schedule(bgresttask, 4800);
+		resetbackground.schedule(bgresettask, 4800);
 	}
 
 	// SkillScreen에서 호출되는 스킬 메소드들
@@ -1579,10 +1571,6 @@ public class GameScreen extends JFrame {
 					}
 				}
 			}
-//			System.out.println("[info] 현재 인벤토리 사이즈 : " + inven.size());
-//			for (int i = 0; i < inven.size(); i++) {
-//				System.out.println("[info] 현재 인벤토리에 들어있는 아이템 : " + inven.get(i).getI_name());
-//			}
 		} catch (Exception e) {
 			System.out.println("[Error] 예외 발생");
 			e.printStackTrace();
@@ -1761,7 +1749,6 @@ public class GameScreen extends JFrame {
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp); // 현재 몹 체력으로 몹 체력바 값 설정
 			MonsterHpbar.setString(String.valueOf(current_monster_hp) + " / " + m_hp); // 막대 안에 보이는 문자열 설정
-//			addInventory(dropitem); // Test용
 			MonsterHpbar.setVisible(true);
 			break;
 		case 1: // Orcwarrior
@@ -1772,7 +1759,6 @@ public class GameScreen extends JFrame {
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp);
 			MonsterHpbar.setString(String.valueOf(current_monster_hp) + " / " + m_hp);
-//			addInventory(dropitem);
 			MonsterHpbar.setVisible(true);
 			break;
 		case 2: // Golem
@@ -1783,7 +1769,6 @@ public class GameScreen extends JFrame {
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp);
 			MonsterHpbar.setString(String.valueOf(current_monster_hp) + " / " + m_hp);
-//			addInventory(dropitem);
 			MonsterHpbar.setVisible(true);
 			break;
 		}

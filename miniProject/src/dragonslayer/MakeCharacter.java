@@ -122,6 +122,7 @@ public class MakeCharacter extends JFrame{
 				btnStart.setIcon(new ImageIcon(btncharstart));
 			}
 		});
+		
 		btnStart.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -131,13 +132,15 @@ public class MakeCharacter extends JFrame{
 					JOptionPane.showMessageDialog(null, message, "캐릭터생성", JOptionPane.WARNING_MESSAGE, null);
 					return;
 				}else { 
-					if(txtname.getText().length() >= 2 && txtname.getText().length() <= 6) { // 캐릭터명 길이는 2~6자
-						message.setText("<html><body><p style='font-family:맑은 고딕;'>캐릭터를 생성하였습니다.<br/>게임을 시작합니다.</p></body></html>");
+					if(txtname.getText().length() >= 2 && txtname.getText().length() <= 6) { // 캐릭터명 길이는 2 ~ 6자
+						message.setText("<html><body><p style='font-family:맑은 고딕;'>"
+								+ "캐릭터를 생성하였습니다.<br/>게임을 시작합니다.</p></body></html>");
 						JOptionPane.showMessageDialog(null, message, "캐릭터 생성", JOptionPane.DEFAULT_OPTION, null);
 						new LoadingScreen(txtname.getText());
 						dispose();
 					}else { // 길이가 2 ~ 6자가 아닌 경우
-						message.setText("<html><body><p style='font-family:맑은 고딕;'>캐릭터명 길이는 2 ~ 6 자 입니다.</p></body></html>");
+						message.setText("<html><body><p style='font-family:맑은 고딕;'>"
+								+ "캐릭터명 길이는 2 ~ 6 자 입니다.</p></body></html>");
 						JOptionPane.showMessageDialog(null, message, "캐릭터 생성", JOptionPane.DEFAULT_OPTION, null);
 						return;
 					}
