@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -33,112 +34,69 @@ import javax.swing.border.LineBorder;
 public class GameScreen extends JFrame {
 	/** 이미지 영역 **/
 	// 게임아이콘
-	private final static Image ICONIMAGE = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/title/titleicon.png");
+	private final static Image ICONIMAGE = Toolkit.getDefaultToolkit().createImage("resource/images/title/titleicon.png");
 
 	// 게임배경화면(사각형 테두리)
-	private final static Image MAINBACKGROUND = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/background/GameScreen/background_border.png");
+	private final static Image MAINBACKGROUND = Toolkit.getDefaultToolkit().createImage("resource/images/background/GameScreen/background_border.png");
 	// 전투배경
-	private final static ImageIcon BATTLEBACKGROUND = new ImageIcon(
-			Toolkit.getDefaultToolkit().createImage("resource/images/background/GameScreen/background_battle.png"));
+	private final static ImageIcon BATTLEBACKGROUND = new ImageIcon(Toolkit.getDefaultToolkit().createImage("resource/images/background/GameScreen/background_battle.png"));
 	// 함정배경
-	private final static ImageIcon FIRETRAP = new ImageIcon(
-			Toolkit.getDefaultToolkit().createImage("resource/images/background/GameScreen/trap/fire_trap.png"));
-	private final static ImageIcon SPIKETRAP = new ImageIcon(
-			Toolkit.getDefaultToolkit().createImage("resource/images/background/GameScreen/trap/spike_trap.png"));
-	private final static ImageIcon WELLTRAP = new ImageIcon(
-			Toolkit.getDefaultToolkit().createImage("resource/images/background/GameScreen/trap/well_trap.png"));
+	private final static ImageIcon FIRETRAP = new ImageIcon(Toolkit.getDefaultToolkit().createImage("resource/images/background/GameScreen/trap/fire_trap.png"));
+	private final static ImageIcon SPIKETRAP = new ImageIcon(Toolkit.getDefaultToolkit().createImage("resource/images/background/GameScreen/trap/spike_trap.png"));
+	private final static ImageIcon WELLTRAP = new ImageIcon(Toolkit.getDefaultToolkit().createImage("resource/images/background/GameScreen/trap/well_trap.png"));
 
 	// 플레이어 이미지(모험가)
-	private final static Image PLAYERBEGINNER = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/player/playercharacter_beginner.png");
-	private final static Image PLAYERWARRIOR = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/player/playercharacter_warrior.png");
-	private final static Image PLAYERKNIGHT = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/player/playercharacter_knight.png");
-	private final static Image PLAYERKNIGHT_BOSS = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/player/playercharacter_knight_boss.png");
+	private final static Image PLAYERBEGINNER = Toolkit.getDefaultToolkit().createImage("resource/images/player/playercharacter_beginner.png");
+	private final static Image PLAYERWARRIOR = Toolkit.getDefaultToolkit().createImage("resource/images/player/playercharacter_warrior.png");
+	private final static Image PLAYERKNIGHT = Toolkit.getDefaultToolkit().createImage("resource/images/player/playercharacter_knight.png");
+	private final static Image PLAYERKNIGHT_BOSS = Toolkit.getDefaultToolkit().createImage("resource/images/player/playercharacter_knight_boss.png");
 
 	// 몹 이미지들(초급)
-	private final static Image SKEL = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/monsters/low_grade/1_skel_warrior_resize.png");
-	private final static Image ORC = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/monsters/low_grade/2_orc_warrior_resize.png");
-	private final static Image GOLEM = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/monsters/low_grade/3_golem_resize.png");
+	private final static Image SKEL = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/low_grade/1_skel_warrior_resize.png");
+	private final static Image ORC = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/low_grade/2_orc_warrior_resize.png");
+	private final static Image GOLEM = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/low_grade/3_golem_resize.png");
 
 	// 몹 이미지들(중급)
-	private final static Image SKELKING = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/monsters/middle_grade/1_skel_king_resize.png");
-	private final static Image HATCHLING = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/monsters/middle_grade/2_Hatchling_resize.png");
-	private final static Image LAGIA = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/monsters/middle_grade/3_Lagiacrus_resize.png");
+	private final static Image SKELKING = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/middle_grade/1_skel_king_resize.png");
+	private final static Image HATCHLING = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/middle_grade/2_Hatchling_resize.png");
+	private final static Image LAGIA = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/middle_grade/3_Lagiacrus_resize.png");
 
 	// 몹 이미지들(고급)
-	private final static Image DRAKE = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/monsters/high_grade/1_Drake_resize.png");
-	private final static Image CHIMERA = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/monsters/high_grade/2_Chimera_resize.png");
-	private final static Image ICEDRAGON = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/monsters/high_grade/3_Ice_dragon_resize.png");
+	private final static Image DRAKE = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/high_grade/1_Drake_resize.png");
+	private final static Image CHIMERA = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/high_grade/2_Chimera_resize.png");
+	private final static Image ICEDRAGON = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/high_grade/3_Ice_dragon_resize.png");
 
 	// 보스몹 이미지들(최상급)
-	private final static Image BOSSPOLYMORPH = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/monsters/boss/bosspolymorph_resized.png");
-	private final static Image BOSSORIGINAL = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/monsters/boss/bossoriginal_resized.png");
+	private final static Image BOSSPOLYMORPH = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/boss/bosspolymorph_resized.png");
+	private final static Image BOSSORIGINAL = Toolkit.getDefaultToolkit().createImage("resource/images/monsters/boss/bossoriginal_resized.png");
 
 	// 버튼 패널 & 로그 패널 배경(테두리)
-	private final static Image LOGBACKGROUND = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/background/GameScreen/background_border_log.png");
-	private final static Image BUTTONBACKGROUND = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/background/GameScreen/background_border_buttons.png");
+	private final static Image LOGBACKGROUND = Toolkit.getDefaultToolkit().createImage("resource/images/background/GameScreen/background_border_log.png");
+	private final static Image BUTTONBACKGROUND = Toolkit.getDefaultToolkit().createImage("resource/images/background/GameScreen/background_border_buttons.png");
 
 	// 버튼 이미지들(탐색,공격,가방....)
-	private final static Image BTNATK = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/button/GameScreen/button_attack.png");
-	private final static Image BTNATK_PRESS = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/button/GameScreen/button_attack_pressed.png");
-	private final static Image BTNSEARCH = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/button/GameScreen/button_search.png");
-	private final static Image BTNSEARCH_PRESS = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/button/GameScreen/button_search_pressed.png");
-	private final static Image BTNEQUIP = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/button/GameScreen/button_equip.png");
-	private final static Image BTNEQUIP_PRESS = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/button/GameScreen/button_equip_pressed.png");
-	private final static Image BTNSKILL = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/button/GameScreen/button_skill.png");
-	private final static Image BTNSKILL_PRESS = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/button/GameScreen/button_skill_pressed.png");
-	private final static Image BTNSTAT = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/button/GameScreen/button_stat.png");
-	private final static Image BTNSTAT_PRESS = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/button/GameScreen/button_stat_pressed.png");
-	private final static Image BTNINVEN = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/button/GameScreen/button_inventory.png");
-	private final static Image BTNINVEN_PRESS = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/button/GameScreen/button_inventory_pressed.png");
-	private final static Image BTNQUIT = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/button/GameScreen/button_quitgame.png");
-	private final static Image BTNQUIT_PRESS = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/button/GameScreen/button_quitgame_pressed.png");
-	private final static Image LOGO = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/background/GameScreen/logo.png");
+	private final static Image BTNATK = Toolkit.getDefaultToolkit().createImage("resource/images/button/GameScreen/button_attack.png");
+	private final static Image BTNATK_PRESS = Toolkit.getDefaultToolkit().createImage("resource/images/button/GameScreen/button_attack_pressed.png");
+	private final static Image BTNSEARCH = Toolkit.getDefaultToolkit().createImage("resource/images/button/GameScreen/button_search.png");
+	private final static Image BTNSEARCH_PRESS = Toolkit.getDefaultToolkit().createImage("resource/images/button/GameScreen/button_search_pressed.png");
+	private final static Image BTNEQUIP = Toolkit.getDefaultToolkit().createImage("resource/images/button/GameScreen/button_equip.png");
+	private final static Image BTNEQUIP_PRESS = Toolkit.getDefaultToolkit().createImage("resource/images/button/GameScreen/button_equip_pressed.png");
+	private final static Image BTNSKILL = Toolkit.getDefaultToolkit().createImage("resource/images/button/GameScreen/button_skill.png");
+	private final static Image BTNSKILL_PRESS = Toolkit.getDefaultToolkit().createImage("resource/images/button/GameScreen/button_skill_pressed.png");
+	private final static Image BTNSTAT = Toolkit.getDefaultToolkit().createImage("resource/images/button/GameScreen/button_stat.png");
+	private final static Image BTNSTAT_PRESS = Toolkit.getDefaultToolkit().createImage("resource/images/button/GameScreen/button_stat_pressed.png");
+	private final static Image BTNINVEN = Toolkit.getDefaultToolkit().createImage("resource/images/button/GameScreen/button_inventory.png");
+	private final static Image BTNINVEN_PRESS = Toolkit.getDefaultToolkit().createImage("resource/images/button/GameScreen/button_inventory_pressed.png");
+	private final static Image BTNQUIT = Toolkit.getDefaultToolkit().createImage("resource/images/button/GameScreen/button_quitgame.png");
+	private final static Image BTNQUIT_PRESS = Toolkit.getDefaultToolkit().createImage("resource/images/button/GameScreen/button_quitgame_pressed.png");
+	private final static Image LOGO = Toolkit.getDefaultToolkit().createImage("resource/images/background/GameScreen/logo.png");
 
 	// 스킬 이펙트 이미지들
-	private final static Image PLAYERBASICATTACK = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/effects/player/player_basic_attack.gif");
-	private final static Image MONSTERATTACK = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/effects/monster/monster_attack_resized.gif");
-	private final static Image BEINGATTACKED = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/effects/both sides/Being attacked_resized.gif");
-	private final static Image BOSSNORMALATTACK = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/effects/monster/boss/Boss Normal attack_resized.gif");
-	private final static Image BOSSSKILLATTACK = Toolkit.getDefaultToolkit()
-			.createImage("resource/images/effects/monster/boss/Boss Skill_resized.gif");
+	private final static Image PLAYERBASICATTACK = Toolkit.getDefaultToolkit().createImage("resource/images/effects/player/player_basic_attack.gif");
+	private final static Image MONSTERATTACK = Toolkit.getDefaultToolkit().createImage("resource/images/effects/monster/monster_attack_resized.gif");
+	private final static Image BEINGATTACKED = Toolkit.getDefaultToolkit().createImage("resource/images/effects/both sides/Being attacked_resized.gif");
+	private final static Image BOSSNORMALATTACK = Toolkit.getDefaultToolkit().createImage("resource/images/effects/monster/boss/Boss Normal attack_resized.gif");
+	private final static Image BOSSSKILLATTACK = Toolkit.getDefaultToolkit().createImage("resource/images/effects/monster/boss/Boss Skill_resized.gif");
 
 	/** 필드 영역 **/
 	private static String c_name, m_name, c_job; // 캐릭터명 & 몬스터이름
@@ -146,9 +104,9 @@ public class GameScreen extends JFrame {
 	public static int c_lv, c_str, c_dex, c_int, c_hp, c_mp, c_exp, c_next_exp;
 	public static int current_monster_hp, m_hp, m_exp; // 몹 체력 & 몹 최대체력 & 몹이 주는 경험치
 	public static Boolean battle = false; // 전투 발생을 알려주는 변수. 전투 발생 시 true로 전환(기본값 false)
-	private static Boolean bossphase2 = false;
-	private static Boolean bossfight = false;
-	private static Boolean skillused = false; // 스킬이 한번만 사용될 수 있도록 제한하는 변수
+	private static Boolean bossphase2 = false; // 페이즈 2 진입 여부
+	private static Boolean bossfight = false; // 보스전 시작 여부
+	private static Boolean skillused = false; // 보스 스킬이 한번만 사용될 수 있도록 제한하는 변수
 
 	private Boolean buff = false; // 플레이어 버프 상황(걸려있는지 아닌지)
 	private Thread p_check, m_check; // 플레이어, 몹 상태 확인 Thread
@@ -176,8 +134,7 @@ public class GameScreen extends JFrame {
 	private static JLabel playerattackLabel, monsterattackLabel, playerbeingattackedLabel, monsterbeingattackedLabel;
 	private static JLabel bossskillLabel;
 	private static JLabel message;
-	public static JLabel SkillEffectLabel1, SkillEffectLabel2, SkillEffectLabel3, SkillEffectLabel4_1,
-			SkillEffectLabel4_2;
+	public static JLabel SkillEffectLabel1, SkillEffectLabel2, SkillEffectLabel3, SkillEffectLabel4_1,SkillEffectLabel4_2;
 
 	private static JPanel CharacterPanel, MonsterPanel; // 캐릭터 이미지가 출력되는 패널, 몹 이미지가 출력되는 패널
 	private static JPanel skilleffectpanel; // 공격 및 스킬 이팩트가 출력되는 패널
@@ -190,15 +147,16 @@ public class GameScreen extends JFrame {
 	private static LinkedList<DSItems> inven = new LinkedList<DSItems>(); // 플레이어 인벤토리 내용물
 	private static int current_user_hp, current_user_mp; // 현재 플레이어 체력 & 마나
 
-//	public static void main(String[] args) {
-//		new GameScreen("춘식이", 30, "모험가", 1000, 1000, 1000, 1200, 480);
-//	}
+	public static void main(String[] args) {
+		new GameScreen("춘식이", 30, "모험가", 1000, 1000, 1000, 1400, 880);
+	}
 
 	/** 메소드 영역 **/
 	public GameScreen(String name, int l, String job, int s, int d, int i, int hp, int mp) {
 		System.out.println("[info] GameScreen() 호출");
 		// MainScreen ~ LoadingScreen 에서 사용되던 bgm을 종료하고 GameScreen에서 새로운 bgm 재생
 		DSAudio audio = DSAudio.getInstance();
+//		audio.offTitle();
 		audio.playGame();
 
 		lowmonsters = service.monsterData("초급"); // 초급 몹 정보 저장
@@ -233,9 +191,10 @@ public class GameScreen extends JFrame {
 		boots = "없음";
 		System.out.println("[info] GameScreen() 필드 초기화 완료.");
 
-		addInventory(new String[] { "단검", "체력 물약", "마나 물약", "체력 물약", "마나 물약" }); // 기본 템
-																													// 지급
+
+		addInventory(new String[] { "단검", "체력 물약", "마나 물약", "체력 물약", "마나 물약" }); // 기본 템																													// 지급
 //		addInventory(new String[] { "기간틱 액스", "미스릴 투구", "미스릴 갑옷", "미스릴 장갑", "미스릴 신발" }); // 테스팅용
+
 		createGameScreen();
 		checkplayerstatus();
 		checkmonsterstatus();
@@ -375,20 +334,19 @@ public class GameScreen extends JFrame {
 				case 4:
 				case 5:
 				case 6:
-				case 7:
-				case 8:// 전투 발생
+				case 7:// 전투 발생
 					battle = true; // 전투 발생 시 true로 전환, 해당 변수는 전투가 종료되면 다시 false로 바뀜
 					System.out.println("[info] 전투 발생");
 					createBattle(c_lv); // 플레이어 레벨에 따라서 생성되는 몹의 구간(?)이 달라짐. 1 ~ 10, 11 ~ 20, 21 ~ 30
 					break;
-				case 9:
+				case 8:
 					System.out.println("[info] 상자 획득 이벤트 발생");
 					// 1 ~ 10 상자 이벤트 (1 ~ 6 일반 상자, 7 ~ 9 괜찮아 보이는 상자, 10 화려한 상자)
 					int chestevent = (int) (Math.random() * 10) + 1;
 					System.out.println("[info] 발생한 상자 획득 이벤트	 : " + chestevent);
 					createGetItemEvent(chestevent);
 					break;
-				case 10:
+				case 9: case 10:
 					System.out.println("[info] 특수 이벤트 발생(버프/함정)");
 					int subevent = (int) (Math.random() * 2) + 1; // 1 or 2 랜덤 숫자 (1 : 버프 / 2 : 함정)
 					System.out.println(subevent);
@@ -500,7 +458,6 @@ public class GameScreen extends JFrame {
 		buttonstat.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
 				new StatScreen(c_name, c_job, c_lv, c_str, c_dex, c_int, playeratk, playerdef, c_exp, c_next_exp);
 				buttonstat.setEnabled(false);
 			}
@@ -571,10 +528,9 @@ public class GameScreen extends JFrame {
 			public void mouseClicked(MouseEvent m) {
 				if (c_lv == 30) {
 					createFinalBossBattle_Phase1();
-
 				} else {
-					JLabel message = new JLabel(
-							"<html><p style='font-family:맑은 고딕;'>레벨이 부족하여 보스의 방에 입장할 수 없습니다.</p></html>");
+					JLabel message = new JLabel("<html><p style='font-family:맑은 고딕;'>"
+							+ "레벨이 부족하여 보스의 방에 입장할 수 없습니다.</p></html>");
 					JOptionPane.showMessageDialog(null, message, "최후의 결전", JOptionPane.ERROR_MESSAGE);
 				}
 			}
@@ -585,7 +541,6 @@ public class GameScreen extends JFrame {
 		skilleffectpanel = new JPanel(null);
 		skilleffectpanel.setBounds(150, 70, 670, 280);
 		skilleffectpanel.setOpaque(false);
-//		skilleffectpanel.setBorder(new LineBorder(Color.PINK));
 
 		// 플레이어 기본 공격 이팩트 라벨
 		playerattackLabel = new JLabel();
@@ -657,11 +612,11 @@ public class GameScreen extends JFrame {
 			battle = true;
 			bossfight = true;
 			// Phase 1 시작
-			writeLog("\n마지막 전투가 시작되었습니다.\n이 세계의 운명은 용사님의 손에 달려있습니다!");
+			writeLog("마지막 전투가 시작되었습니다.\n이 세계의 운명은 용사님의 손에 달려있습니다!");
 			System.out.println("[info] 전투 발생");
 			createBossMonster(0);
 			System.out.println("[info] 보스 전 - Phase 1 시작");
-			writeLog("\n드래곤이 인간의 형상을 하고 있다는 건 \n용사님을 얕잡아보고 있다는 것입니다.\n방심을 틈타 기회를 노리세요!");
+			writeLog("드래곤이 인간의 형상을 하고 있다는 건 \n용사님을 얕잡아보고 있다는 것입니다.\n방심을 틈타 기회를 노리세요!");
 			break;
 		case 1: // 'NO'
 			break;
@@ -702,14 +657,10 @@ public class GameScreen extends JFrame {
 		}
 		int switchnum = (int) (Math.random() * 3); // 0 ~ 2 랜덤
 		if (level >= 1 && level <= 10) { // 1 ~ 10 레벨은 초급 몹
-			System.out.println("[Info] 캐릭터 레벨 : " + c_lv);
-			System.out.println("[Info] 나온 몹 인카운터  : " + switchnum);
 			if (c_lv <= 5) { // 캐릭터 레벨이 5 이하 인 경우
-				System.out.println("[Info] 초보자 어드밴티지 ");
 				switchnum = (int) (Math.random() * 2); // 0 ~ 1 랜덤(골렘 빼고 리젠)
 				createLowMonster(switchnum);
 			} else {
-				System.out.println("[Info] 초보자 어드밴티지 해제");
 				createLowMonster(switchnum);
 			}
 		} else if (level >= 11 && level <= 20) { // 11 ~ 20 레벨은 중급 몹
@@ -721,7 +672,7 @@ public class GameScreen extends JFrame {
 			}
 		} else { // 둘 다 아니면 21 ~ 부터니까 고급 몹 생성
 			if (c_lv != 25) {
-				switchnum = (int) (Math.random() * 2); // 0 ~ 1 랜덤(라크리 뭐시기 빼고 리젠)
+				switchnum = (int) (Math.random() * 2); // 0 ~ 1 랜덤(아이스 드래곤 빼고 리젠)
 				createHighMonster(switchnum);
 			} else {
 				createHighMonster(switchnum);
@@ -820,6 +771,8 @@ public class GameScreen extends JFrame {
 		case 2: // 2는 함정
 			System.out.println("[info] 함정 이벤트 발생");
 			int randomtrap = (int) (Math.random() * 3) + 1; // 1 ~ 3 랜덤 트랩 발생
+			DSAudio trap = DSAudio.getInstance();
+			trap.playTrapScream();
 			if (randomtrap == 1) { // 1은 불 함정
 				writeLog("함정 발동 : 외벽에서 뜨거운 불이 뿜어져 나왔다.\n체력이 감소했다.");
 				current_user_hp -= (c_lv * 2); // 캐릭터 레벨 * 2 수치 만큼 체력 깎임
@@ -1027,13 +980,13 @@ public class GameScreen extends JFrame {
 							int strup, dexup, intup;
 
 							if (c_lv >= 1 && c_lv <= 10) { // 레벨이 1 ~ 10인 경우 스텟 가중치 (5 ~ 10 랜덤), 체력 +40 /마나 +10
-								strup = (int) (Math.random() * 10) + 5;
+								strup = (int) (Math.random() * 6) + 5;
 								c_str += strup;
 								writeLog("힘이 " + strup + " 올랐다.");
-								dexup = (int) (Math.random() * 10) + 5;
+								dexup = (int) (Math.random() * 6) + 5;
 								c_dex += dexup;
 								writeLog("민첩이 " + dexup + " 올랐다.");
-								intup = (int) (Math.random() * 10) + 5;
+								intup = (int) (Math.random() * 6) + 5;
 								c_int += intup;
 								writeLog("지능이 " + intup + " 올랐다.");
 								c_hp += 40;
@@ -1051,13 +1004,13 @@ public class GameScreen extends JFrame {
 
 							} else if (c_lv >= 11 && c_lv <= 20) { // 레벨이 11 ~ 20인 경우 스텟 가중치 (10 ~ 15 랜덤), 체력 + 70 /마나 +
 																	// 30
-								strup = (int) (Math.random() * 16) + 10;
+								strup = (int) (Math.random() * 6) + 10;
 								c_str += strup;
 								writeLog("힘이 " + strup + " 올랐다.");
-								dexup = (int) (Math.random() * 16) + 10;
+								dexup = (int) (Math.random() * 6) + 10;
 								c_dex += dexup;
 								writeLog("민첩이 " + dexup + " 올랐다.");
-								intup = (int) (Math.random() * 16) + 10;
+								intup = (int) (Math.random() * 6) + 10;
 								c_int += intup;
 								writeLog("지능이 " + intup + " 올랐다.");
 								c_hp += 70;
@@ -1074,13 +1027,13 @@ public class GameScreen extends JFrame {
 								playerMpbar.setString(current_user_mp + " / " + c_mp);
 
 							} else if (c_lv >= 21 && c_lv <= 29) { // 21 ~ 29 스텟 가중치 (15 ~ 20 랜덤), 체력 + 100 /마나 + 30
-								strup = (int) (Math.random() * 21) + 15;
+								strup = (int) (Math.random() * 6) + 15;
 								c_str += strup;
 								writeLog("힘이 " + strup + " 올랐다.");
-								dexup = (int) (Math.random() * 21) + 15;
+								dexup = (int) (Math.random() * 6) + 15;
 								c_dex += dexup;
 								writeLog("민첩이 " + dexup + " 올랐다.");
-								intup = (int) (Math.random() * 21) + 15;
+								intup = (int) (Math.random() * 6) + 15;
 								c_int += intup;
 								writeLog("지능이 " + intup + " 올랐다.");
 								c_hp += 100;
@@ -1228,7 +1181,6 @@ public class GameScreen extends JFrame {
 									}
 								}
 							}
-
 						} catch (Exception e) {
 							System.out.println("[Error] m_check 쓰레드 에러");
 						}
@@ -1255,7 +1207,7 @@ public class GameScreen extends JFrame {
 		current_user_hp -= 400;
 		writeLog("'" + c_name + "' 의 체력이 400 감소했다.");
 		Timer resetbackground = new Timer();
-		TimerTask bgresttask = new TimerTask() {
+		TimerTask bgresettask = new TimerTask() {
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
@@ -1264,7 +1216,7 @@ public class GameScreen extends JFrame {
 				MonsterPanel.setVisible(true);
 			}
 		};
-		resetbackground.schedule(bgresttask, 4800);
+		resetbackground.schedule(bgresettask, 4800);
 	}
 
 	// SkillScreen에서 호출되는 스킬 메소드들
@@ -1584,10 +1536,6 @@ public class GameScreen extends JFrame {
 					}
 				}
 			}
-//			System.out.println("[info] 현재 인벤토리 사이즈 : " + inven.size());
-//			for (int i = 0; i < inven.size(); i++) {
-//				System.out.println("[info] 현재 인벤토리에 들어있는 아이템 : " + inven.get(i).getI_name());
-//			}
 		} catch (Exception e) {
 			System.out.println("[Error] 예외 발생");
 			e.printStackTrace();
@@ -1703,7 +1651,7 @@ public class GameScreen extends JFrame {
 		System.out.println("몹 공격력 : " + monsteratk);
 		System.out.println("몹 방어력 : " + monsterdef);
 		System.out.println("몹 경험치 : " + m_exp);
-		System.out.println("몹 드랍 : " + String.valueOf(dropitem));
+		System.out.println("몹 드랍 : " + Arrays.toString(dropitem));
 	}
 
 	// 중급 몹 기본 정보 저장
@@ -1719,7 +1667,7 @@ public class GameScreen extends JFrame {
 		System.out.println("몹 공격력 : " + monsteratk);
 		System.out.println("몹 방어력 : " + monsterdef);
 		System.out.println("몹 경험치 : " + m_exp);
-		System.out.println("몹 드랍 : " + String.valueOf(dropitem));
+		System.out.println("몹 드랍 : " + Arrays.toString(dropitem));
 	}
 
 	// 고급 몹 기본 정보 저장
@@ -1735,7 +1683,7 @@ public class GameScreen extends JFrame {
 		System.out.println("몹 공격력 : " + monsteratk);
 		System.out.println("몹 방어력 : " + monsterdef);
 		System.out.println("몹 경험치 : " + m_exp);
-		System.out.println("몹 드랍 : " + String.valueOf(dropitem));
+		System.out.println("몹 드랍 : " + Arrays.toString(dropitem));
 	}
 
 	// 보스 몹 기본 정보 저장
@@ -1751,7 +1699,7 @@ public class GameScreen extends JFrame {
 		System.out.println("몹 공격력 : " + monsteratk);
 		System.out.println("몹 방어력 : " + monsterdef);
 		System.out.println("몹 경험치 : " + m_exp);
-		System.out.println("몹 드랍 : " + String.valueOf(dropitem));
+		System.out.println("몹 드랍 : " + Arrays.toString(dropitem));
 	}
 
 	// 초급 몹 생성
@@ -1766,7 +1714,6 @@ public class GameScreen extends JFrame {
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp); // 현재 몹 체력으로 몹 체력바 값 설정
 			MonsterHpbar.setString(String.valueOf(current_monster_hp) + " / " + m_hp); // 막대 안에 보이는 문자열 설정
-//			addInventory(dropitem); // Test용
 			MonsterHpbar.setVisible(true);
 			break;
 		case 1: // Orcwarrior
@@ -1777,7 +1724,6 @@ public class GameScreen extends JFrame {
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp);
 			MonsterHpbar.setString(String.valueOf(current_monster_hp) + " / " + m_hp);
-//			addInventory(dropitem);
 			MonsterHpbar.setVisible(true);
 			break;
 		case 2: // Golem
@@ -1788,7 +1734,6 @@ public class GameScreen extends JFrame {
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
 			MonsterHpbar.setValue(current_monster_hp);
 			MonsterHpbar.setString(String.valueOf(current_monster_hp) + " / " + m_hp);
-//			addInventory(dropitem);
 			MonsterHpbar.setVisible(true);
 			break;
 		}
@@ -1889,6 +1834,8 @@ public class GameScreen extends JFrame {
 			System.out.println("[info] 보스 전 - Phase 2 시작");
 			writeLog("\n 분노가 극에 달한 드래곤이 본 모습을 드러내었습니다.\n부디 조심하시기 바랍니다!");
 			writeLog(bossmonsters.get(switchnum).getM_name() + " 이/가 나타났다.\n");
+			DSAudio roar = DSAudio.getInstance();
+			roar.playDragonRoar();
 			settingBossMobInfo(switchnum);
 			current_monster_hp = m_hp; // 현재 몹 체력에 새로 생성된 몹 체력 저장(새삥)
 			MonsterHpbar.setMaximum(m_hp); // 체력바의 최대수치를 몹 체력으로 설정
