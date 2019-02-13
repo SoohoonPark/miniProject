@@ -16,7 +16,8 @@ public class DSAudio{
 	private static String beingHit = "resource/sound/being_hit.wav";
 	private static String playeratk = "resource/sound/attack_player.wav";
 	private static String monsteratk = "resource/sound/attack_monster.wav";
-	private static String dragonslasher = "resource/sound/skill_dragonslasher.wav";
+	private static String dragonslasher1 = "resource/sound/skill_dragonslasher_first.wav";
+	private static String dragonslasher2 = "resource/sound/skill_dragonslasher_second.wav";
 	private static String aurablade = "resource/sound/skill_aurablade.wav";
 	private static String demonicsword = "resource/sound/skill_demonicsword.wav";
 	private static String dimension_1 = "resource/sound/skill_dimension_first.wav";
@@ -26,17 +27,20 @@ public class DSAudio{
 	private static String dragonskill1 = "resource/sound/dragon_skill_first.wav";
 	private static String dragonskill2 = "resource/sound/dragon_skill_second.wav";
 	private static String dragonattack = "resource/sound/dragon_attack.wav";
+	private static String trapscream = "resource/sound/trap_scream.wav";
+	private static String dragonroar = "resource/sound/dragon_roar.wav";
 	
 	private static Clip titleclip = null;
 	private static Clip gameclip = null;
 	private static Clip beinghitclip = null;
 	private static Clip playeratkclip = null;
 	private static Clip monsteratkclip = null;
-	private static Clip dragonslasherclip = null;
+	private static Clip dragonslasherclip1,dragonslasherclip2;
 	private static Clip aurabladeclip = null;
 	private static Clip demonicswordclip = null;
 	private static Clip dimensionclip1,dimensionclip2,dimensionclip3,dimensionclip4;
-	private static Clip dragonskillclip1,dragonskillclip2,dragonattackclip;
+	private static Clip dragonskillclip1,dragonskillclip2,dragonattackclip,dragonroarclip;
+	private static Clip trapscreamclip;
 	
 	private static DSAudio audio = new DSAudio();
 	private DSAudio() {}
@@ -126,11 +130,25 @@ public class DSAudio{
 	// 드래곤 슬래셔 효과음
 	public void playDragonSlasher() {
 		try {
-			File bgm = new File(dragonslasher);
+			File bgm = new File(dragonslasher1);
+			File bgm2 = new File(dragonslasher2);
 			AudioInputStream ais = AudioSystem.getAudioInputStream(bgm);
-			dragonslasherclip = AudioSystem.getClip();
-			dragonslasherclip.open(ais);
-			dragonslasherclip.start();
+			AudioInputStream ais2 = AudioSystem.getAudioInputStream(bgm2);
+			dragonslasherclip1 = AudioSystem.getClip();
+			dragonslasherclip2 = AudioSystem.getClip();
+			dragonslasherclip1.open(ais);
+			dragonslasherclip2.open(ais2);
+			dragonslasherclip1.start();
+			Timer secondeffect = new Timer();
+			TimerTask secondeffecttask = new TimerTask() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					dragonslasherclip2.start();
+				}
+			};
+			secondeffect.schedule(secondeffecttask, 400);
 		}catch(Exception e) {
 			System.out.println("[Error] 오디오 재생 에러(효과음_드래곤슬래셔)");
 		}
@@ -158,7 +176,7 @@ public class DSAudio{
 			demonicswordclip.open(ais);
 			demonicswordclip.start();
 		}catch(Exception e) {
-			System.out.println("[Error] 오디오 재생 에러(효과음_오러블레이드)");
+			System.out.println("[Error] 오디오 재생 에러(효과음_데모닉소드)");
 		}
 	}
 	
@@ -260,6 +278,35 @@ public class DSAudio{
 			dragonattackclip.start();
 		}catch(Exception e) {
 			System.out.println("[Error] 오디오 재생 에러(효과음_용평타)");
+		}
+	}
+	
+	// 함정 비명 소리
+	public void playTrapScream() {
+		try {
+			File bgm = new File(trapscream);
+			AudioInputStream ais = AudioSystem.getAudioInputStream(bgm);
+			trapscreamclip = AudioSystem.getClip();
+			trapscreamclip.open(ais);
+			trapscreamclip.start();
+		}catch(Exception e) {
+			System.out.println("[Error] 오디오 재생 에러(효과음_함정비명)");
+		}
+	}
+	
+	// 용 페이즈2 진입 사운드
+	public void playDragonRoar() {
+		try {
+			File bgm = new File(dragonroar);
+			AudioInputStream ais = AudioSystem.getAudioInputStream(bgm);
+			dragonroarclip = AudioSystem.getClip();
+			dragonroarclip.open(ais);
+			FloatControl gainControl = (FloatControl) dragonroarclip.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl.setValue(6.0f); // Reduce volume by 10 decibels.
+			dragonroarclip.start();
+		}catch(Exception e) {
+			System.out.println("[Error] 오디오 재생 에러(효과음_용포효)");
+			System.out.println(e.getMessage());
 		}
 	}
 	
