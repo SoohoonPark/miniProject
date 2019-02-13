@@ -38,7 +38,6 @@ public class MainScreen extends JFrame {
 	public MainScreen() {
 		DSAudio audio = DSAudio.getInstance();
 		audio.playTitle();
-
 		setTitle("Dragon Slayer");
 		setSize(700, 525);
 		setLocationRelativeTo(null);
