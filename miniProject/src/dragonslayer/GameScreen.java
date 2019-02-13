@@ -147,16 +147,16 @@ public class GameScreen extends JFrame {
 	private static LinkedList<DSItems> inven = new LinkedList<DSItems>(); // 플레이어 인벤토리 내용물
 	private static int current_user_hp, current_user_mp; // 현재 플레이어 체력 & 마나
 
-//	public static void main(String[] args) {
-//		new GameScreen("춘식이", 30, "모험가", 1000, 1000, 1000, 1400, 880);
-//	}
+	public static void main(String[] args) {
+		new GameScreen("춘식이", 30, "모험가", 1000, 1000, 1000, 1400, 880);
+	}
 
 	/** 메소드 영역 **/
 	public GameScreen(String name, int l, String job, int s, int d, int i, int hp, int mp) {
 		System.out.println("[info] GameScreen() 호출");
 		// MainScreen ~ LoadingScreen 에서 사용되던 bgm을 종료하고 GameScreen에서 새로운 bgm 재생
 		DSAudio audio = DSAudio.getInstance();
-		audio.offTitle();
+//		audio.offTitle();
 		audio.playGame();
 
 		lowmonsters = service.monsterData("초급"); // 초급 몹 정보 저장
