@@ -29,8 +29,9 @@ public class DSAudio{
 	private static String dragonattack = "resource/sound/dragon_attack.wav";
 	private static String trapscream = "resource/sound/trap_scream.wav";
 	private static String dragonroar = "resource/sound/dragon_roar.wav";
+	private static String buttonclicked = "resource/sound/button_clicked.wav";
 	
-	private static Clip titleclip = null;
+	private static Clip titleclip,buttonclickclip;
 	private static Clip gameclip = null;
 	private static Clip beinghitclip = null;
 	private static Clip playeratkclip = null;
@@ -54,7 +55,7 @@ public class DSAudio{
 			titleclip.open(ais);
 			titleclip.loop(Clip.LOOP_CONTINUOUSLY);
 			FloatControl gainControl = (FloatControl) titleclip.getControl(FloatControl.Type.MASTER_GAIN);
-			gainControl.setValue(-15.0f); // Reduce volume by 10 decibels.
+			gainControl.setValue(-10.0f); // Reduce volume by 10 decibels.
 			titleclip.start();
 		}catch(Exception e) {
 			System.out.println("[Error] 오디오 재생 에러(타이틀)");
@@ -306,6 +307,22 @@ public class DSAudio{
 			dragonroarclip.start();
 		}catch(Exception e) {
 			System.out.println("[Error] 오디오 재생 에러(효과음_용포효)");
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	// 메인화면 & 캐릭터 생성창 버튼 클릭 음
+	public void playButtonClick() {
+		try {
+			File bgm = new File(buttonclicked);
+			AudioInputStream ais = AudioSystem.getAudioInputStream(bgm);
+			buttonclickclip = AudioSystem.getClip();
+			buttonclickclip.open(ais);
+			FloatControl gainControl = (FloatControl) buttonclickclip.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl.setValue(6.0f); // set volume by 6(this audio maximum) decibels.
+			buttonclickclip.start();
+		}catch(Exception e) {
+			System.out.println("[Error] 오디오 에러 - 버튼 클릭");
 			System.out.println(e.getMessage());
 		}
 	}

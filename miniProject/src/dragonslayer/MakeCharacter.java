@@ -8,6 +8,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -126,6 +129,8 @@ public class MakeCharacter extends JFrame{
 		btnStart.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				DSAudio click = DSAudio.getInstance();
+				click.playButtonClick();
 				JLabel message = new JLabel();
 				if(txtname.getText().isEmpty()) { // 캐릭터명이 공백인 경우
 					message.setText("<html><p style='font-family:맑은 고딕;'>캐릭터명이 공백입니다.</p></html>");
@@ -164,6 +169,8 @@ public class MakeCharacter extends JFrame{
 		btnCancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				DSAudio click = DSAudio.getInstance();
+				click.playButtonClick();
 				JLabel message = new JLabel("<html><p style='font-family:맑은 고딕;'>메인화면으로 돌아가시겠습니까?</p></html>");
 				int a = JOptionPane.showConfirmDialog(null, message, "캐릭터 생성", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
 				switch(a) {
@@ -186,5 +193,12 @@ public class MakeCharacter extends JFrame{
 		layer.add(buttonPanel, new Integer(2));
 		
 		setVisible(true);
+		
+		addWindowListener(new WindowAdapter() {
+			public void windowClosed(WindowEvent w) {
+				DSAudio offtitle = DSAudio.getInstance();
+				offtitle.offTitle();
+			}
+		});
 	}
 }
