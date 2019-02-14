@@ -52,8 +52,9 @@ public class DSMonsters {
 
 	// 몹 드랍아이템 결정(드랍되는 아이템은 2종류, 중복 불가능)
 	public String[] getMobDrop() {
-		String[] drop = new String[2]; // 드랍 되는 아이템은 2개
-		for(int i=0; i<drop.length; i++) { // 몹의 드랍아이템 개수만큼 반복문 실행
+		String[] drop = new String[3]; // 드랍 되는 아이템은 3개
+		drop[0] = "체력 물약"; // 체력 물약 1개는 무조건 고정 드랍
+		for(int i=1; i<drop.length; i++) { // 몹의 드랍아이템 개수만큼 반복문 실행
 			int dropindex = (int)(Math.random() * m_dropitem.length); // 0 ~ m_dropitem.length 까지
 			drop[i] = m_dropitem[dropindex];
 			for(int j=0; j<i; j++) {

@@ -779,11 +779,11 @@ public class GameScreen extends JFrame {
 				setBackgroundimg(FIRETRAP, BATTLEBACKGROUND);
 			} else if (randomtrap == 2) { // 2는 가시(바닥) 함정
 				writeLog("\n함정 발동 : 바닥에서 날카로운 가시가 솟구쳐 올라왔다.\n체력이 감소했다.");
-				current_user_hp -= (c_lv * 30); // 캐릭터 레벨 * 3 수치 만큼 체력 깎임
+				current_user_hp -= (c_lv * 20); // 캐릭터 레벨 * 3 수치 만큼 체력 깎임
 				setBackgroundimg(SPIKETRAP, BATTLEBACKGROUND);
 			} else { // 3은 우물 함정
 				writeLog("\n함정발동 : 오염된 우물안의 물을 마셨다.\n체력이 감소했다.");
-				current_user_hp -= (c_lv * 40); // 캐릭터 레벨 * 4 수치 만큼 체력 깎임
+				current_user_hp -= (c_lv * 20); // 캐릭터 레벨 * 4 수치 만큼 체력 깎임
 				setBackgroundimg(WELLTRAP, BATTLEBACKGROUND);
 			}
 			break;
