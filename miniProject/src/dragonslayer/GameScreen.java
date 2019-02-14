@@ -157,7 +157,6 @@ public class GameScreen extends JFrame {
 	private static Boolean skillused = false; // 보스 스킬이 한번만 사용될 수 있도록 제한하는 변수
 
 	private Boolean buff = false; // 플레이어 버프 상황(걸려있는지 아닌지)
-	private static Boolean ultimate = false;
 	private Thread p_check, m_check; // 플레이어, 몹 상태 확인 Thread
 	private LinkedList<DSMonsters> lowmonsters = null; // 초급몹정보가 저장돼있는 LinkedList
 	private LinkedList<DSMonsters> middlemonsters = null; // 중급몹정보가 저장돼있는 LinkedList
@@ -389,7 +388,8 @@ public class GameScreen extends JFrame {
 			// 탐색 버튼을 눌렸을 시 3가지의 이벤트 중 무작위로 하나가 발생됨(전투,상자획득,함정이벤트)
 			public void actionPerformed(ActionEvent e) {
 				// battle이 true인 경우(전투 발생) 탐색불가. 전투 종료 후 탐색 재개 가능
-				if (battle) {
+				if (battle) 
+				{
 					JLabel message = new JLabel("<html><p style='font-family:맑은 고딕;'>전투 중에는 탐색이 불가능합니다.</p></html>");
 					JOptionPane.showMessageDialog(null, message, "탐색", JOptionPane.WARNING_MESSAGE, null);
 					return;
@@ -397,7 +397,8 @@ public class GameScreen extends JFrame {
 				// 1 ~ 3 분기 발생
 				int switchnum = (int) (Math.random() * 10) + 1; // 1 ~ 10
 				System.out.println("나온 탐색 분기 : " + switchnum);
-				switch (switchnum) {
+				switch (switchnum) 
+				{
 				case 1:
 				case 2:
 				case 3:
@@ -445,18 +446,19 @@ public class GameScreen extends JFrame {
 		buttonattack.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (!battle) {
+				if (!battle) 
+				{
 					JLabel message = new JLabel("<html><p style='font-family:맑은 고딕;'>몬스터가 존재하지 않습니다.</p></html>");
 					JOptionPane.showMessageDialog(null, message, "공격", JOptionPane.WARNING_MESSAGE, null);
 					return;
 				}
 				attack_player();
 				Timer mAttackTimer = new Timer();
-				TimerTask mAttackTimerTask = new TimerTask() {
-
+				TimerTask mAttackTimerTask = new TimerTask() 
+				{
 					@Override
-					public void run() {
-						// TODO Auto-generated method stub
+					public void run() 
+					{
 						attack_monster();
 					}
 				};
@@ -578,14 +580,16 @@ public class GameScreen extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// JOptionPane 버튼 글자 스타일 설정
 				UIManager.put("OptionPane.buttonFont", new Font("맑은 고딕", Font.PLAIN, 14));
-				JLabel message = new JLabel(
-						"<html><p style='font-family:맑은 고딕;'>정말 가실꺼에요?<br/>아직 용사님의 도움을 필요로 하는 곳이 많아요!!</p></html>");
-				int a = JOptionPane.showOptionDialog(null, message, "게임종료", JOptionPane.YES_NO_OPTION,
-						JOptionPane.QUESTION_MESSAGE, null,
-						new Object[] { "미안하지만, 지금은 좀 바빠.", "그래? 내 도움이 필요한 곳이 어디야??" }, null);
-				if (a == 0) { // 확인 버튼
+				JLabel message = new JLabel("<html><p style='font-family:맑은 고딕;'>"
+						+ "정말 가실꺼에요?<br/>아직 용사님의 도움을 필요로 하는 곳이 많아요!!</p></html>");
+				int a = JOptionPane.showOptionDialog(null,message,"게임종료",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE, null,
+						new Object[] {"미안하지만, 지금은 좀 바빠.","그래? 내 도움이 필요한 곳이 어디야??"}, null);
+				if (a == 0) // 확인 버튼 
+				{ 
 					System.exit(1);
-				} else { // 취소버튼
+				} 
+				else // 취소버튼
+				{ 
 					return;
 				}
 			}
@@ -596,11 +600,13 @@ public class GameScreen extends JFrame {
 		logoLabel.setBounds(325, 85, 90, 90);
 		logoLabel.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent m) {
-				if (c_lv == 30) {
+				if (c_lv == 30) 
+				{
 					createFinalBossBattle_Phase1();
-				} else {
-					JLabel message = new JLabel(
-							"<html><p style='font-family:맑은 고딕;'>" + "레벨이 부족하여 보스의 방에 입장할 수 없습니다.</p></html>");
+				} 
+				else 
+				{
+					JLabel message = new JLabel("<html><p style='font-family:맑은 고딕;'>레벨이 부족하여 보스의 방에 입장할 수 없습니다.</p></html>");
 					JOptionPane.showMessageDialog(null, message, "최후의 결전", JOptionPane.ERROR_MESSAGE);
 				}
 			}
@@ -673,11 +679,12 @@ public class GameScreen extends JFrame {
 	// 30 레벨이 된 후 최종보스전 진입
 	void createFinalBossBattle_Phase1() { // 보스 전 Phase 1
 		UIManager.put("OptionPane.buttonFont", new Font("맑은 고딕", Font.PLAIN, 12));
-		JLabel message = new JLabel(
-				"<html><p style='font-family:맑은 고딕;'>이제 사악한 드래곤을 무찌르는 일만 남았습니다.<br/>최후의 결전을 벌일 준비가 되었습니까?</p></html>");
+		JLabel message = new JLabel("<html><p style='font-family:맑은 고딕;'>"
+				+ "이제 사악한 드래곤을 무찌르는 일만 남았습니다.<br/>최후의 결전을 벌일 준비가 되었습니까?</p></html>");
 		int select = JOptionPane.showOptionDialog(this, message, "최후의 결전", JOptionPane.YES_NO_OPTION,
 				JOptionPane.QUESTION_MESSAGE, null, new Object[] { "물론이지!", "아직은 조금 두려워..." }, null);
-		switch (select) {
+		switch (select) 
+		{
 		case 0: // 'YES'
 			battle = true;
 			bossfight = true;
@@ -721,29 +728,44 @@ public class GameScreen extends JFrame {
 
 	// 전투 생성하는 메소드
 	public void createBattle(int level) {
-		if (buff) {
+		if (buff) 
+		{
 			System.out.println("[info] 버프 걸려있음");
 		}
 		int switchnum = (int) (Math.random() * 3); // 0 ~ 2 랜덤
-		if (level >= 1 && level <= 10) { // 1 ~ 10 레벨은 초급 몹
-			if (c_lv <= 5) { // 캐릭터 레벨이 5 이하 인 경우
+		if (level >= 1 && level <= 10) // 1 ~ 10 레벨은 초급 몹
+		{ 
+			if (c_lv <= 5) 
+			{ // 캐릭터 레벨이 5 이하 인 경우
 				switchnum = (int) (Math.random() * 2); // 0 ~ 1 랜덤(골렘 빼고 리젠)
 				createLowMonster(switchnum);
-			} else {
+			} 
+			else 
+			{
 				createLowMonster(switchnum);
 			}
-		} else if (level >= 11 && level <= 20) { // 11 ~ 20 레벨은 중급 몹
-			if (c_lv <= 15) { // 캐릭터 레벨이 15 이하 인 경우
+		} 
+		else if (level >= 11 && level <= 20)  // 11 ~ 20 레벨은 중급 몹
+		{
+			if (c_lv <= 15) // 캐릭터 레벨이 15 이하 인 경우
+			{ 
 				switchnum = (int) (Math.random() * 2); // 0 ~ 1 랜덤(라크리 뭐시기 빼고 리젠)
 				createMiddleMonster(switchnum);
-			} else {
+			} 
+			else 
+			{
 				createMiddleMonster(switchnum);
 			}
-		} else { // 둘 다 아니면 21 ~ 부터니까 고급 몹 생성
-			if (c_lv != 25) {
+		} 
+		else // 둘 다 아니면 21 ~ 부터니까 고급 몹 생성
+		{ 
+			if (c_lv != 25) 
+			{
 				switchnum = (int) (Math.random() * 2); // 0 ~ 1 랜덤(아이스 드래곤 빼고 리젠)
 				createHighMonster(switchnum);
-			} else {
+			} 
+			else 
+			{
 				createHighMonster(switchnum);
 			}
 		}
@@ -751,12 +773,16 @@ public class GameScreen extends JFrame {
 
 	// 아이템 획득 이벤트(상자 이벤트)
 	public void createGetItemEvent(int event) {
-		try {
-			if (event >= 1 && event <= 6) { // 1 ~ 6 : 일반 상자
+		try 
+		{
+			if (event >= 1 && event <= 6) // 1 ~ 6 : 일반 상자
+			{ 
 				writeLog("\n평범해 보이는 상자를 발견했다.");
 				// '하급' 키워드가 들어간 아이템 명을 담을 문자열 리스트
-				for (int i = 0; i < iteminfo.size(); i++) {
-					if (iteminfo.get(i).getI_name().contains("하급")) {
+				for (int i = 0; i < iteminfo.size(); i++) 
+				{
+					if (iteminfo.get(i).getI_name().contains("하급")) 
+					{
 						Rewards.add(iteminfo.get(i).getI_name());
 					}
 				}
@@ -766,17 +792,22 @@ public class GameScreen extends JFrame {
 
 				// 뽑은 2개의 숫자가 보상 인덱스
 				String[] low = new String[2];
-				for (int i = 0; i < 2; i++) {
+				for (int i = 0; i < 2; i++) 
+				{
 					low[i] = Rewards.get(ran[i]);
 				}
 				addInventory(low); // 인벤토리에 추가
 				Rewards.clear(); // 보상 획득 후 기존 리스트 내용 초기화
 
-			} else if (event >= 7 && event < 10) { // 7 ~ 9 : 괜찮아 보이는 상자
+			} 
+			else if (event >= 7 && event < 10) // 7 ~ 9 : 괜찮아 보이는 상자
+			{ 
 				writeLog("\n괜찮아 보이는 상자를 발견했다.");
 				// '중급' 키워드가 들어간 아이템 명을 담을 문자열 리스트
-				for (int i = 0; i < iteminfo.size(); i++) {
-					if (iteminfo.get(i).getI_name().contains("중급")) {
+				for (int i = 0; i < iteminfo.size(); i++) 
+				{
+					if (iteminfo.get(i).getI_name().contains("중급")) 
+					{
 						GoodRewards.add(iteminfo.get(i).getI_name());
 					}
 				}
@@ -786,17 +817,22 @@ public class GameScreen extends JFrame {
 
 				// 뽑은 2개의 숫자가 보상 인덱스
 				String[] good = new String[2];
-				for (int i = 0; i < 2; i++) {
+				for (int i = 0; i < 2; i++) 
+				{
 					good[i] = GoodRewards.get(ran[i]);
 				}
 				addInventory(good); // 인벤토리에 추가
 				GoodRewards.clear();
 
-			} else { // 10 : 화려해 보이는 상자
+			} 
+			else // 10 : 화려해 보이는 상자
+			{ 
 				writeLog("\n화려해 보이는 상자를 발견했다.");
 				// '고오급' 키워드가 들어간 아이템 명을 담을 문자열 리스트
-				for (int i = 0; i < iteminfo.size(); i++) {
-					if (iteminfo.get(i).getI_name().contains("고오급")) {
+				for (int i = 0; i < iteminfo.size(); i++) 
+				{
+					if (iteminfo.get(i).getI_name().contains("고오급")) 
+					{
 						VeryGoodRewards.add(iteminfo.get(i).getI_name());
 					}
 				}
@@ -806,13 +842,16 @@ public class GameScreen extends JFrame {
 
 				// 뽑은 2개의 숫자가 보상 인덱스
 				String[] VeryGood = new String[2];
-				for (int i = 0; i < 2; i++) {
+				for (int i = 0; i < 2; i++) 
+				{
 					VeryGood[i] = VeryGoodRewards.get(ran[i]);
 				}
 				addInventory(VeryGood); // 인벤토리에 추가
 				VeryGoodRewards.clear();
 			}
-		} catch (Exception e) {
+		} 
+		catch (Exception e) 
+		{
 			System.out.println("[Error] 상자 이벤트 에러 발생");
 			System.out.println(e.getMessage());
 		}
@@ -820,10 +859,12 @@ public class GameScreen extends JFrame {
 
 	// 버프,함정 이벤트
 	public void createSubEvent(int event) {
-		switch (event) {
+		switch (event) 
+		{
 		case 1: // 1은 버프
 			System.out.println("[info] 버프 전 능력치 : " + "힘 " + c_str + " / " + " 민첩 " + c_dex + " / " + " 지능 " + c_int);
-			if (buff) { // 버프 상태가 true 일때 해당 이벤트가 실행되면 중복 버프를 받음. 중복 버프 방지함
+			if (buff) // 버프 상태가 true 일때 해당 이벤트가 실행되면 중복 버프를 받음. 중복 버프 방지함
+			{ 
 				System.out.println("[info] 중복 버프 발생");
 				return;
 			}
@@ -842,15 +883,20 @@ public class GameScreen extends JFrame {
 			int randomtrap = (int) (Math.random() * 3) + 1; // 1 ~ 3 랜덤 트랩 발생
 			DSAudio trap = DSAudio.getInstance();
 			trap.playTrapScream();
-			if (randomtrap == 1) { // 1은 불 함정
+			if (randomtrap == 1) // 1은 불 함정
+			{ 
 				writeLog("\n함정 발동 : 외벽에서 뜨거운 불이 뿜어져 나왔다.\n체력이 감소했다.");
 				current_user_hp -= (c_lv * 20); // 캐릭터 레벨 * 2 수치 만큼 체력 깎임
 				setBackgroundimg(FIRETRAP, BATTLEBACKGROUND);
-			} else if (randomtrap == 2) { // 2는 가시(바닥) 함정
+			} 
+			else if (randomtrap == 2) // 2는 가시(바닥) 함정
+			{ 
 				writeLog("\n함정 발동 : 바닥에서 날카로운 가시가 솟구쳐 올라왔다.\n체력이 감소했다.");
 				current_user_hp -= (c_lv * 20); // 캐릭터 레벨 * 3 수치 만큼 체력 깎임
 				setBackgroundimg(SPIKETRAP, BATTLEBACKGROUND);
-			} else { // 3은 우물 함정
+			} 
+			else // 3은 우물 함정
+			{ 
 				writeLog("\n함정발동 : 오염된 우물안의 물을 마셨다.\n체력이 감소했다.");
 				current_user_hp -= (c_lv * 20); // 캐릭터 레벨 * 4 수치 만큼 체력 깎임
 				setBackgroundimg(WELLTRAP, BATTLEBACKGROUND);
@@ -865,10 +911,11 @@ public class GameScreen extends JFrame {
 		MonsterPanel.setVisible(false);
 		GameScreenimgLabel.setIcon(trapimg);
 		Timer recoverimg = new Timer();
-		TimerTask recovertask = new TimerTask() {
+		TimerTask recovertask = new TimerTask() 
+		{
 			@Override
-			public void run() {
-				// TODO Auto-generated method stub
+			public void run() 
+			{
 				GameScreenimgLabel.setIcon(originalimg);
 				CharacterPanel.setVisible(true);
 			}
@@ -879,10 +926,13 @@ public class GameScreen extends JFrame {
 	// 0 ~ 4 랜덤 만드는 메소드(상자 이벤트에서 사용)
 	int[] makeRanNums() {
 		int[] ran = new int[2];
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < 2; i++) 
+		{
 			ran[i] = (int) (Math.random() * 4); // 0 ~ 3 랜덤 (0,1,2,3)
-			for (int j = 0; j < i; j++) {
-				if (ran[i] == ran[j]) {
+			for (int j = 0; j < i; j++) 
+			{
+				if (ran[i] == ran[j]) 
+				{
 					i--;
 				}
 			}
@@ -893,7 +943,8 @@ public class GameScreen extends JFrame {
 	// 플레이어 공격(평타)
 	public void attack_player() {
 		DSAudio playerhit = DSAudio.getInstance();
-		if (!battle) {
+		if (!battle) 
+		{
 			System.out.println("[info] 전투 중이 아닙니다.");
 			return;
 		}
@@ -906,22 +957,29 @@ public class GameScreen extends JFrame {
 
 		int damage = playeratk - monsterdef; // 데미지는 플레이어 공격력 - 몬스터 방어력
 		System.out.println("나온 데미지 : " + damage);
-		if (damage <= 0) { // 플레이어 공격력 - 몬스터 방어력의 결과가 0보다 작거나 같을 경우 (= 몬스터의 방어력이 플레이어 공격력보다 높을 경우)
+		if (damage <= 0) // 플레이어 공격력 - 몬스터 방어력의 결과가 0보다 작거나 같을 경우 (= 몬스터의 방어력이 플레이어 공격력보다 높을 경우)
+		{ 
 			damage = 1; // 최소 데미지 1이 적용되도록 설정함.
 			current_monster_hp -= damage; // damage 수치만큼 몬스터 현재 체력 감소
 			writeLog("'" + c_name + "' (은/는) " + m_name + " 에게 " + damage + " 의 피해를 입혔다!");
-		} else {
+		} 
+		else 
+		{
 			int mindam = damage / 2; // 최소데미지는 데미지 / 2
 			int maxdam = damage; // 최대데미지
 			System.out.println("최소데미지 : " + mindam);
 			System.out.println("최대데미지 : " + maxdam);
-			if (mindam == 1 || maxdam == 1) {
+			if (mindam == 1 || maxdam == 1) 
+			{
 				int randomdamage = 1;
 				current_monster_hp -= randomdamage; // randomdamage 수치만큼 몹 현재 체력 감소
 				writeLog("'" + c_name + "' (은/는) " + m_name + " 에게 " + randomdamage + " 의 피해를 입혔다!");
-			} else {
+			} 
+			else 
+			{
 				int randomdamage = (int) (Math.random() * maxdam) + mindam; // 최소데미지 ~ 플레이어 데미지 사이의 랜덤데미지 결정
-				if (randomdamage > maxdam) {
+				if (randomdamage > maxdam) 
+				{
 					randomdamage = maxdam;
 				}
 				System.out.println("나온 랜덤데미지 : " + randomdamage);
@@ -931,11 +989,11 @@ public class GameScreen extends JFrame {
 		}
 
 		Timer pAttacktimer = new Timer();
-		TimerTask pAttackTask = new TimerTask() {
-
+		TimerTask pAttackTask = new TimerTask() 
+		{
 			@Override
-			public void run() {
-				// TODO Auto-generated method stub
+			public void run() 
+			{
 				playerattackLabel.setIcon(null); // 플레이어 기본공격 이펙트 제거
 				monsterbeingattackedLabel.setIcon(null); // 몹 피격 이팩트 제거
 			}
@@ -945,24 +1003,29 @@ public class GameScreen extends JFrame {
 
 	// 몬스터 공격(평타)
 	public static void attack_monster() {
-		if(current_monster_hp <= 0) {
+		if(current_monster_hp <= 0) 
+		{
 			return;
 		}
 		
 		DSAudio monsterhit = DSAudio.getInstance();
-		if (!battle) {
+		if (!battle) 
+		{
 			System.out.println("[info] 전투 중이 아닙니다.");
 			return;
 		}
 
 		writeLog("'" + m_name + "' 의 공격!");
-		if (battle == true && bossphase2 == true) { // 전투 중이며, 보스전 phase 2가 진행 중이면
+		if (battle == true && bossphase2 == true) // 전투 중이며, 보스전 phase 2가 진행 중이면
+		{ 
 			System.out.println("[Info] 페이즈 2 진행중");
 			DSAudio playdragonattack = DSAudio.getInstance();
 			playdragonattack.playDragonAttack();
 			monsterattackLabel.setIcon(new ImageIcon(BOSSNORMALATTACK)); // 보스 기본 공격 이팩트 출력
 			monsterattackLabel.setBounds(340, 30, 380, 280);
-		} else {
+		} 
+		else 
+		{
 			monsterattackLabel.setIcon(new ImageIcon(MONSTERATTACK)); // 몬스터 공격 이펙트 출력
 			monsterhit.playAtk_M();
 			playerbeingattackedLabel.setIcon(new ImageIcon(BEINGATTACKED)); // 피격 이팩트 출력
@@ -970,49 +1033,60 @@ public class GameScreen extends JFrame {
 		}
 
 		int damage = monsteratk - playerdef; // 데미지는 몬스터 공격력 - 플레이어 방어력
-		if (damage <= 0) { // 몬스터 공격력 - 플레이어 방어력의 결과가 0보다 작거나 같을 경우 (= 플레이어의 방어력이 몬스터의 공격력보다 높을 경우)
+		if (damage <= 0) 
+		{ // 몬스터 공격력 - 플레이어 방어력의 결과가 0보다 작거나 같을 경우 (= 플레이어의 방어력이 몬스터의 공격력보다 높을 경우)
 			damage = 1;
 			writeLog("'" + m_name + "' (은/는) " + c_name + " 에게 " + damage + " 의 피해를 입혔다!");
 			current_user_hp -= damage; // damage 수치만큼 플레이어 현재 체력 감소
-		} else {
+		} 
+		else 
+		{
 			int randomdamage = (int) (Math.random() * damage) + 1; // 1 ~ 몬스터 데미지 사이의 랜덤데미지 결정
 			writeLog("'" + m_name + "' (은/는) " + c_name + " 에게 " + randomdamage + " 의 피해를 입혔다!");
 			current_user_hp -= randomdamage; // randomdamage 수치만큼 플레이어 현재 체력 감
 		}
 		Timer mAttackEnd = new Timer();
-		TimerTask mAttackEndTask = new TimerTask() {
+		TimerTask mAttackEndTask = new TimerTask() 
+		{
 			@Override
-			public void run() {
-				// TODO Auto-generated method stub
+			public void run() 
+			{
 				monsterattackLabel.setIcon(null); // 몬스터 공격 이펙트 제거
 				playerbeingattackedLabel.setIcon(null); // 피격 이팩트 제거
 			}
 		};
-		mAttackEnd.schedule(mAttackEndTask, Calendar.getInstance().get(Calendar.MILLISECOND) + 300); // 현재 millisecond +
-																										// 300 이후 task
-																										// 실행
+		mAttackEnd.schedule(mAttackEndTask, Calendar.getInstance().get(Calendar.MILLISECOND) + 300); // 현재 millisecond + 300 이후 task 실행
 	}
 
 	// 플레이어 상태 확인 Thread 실행 메소드
 	public void checkplayerstatus() {
-		p_check = new Thread(new Runnable() {
+		p_check = new Thread(new Runnable() 
+		{
 			@Override
-			public void run() {
+			public void run() 
+			{
 				// TODO Auto-generated method stub
 				System.out.println("[info] p_check 쓰레드 실행");
-
-				while (!Thread.currentThread().isInterrupted()) {
-					try {
+				while (!Thread.currentThread().isInterrupted()) 
+				{
+					try 
+					{
 						Thread.sleep(300);
 						System.out.println("[info] 캐릭터 레벨 체크..");
-						if (c_lv > 10 && c_lv < 30) { // 11 ~ 29 레벨 전사 이미지
+						if (c_lv > 10 && c_lv < 30) // 11 ~ 29 레벨 전사 이미지
+						{ 
 							c_job = "전사"; // 11 ~ 29 레벨 직업은 전사
 							characterLabel.setIcon(new ImageIcon(PLAYERWARRIOR));
-						} else if (c_lv >= 30) { // 기사 이미지
+						} 
+						else if (c_lv >= 30) // 기사 이미지
+						{ 
 							c_job = "기사"; // 만렙(30) 직업은 기사
-							if (bossphase2) {
+							if (bossphase2) 
+							{
 								characterLabel.setIcon(new ImageIcon(PLAYERKNIGHT_BOSS));
-							} else {
+							} 
+							else 
+							{
 								characterLabel.setIcon(new ImageIcon(PLAYERKNIGHT));
 							}
 						}
@@ -1022,7 +1096,8 @@ public class GameScreen extends JFrame {
 						playerMpbar.setValue(current_user_mp);
 						playerMpbar.setString(current_user_mp + " / " + c_mp);
 
-						if (current_user_hp <= 0) {
+						if (current_user_hp <= 0) 
+						{
 							JLabel message = new JLabel("<html><body style='background-color:black;'>"
 									+ "<p style='font-family:맑은 고딕; font-size:13px; color:white; text-align:center;'>"
 									+ "캐릭터가 전사하였습니다.<br/><br/>용사님이 돌아오실 때까지 저희가 막아내고 있겠습니다!!" + "</p></body></html>");
@@ -1044,12 +1119,14 @@ public class GameScreen extends JFrame {
 						System.out.println("[info] 현재 경험치 : " + c_exp);
 						System.out.println("[info] 다음 경험치 : " + c_next_exp);
 						// 레벨업(현재 경험치가 다음 경험치보다 크거나 같을 때)
-						if (c_exp >= c_next_exp) {
+						if (c_exp >= c_next_exp) 
+						{
 							c_lv++;
 							writeLog("\n---------- 레벨 업 ----------\n캐릭터 레벨이 " + c_lv + " 가 되었다.\n");
 							int strup, dexup, intup;
 
-							if (c_lv >= 1 && c_lv <= 10) { // 레벨이 1 ~ 10인 경우 스텟 가중치 (5 ~ 10 랜덤), 체력 +40 /마나 +10
+							if (c_lv >= 1 && c_lv <= 10) // 레벨이 1 ~ 10인 경우 스텟 가중치 (5 ~ 10 랜덤), 체력 +40 /마나 +10
+							{ 
 								strup = (int) (Math.random() * 6) + 5;
 								c_str += strup;
 								writeLog("힘이 " + strup + " 올랐다.");
@@ -1072,8 +1149,9 @@ public class GameScreen extends JFrame {
 								playerHpbar.setString(current_user_hp + " / " + c_hp);
 								playerMpbar.setString(current_user_mp + " / " + c_mp);
 
-							} else if (c_lv >= 11 && c_lv <= 20) { // 레벨이 11 ~ 20인 경우 스텟 가중치 (10 ~ 15 랜덤), 체력 + 70 /마나 +
-																	// 30
+							} 
+							else if (c_lv >= 11 && c_lv <= 20) // 레벨이 11 ~ 20인 경우 스텟 가중치 (10 ~ 15 랜덤), 체력 + 70 /마나 +30
+							{ 
 								strup = (int) (Math.random() * 6) + 10;
 								c_str += strup;
 								writeLog("힘이 " + strup + " 올랐다.");
@@ -1096,7 +1174,9 @@ public class GameScreen extends JFrame {
 								playerHpbar.setString(current_user_hp + " / " + c_hp);
 								playerMpbar.setString(current_user_mp + " / " + c_mp);
 
-							} else if (c_lv >= 21 && c_lv <= 29) { // 21 ~ 29 스텟 가중치 (15 ~ 20 랜덤), 체력 + 100 /마나 + 30
+							} 
+							else if (c_lv >= 21 && c_lv <= 29)  // 21 ~ 29 스텟 가중치 (15 ~ 20 랜덤), 체력 + 100 /마나 + 30
+							{
 								strup = (int) (Math.random() * 6) + 15;
 								c_str += strup;
 								writeLog("힘이 " + strup + " 올랐다.");
@@ -1118,8 +1198,9 @@ public class GameScreen extends JFrame {
 								playerMpbar.setMaximum(current_user_mp);
 								playerHpbar.setString(current_user_hp + " / " + c_hp);
 								playerMpbar.setString(current_user_mp + " / " + c_mp);
-
-							} else { // 30 레벨 달성(만렙) 올스탯+80, 체,마 + 500
+							} 
+							else // 30 레벨 달성(만렙) 올스탯+80, 체,마 + 500 
+							{ 
 								c_hp += 300;
 								c_mp += 300;
 								c_str += 80;
@@ -1140,7 +1221,9 @@ public class GameScreen extends JFrame {
 
 						System.out.println("[info] 캐릭터 버프 상태 체크..");
 						System.out.println("[info] 버프 상태 : " + buff);
-					} catch (Exception e) {
+					} 
+					catch (Exception e) 
+					{
 						System.out.println("[Error] p_check 쓰레드 에러");
 					}
 				}
@@ -1212,8 +1295,7 @@ public class GameScreen extends JFrame {
 								UIManager.put("OptionPane.background", Color.BLACK);
 								UIManager.put("Panel.background", Color.BLACK);
 
-								JOptionPane.showMessageDialog(null, message, "Ending", JOptionPane.DEFAULT_OPTION,
-										null);
+								JOptionPane.showMessageDialog(null, message, "Ending", JOptionPane.DEFAULT_OPTION,null);
 								System.exit(0);
 							}
 						}
@@ -1311,7 +1393,6 @@ public class GameScreen extends JFrame {
 
 	// SkillScreen에서 호출되는 스킬 메소드들
 	static void skill_DragonSlasher() {
-		ultimate = false;
 		int requiredLv = 6;
 		int requiredMp = 70;
 		int skilldamage = 0;
@@ -1403,7 +1484,6 @@ public class GameScreen extends JFrame {
 	}
 
 	static void skill_AuraBlade() {
-		ultimate = false;
 		int requiredLv = 12;
 		int requiredMp = 120;
 		int skilldamage = 0;
@@ -1477,46 +1557,60 @@ public class GameScreen extends JFrame {
 	}
 
 	static void skill_DemonicSword() {
-		ultimate = false;
 		int requiredLv = 18;
 		int requiredMp = 170;
 		int skilldamage = 0;
 		Timer removeEffectTimer;
 		TimerTask removeEffectTask;
-		try {
-			if (battle) {
-				if (c_lv < requiredLv) {
+		try 
+		{
+			if (battle) 
+			{
+				if (c_lv < requiredLv) 
+				{
 					message = new JLabel("<html><p style='font-family:맑은 고딕;'>레벨이 부족합니다.</p></html>");
 					JOptionPane.showMessageDialog(null, message, "데모닉 소드", JOptionPane.ERROR_MESSAGE);
 					return;
-				} else {
-					if (current_user_mp < requiredMp) {
+				} 
+				else 
+				{
+					if (current_user_mp < requiredMp) 
+					{
 						message = new JLabel("<html><p style='font-family:맑은 고딕;'>마나가 부족합니다.</p></html>");
 						JOptionPane.showMessageDialog(null, message, "데모닉 소드", JOptionPane.ERROR_MESSAGE);
 						return;
-					} else {
+					} 
+					else 
+					{
 						DSAudio demonic = DSAudio.getInstance();
 						demonic.playDemonicSword();
 						SkillEffectLabel3.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
 								.createImage("resource/images/effects/player/skill3_Demonic_Swords_resize.gif")));
 						skilldamage = (playeratk * 4) - monsterdef; // 스킬데미지 = 스킬계수*6 - 몹 방어력
-						if (skilldamage <= 0) {
+						if (skilldamage <= 0) 
+						{
 							skilldamage = 1; // 최소데미지는 무조건 1
 							current_user_mp -= requiredMp;
 							System.out.println("[info] 남은 마나 : " + current_user_mp);
 							current_monster_hp -= skilldamage;
-						} else {
+						} 
+						else 
+						{
 							int mindam = skilldamage / 2;
 							int maxdam = skilldamage;
 							System.out.println("데모닉 소드 최소 데미지 : " + mindam + " 최대 데미지 : " + maxdam);
-							if (mindam == 1 || maxdam == 1) {
+							if (mindam == 1 || maxdam == 1) 
+							{
 								skilldamage = 1;
 								current_user_mp -= requiredMp;
 								System.out.println("[info] 남은 마나 : " + current_user_mp);
 								current_monster_hp -= skilldamage;
-							} else {
+							} 
+							else 
+							{
 								skilldamage = (int) (Math.random() * maxdam) + mindam; // 최소데미지 ~ 스킬데미지 사이 랜덤 데미지
-								if (skilldamage > maxdam) {
+								if (skilldamage > maxdam) 
+								{
 									skilldamage = maxdam;
 								}
 								current_user_mp -= requiredMp;
@@ -1527,11 +1621,11 @@ public class GameScreen extends JFrame {
 
 						writeLog("\n스킬 - 데모닉 소드 사용\n" + m_name + " 에게 피해를 " + skilldamage + " 입혔다.");
 						removeEffectTimer = new Timer();
-						removeEffectTask = new TimerTask() {
-
+						removeEffectTask = new TimerTask() 
+						{
 							@Override
-							public void run() {
-								// TODO Auto-generated method stub
+							public void run() 
+							{
 								SkillEffectLabel3.setIcon(null);
 								attack_monster();
 							}
@@ -1539,15 +1633,18 @@ public class GameScreen extends JFrame {
 						removeEffectTimer.schedule(removeEffectTask, 1200);
 					}
 				}
-			} else {
+			} 
+			else 
+			{
 				message = new JLabel("<html><p style='font-family:맑은 고딕;'>스킬 사용은 전투 중에만 가능합니다.</p></html>");
 				JOptionPane.showMessageDialog(null, message, "데모닉 소드", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-		} catch (Exception e) {
+		} 
+		catch (Exception e) 
+		{
 			System.out.println(e.getMessage());
 		}
-
 	}
 
 	static void skill_DimensionBreaker() {
@@ -1576,7 +1673,6 @@ public class GameScreen extends JFrame {
 					} 
 					else 
 					{
-						ultimate = true;
 						showUltimateSkill();
 						skilldamage = (playeratk * 8) - monsterdef; // 스킬데미지 = 스킬계수*8 - 몹 방어력
 						if (skilldamage <= 0) 
@@ -1648,24 +1744,29 @@ public class GameScreen extends JFrame {
 		ultimateskill.playDimensionBreaker();
 		Timer changeImg1 = new Timer();
 		Timer changeImg2 = new Timer();
-		TimerTask changeImgTask2 = new TimerTask() { // 궁극기 연출 후 원 화면으로 복귀
+		TimerTask changeImgTask2 = new TimerTask() 
+		{ // 궁극기 연출 후 원 화면으로 복귀
 			@Override
-			public void run() {
-				// TODO Auto-generated method stub
+			public void run() 
+			{
 				CharacterPanel.setVisible(true);
 				MonsterPanel.setLocation(60, 40);
-				if (bossphase2) { // 보스전 2페이즈 진행 중 일 경우
+				if (bossphase2) // 보스전 2페이즈 진행 중 일 경우
+				{ 
 					GameScreenimgLabel.setIcon(new ImageIcon(BOSSORIGINAL));
-				} else {
+				} 
+				else 
+				{
 					GameScreenimgLabel.setIcon(BATTLEBACKGROUND);
 				}
 			}
 		};
 
-		TimerTask changeImgTask1 = new TimerTask() {
+		TimerTask changeImgTask1 = new TimerTask() 
+		{
 			@Override
-			public void run() {
-				// TODO Auto-generated method stub
+			public void run() 
+			{
 				GameScreenimgLabel.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
 						.createImage("resource/images/effects/player/skill4_Dimension_Breaker_sub_resize.gif")));
 				changeImg2.schedule(changeImgTask2, 2100); // 2.1초 뒤 원래 화면으로 돌아가기
@@ -1676,10 +1777,14 @@ public class GameScreen extends JFrame {
 
 	// 인벤토리에 아이템 추가하는 메소드
 	void addInventory(String[] getitem) {
-		try {
-			for (int i = 0; i < iteminfo.size(); i++) {
-				for (int j = 0; j < getitem.length; j++) {
-					if (getitem[j].equals(iteminfo.get(i).getI_name())) {
+		try 
+		{
+			for (int i = 0; i < iteminfo.size(); i++) 
+			{
+				for (int j = 0; j < getitem.length; j++) 
+				{
+					if (getitem[j].equals(iteminfo.get(i).getI_name())) 
+					{
 						inven.add(iteminfo.get(i));
 					}
 				}
@@ -1966,7 +2071,8 @@ public class GameScreen extends JFrame {
 	// 보스 몹 생성
 	public void createBossMonster(int switchnum) {
 		MonsterPanel.setVisible(true);
-		switch (switchnum) {
+		switch (switchnum) 
+		{
 		case 0: // Boss Phase1 - Boss Polymorph mode
 			writeLog("\n" + bossmonsters.get(switchnum).getM_name() + " 이/가 나타났다.\n");
 			settingBossMobInfo(switchnum);
@@ -1996,9 +2102,6 @@ public class GameScreen extends JFrame {
 			playerMpbar.setLocation(10, 75);
 			skilleffectpanel.setLocation(300, 70);
 			characterLabel.setIcon(new ImageIcon(PLAYERKNIGHT_BOSS));
-			if(ultimate) {
-				
-			}
 			GameScreenimgLabel.setIcon(new ImageIcon(BOSSORIGINAL));
 			break;
 		}
