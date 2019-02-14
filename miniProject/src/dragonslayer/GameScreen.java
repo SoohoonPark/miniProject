@@ -1289,7 +1289,6 @@ public class GameScreen extends JFrame {
 		}catch(Exception e) {
 			System.out.println(e.getMessage());
 		}
-		
 	}
 
 	static void skill_AuraBlade() {
