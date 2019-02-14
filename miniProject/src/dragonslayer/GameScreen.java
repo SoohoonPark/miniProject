@@ -1294,6 +1294,7 @@ public class GameScreen extends JFrame {
 
 	// SkillScreen에서 호출되는 스킬 메소드들
 	static void skill_DragonSlasher() {
+		ultimate = false;
 		int requiredLv = 6;
 		int requiredMp = 70;
 		int skilldamage = 0;
@@ -1365,6 +1366,7 @@ public class GameScreen extends JFrame {
 	}
 
 	static void skill_AuraBlade() {
+		ultimate = false;
 		int requiredLv = 12;
 		int requiredMp = 120;
 		int skilldamage = 0;
@@ -1438,6 +1440,7 @@ public class GameScreen extends JFrame {
 	}
 
 	static void skill_DemonicSword() {
+		ultimate = false;
 		int requiredLv = 18;
 		int requiredMp = 170;
 		int skilldamage = 0;
@@ -1511,6 +1514,7 @@ public class GameScreen extends JFrame {
 	}
 
 	static void skill_DimensionBreaker() {
+		ultimate = true;
 		int requiredLv = 27;
 		int requiredMp = 400;
 		int skilldamage = 0;
@@ -1583,8 +1587,7 @@ public class GameScreen extends JFrame {
 		GameScreenimgLabel.setBackground(Color.WHITE);
 		CharacterPanel.setVisible(false);
 		MonsterPanel.setLocation(350, 40);
-		GameScreenimgLabel.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
-				.createImage("resource/images/effects/player/skill4_Dimension_Breaker_main_resize.gif")));
+		GameScreenimgLabel.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage("resource/images/effects/player/skill4_Dimension_Breaker_main_resize.gif")));
 		DSAudio ultimateskill = DSAudio.getInstance();
 		ultimateskill.playDimensionBreaker();
 		Timer changeImg1 = new Timer();
@@ -1938,17 +1941,10 @@ public class GameScreen extends JFrame {
 			playerMpbar.setLocation(10, 75);
 			skilleffectpanel.setLocation(300, 70);
 			characterLabel.setIcon(new ImageIcon(PLAYERKNIGHT_BOSS));
-			if (ultimate) {
-				try {
-					Thread.sleep(4800);
-					ultimate = false;
-					GameScreenimgLabel.setIcon(new ImageIcon(BOSSORIGINAL));
-				} catch (InterruptedException i) {
-					System.out.println(i.getMessage());
-				}
-			} else {
-				GameScreenimgLabel.setIcon(new ImageIcon(BOSSORIGINAL));
+			if(ultimate) {
+				
 			}
+			GameScreenimgLabel.setIcon(new ImageIcon(BOSSORIGINAL));
 			break;
 		}
 	}
