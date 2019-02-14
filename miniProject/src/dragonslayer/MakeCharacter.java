@@ -136,8 +136,8 @@ public class MakeCharacter extends JFrame{
 					message.setText("<html><p style='font-family:맑은 고딕;'>캐릭터명이 공백입니다.</p></html>");
 					JOptionPane.showMessageDialog(null, message, "캐릭터생성", JOptionPane.WARNING_MESSAGE, null);
 					return;
-				}else { 
-					if(txtname.getText().length() >= 2 && txtname.getText().length() <= 6) { // 캐릭터명 길이는 2 ~ 6자
+				}else {
+					if(txtname.getText().trim().length() >= 2 && txtname.getText().trim().length() <= 6) { // 캐릭터명 길이는 2 ~ 6자
 						message.setText("<html><body><p style='font-family:맑은 고딕;'>"
 								+ "캐릭터를 생성하였습니다.<br/>게임을 시작합니다.</p></body></html>");
 						JOptionPane.showMessageDialog(null, message, "캐릭터 생성", JOptionPane.DEFAULT_OPTION, null);

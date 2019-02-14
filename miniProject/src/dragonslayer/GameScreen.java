@@ -6,6 +6,9 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -16,8 +19,10 @@ import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -26,6 +31,7 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
@@ -140,6 +146,8 @@ public class GameScreen extends JFrame {
 			.createImage("resource/images/effects/monster/boss/Boss Normal attack_resized.gif");
 	private final static Image BOSSSKILLATTACK = Toolkit.getDefaultToolkit()
 			.createImage("resource/images/effects/monster/boss/Boss Skill_resized.gif");
+	
+	private static final int IFW = JComponent.WHEN_IN_FOCUSED_WINDOW;
 
 	/** 필드 영역 **/
 	private static String c_name, m_name, c_job; // 캐릭터명 & 몬스터이름
@@ -191,18 +199,18 @@ public class GameScreen extends JFrame {
 	private static LinkedList<DSItems> inven = new LinkedList<DSItems>(); // 플레이어 인벤토리 내용물
 	private static int current_user_hp, current_user_mp; // 현재 플레이어 체력 & 마나
 
-	public static void main(String[] args) {
-		new GameScreen("춘식이", 30, "모험가", 1000, 1000, 1000, 1400, 880);
-	}
+//	public static void main(String[] args) {
+//		new GameScreen("춘식이", 30, "모험가", 1000, 1000, 1000, 1400, 880);
+//	}
 
 	/** 메소드 영역 **/
 	public GameScreen(String name, int l, String job, int s, int d, int i, int hp, int mp) {
 		System.out.println("[info] GameScreen() 호출");
 		// MainScreen ~ LoadingScreen 에서 사용되던 bgm을 종료하고 GameScreen에서 새로운 bgm 재생
 		DSAudio audio = DSAudio.getInstance();
-//		audio.offTitle();
+		audio.offTitle();
 		audio.playGame();
-
+		
 		lowmonsters = service.monsterData("초급"); // 초급 몹 정보 저장
 		middlemonsters = service.monsterData("중급"); // 중급 몹 정보 저장
 		highmonsters = service.monsterData("고급"); // 고급 몹 정보 저장
@@ -235,7 +243,7 @@ public class GameScreen extends JFrame {
 		boots = "없음";
 		System.out.println("[info] GameScreen() 필드 초기화 완료.");
 
-		addInventory(new String[] { "단검", "체력 물약", "마나 물약", "체력 물약", "마나 물약" }); // 기본 템 // 지급
+		addInventory(new String[] { "단검", "체력 물약", "마나 물약", "체력 물약", "마나 물약" }); // 기본 템 지급
 //		addInventory(new String[] { "토마호크", "미스릴 투구", "미스릴 아머", "미스릴 건틀릿", "미스릴 부츠" }); // 시연용
 
 		createGameScreen();
@@ -261,6 +269,27 @@ public class GameScreen extends JFrame {
 		// 게임화면 테두리
 		mainbackgroundimgLabel = new JLabel(new ImageIcon(MAINBACKGROUND));
 		mainbackgroundimgLabel.setBounds(5, 5, 1020, 638);
+		
+		// 시연용 KeyBinding
+		mainbackgroundimgLabel.getInputMap(IFW).put(KeyStroke.getKeyStroke((char)49), "1");
+		mainbackgroundimgLabel.getActionMap().put("1", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				writeLog("[ [ [ [ [ [ [ [ [ [ Cheat Mode Enabled ] ] ] ] ] ] ] ] ] ]");
+				c_lv = 30;
+				c_hp = 3000;
+				current_user_hp = c_hp;
+				c_mp = 2000;
+				current_user_mp = c_mp;
+				c_str = 500;
+				c_dex = 500;
+				c_int = 500;
+				addInventory(new String[]{"토마호크","미스릴 투구","미스릴 아머","미스릴 건틀릿","미스릴 부츠"});
+				playerHpbar.setMaximum(c_hp);
+				playerMpbar.setMaximum(c_mp);
+			}
+		});
 
 		// 게임진행 이미지 라벨
 		GameScreenimgLabel = new JLabel(BATTLEBACKGROUND);
