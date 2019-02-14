@@ -38,6 +38,7 @@ public class SkillScreen extends JFrame {
 		System.out.println("[info] 스킬 창 열림");
 		setSize(400, 690);
 		setLayout(null);
+		setResizable(false);
 		setLocation(135, 180);
 		setTitle("Skills");
 		setIconImage(iconimage);

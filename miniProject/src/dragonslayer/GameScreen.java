@@ -147,9 +147,9 @@ public class GameScreen extends JFrame {
 	private static LinkedList<DSItems> inven = new LinkedList<DSItems>(); // 플레이어 인벤토리 내용물
 	private static int current_user_hp, current_user_mp; // 현재 플레이어 체력 & 마나
 
-	public static void main(String[] args) {
-		new GameScreen("춘식이", 30, "모험가", 1000, 1000, 1000, 1400, 880);
-	}
+//	public static void main(String[] args) {
+//		new GameScreen("춘식이", 30, "모험가", 1000, 1000, 1000, 1400, 880);
+//	}
 
 	/** 메소드 영역 **/
 	public GameScreen(String name, int l, String job, int s, int d, int i, int hp, int mp) {
@@ -288,6 +288,7 @@ public class GameScreen extends JFrame {
 		logarea.setEditable(false);
 		logarea.setForeground(Color.WHITE);
 		logarea.setBackground(Color.BLACK);
+		logarea.setFocusable(false);
 		logarea.setText("\n게임 시작");
 		logarea.setText("모험이 시작되었습니다!\n사악한 드래곤을 무찌르고 최강의 드래곤 슬레이어가 되십시오.\n");
 		logscroll = new JScrollPane(logarea);
@@ -479,7 +480,6 @@ public class GameScreen extends JFrame {
 			}
 		});
 		buttonskill.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// 중복 클릭을 통한 여러 창 띄우는걸 방지하기 위해 해당 버튼을 클릭하면 버튼 비활성화.
@@ -1226,66 +1226,70 @@ public class GameScreen extends JFrame {
 		int skilldamage = 0;
 		Timer removeEffectTimer;
 		TimerTask removeEffectTask;
-
-		if (battle) {
-			if (c_lv < requiredLv) {
-				message = new JLabel("<html><p style='font-family:맑은 고딕;'>레벨이 부족합니다.</p></html>");
-				JOptionPane.showMessageDialog(null, message, "드래곤 슬래셔", JOptionPane.ERROR_MESSAGE);
-				return;
-			} else {
-				if (current_user_mp < requiredMp) {
-					message = new JLabel("<html><p style='font-family:맑은 고딕;'>마나가 부족합니다.</p></html>");
+		try {
+			if (battle) {
+				if (c_lv < requiredLv) {
+					message = new JLabel("<html><p style='font-family:맑은 고딕;'>레벨이 부족합니다.</p></html>");
 					JOptionPane.showMessageDialog(null, message, "드래곤 슬래셔", JOptionPane.ERROR_MESSAGE);
 					return;
 				} else {
-					DSAudio dragonsound = DSAudio.getInstance();
-					dragonsound.playDragonSlasher();
-					SkillEffectLabel1.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
-							.createImage("resource/images/effects/player/skill1_Dragon_Slasher_resize.gif")));
-					skilldamage = (playeratk * 2) - monsterdef; // 스킬데미지 = 스킬계수*2 - 몹 방어력
-					if (skilldamage <= 0) {
-						skilldamage = 1; // 최소데미지는 무조건 1
-						current_user_mp -= requiredMp;
-						System.out.println("[info] 남은 마나 : " + current_user_mp);
-						current_monster_hp -= skilldamage;
+					if (current_user_mp < requiredMp) {
+						message = new JLabel("<html><p style='font-family:맑은 고딕;'>마나가 부족합니다.</p></html>");
+						JOptionPane.showMessageDialog(null, message, "드래곤 슬래셔", JOptionPane.ERROR_MESSAGE);
+						return;
 					} else {
-						int mindam = skilldamage / 2;
-						int maxdam = skilldamage;
-						System.out.println("드래곤 슬래셔 최소 데미지 : " + mindam + " 최대 데미지 : " + maxdam);
-						if (mindam == 1 || maxdam == 1) {
-							skilldamage = 1;
+						DSAudio dragonsound = DSAudio.getInstance();
+						dragonsound.playDragonSlasher();
+						SkillEffectLabel1.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
+								.createImage("resource/images/effects/player/skill1_Dragon_Slasher_resize.gif")));
+						skilldamage = (playeratk * 2) - monsterdef; // 스킬데미지 = 스킬계수*2 - 몹 방어력
+						if (skilldamage <= 0) {
+							skilldamage = 1; // 최소데미지는 무조건 1
 							current_user_mp -= requiredMp;
 							System.out.println("[info] 남은 마나 : " + current_user_mp);
 							current_monster_hp -= skilldamage;
 						} else {
-							skilldamage = (int) (Math.random() * maxdam) + mindam; // 최소데미지 ~ 스킬데미지 사이 랜덤 데미지
-							if (skilldamage > maxdam) {
-								skilldamage = maxdam;
+							int mindam = skilldamage / 2;
+							int maxdam = skilldamage;
+							System.out.println("드래곤 슬래셔 최소 데미지 : " + mindam + " 최대 데미지 : " + maxdam);
+							if (mindam == 1 || maxdam == 1) {
+								skilldamage = 1;
+								current_user_mp -= requiredMp;
+								System.out.println("[info] 남은 마나 : " + current_user_mp);
+								current_monster_hp -= skilldamage;
+							} else {
+								skilldamage = (int) (Math.random() * maxdam) + mindam; // 최소데미지 ~ 스킬데미지 사이 랜덤 데미지
+								if (skilldamage > maxdam) {
+									skilldamage = maxdam;
+								}
+								current_user_mp -= requiredMp;
+								System.out.println("[info] 남은 마나 : " + current_user_mp);
+								current_monster_hp -= skilldamage;
 							}
-							current_user_mp -= requiredMp;
-							System.out.println("[info] 남은 마나 : " + current_user_mp);
-							current_monster_hp -= skilldamage;
 						}
-					}
-					writeLog("스킬 - 드래곤 슬래셔 사용\n" + m_name + " 에게 피해를 " + skilldamage + " 입혔다.");
-					removeEffectTimer = new Timer();
-					removeEffectTask = new TimerTask() {
+						writeLog("스킬 - 드래곤 슬래셔 사용\n" + m_name + " 에게 피해를 " + skilldamage + " 입혔다.");
+						removeEffectTimer = new Timer();
+						removeEffectTask = new TimerTask() {
 
-						@Override
-						public void run() {
-							// TODO Auto-generated method stub
-							SkillEffectLabel1.setIcon(null);
-							attack_monster();
-						}
-					};
-					removeEffectTimer.schedule(removeEffectTask, 1000);
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+								SkillEffectLabel1.setIcon(null);
+								attack_monster();
+							}
+						};
+						removeEffectTimer.schedule(removeEffectTask, 1000);
+					}
 				}
+			} else {
+				message = new JLabel("<html><p style='font-family:맑은 고딕;'>스킬 사용은 전투 중에만 가능합니다.</p></html>");
+				JOptionPane.showMessageDialog(null, message, "드래곤 슬래셔", JOptionPane.ERROR_MESSAGE);
+				return;
 			}
-		} else {
-			message = new JLabel("<html><p style='font-family:맑은 고딕;'>스킬 사용은 전투 중에만 가능합니다.</p></html>");
-			JOptionPane.showMessageDialog(null, message, "드래곤 슬래셔", JOptionPane.ERROR_MESSAGE);
-			return;
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
 		}
+		
 	}
 
 	static void skill_AuraBlade() {
@@ -1294,66 +1298,70 @@ public class GameScreen extends JFrame {
 		int skilldamage = 0;
 		Timer removeEffectTimer;
 		TimerTask removeEffectTask;
-
-		if (battle) {
-			if (c_lv < requiredLv) {
-				message = new JLabel("<html><p style='font-family:맑은 고딕;'>레벨이 부족합니다.</p></html>");
-				JOptionPane.showMessageDialog(null, message, "오러 블레이드", JOptionPane.ERROR_MESSAGE);
-				return;
-			} else {
-				if (current_user_mp < requiredMp) {
-					message = new JLabel("<html><p style='font-family:맑은 고딕;'>마나가 부족합니다.</p></html>");
+		try {
+			if (battle) {
+				if (c_lv < requiredLv) {
+					message = new JLabel("<html><p style='font-family:맑은 고딕;'>레벨이 부족합니다.</p></html>");
 					JOptionPane.showMessageDialog(null, message, "오러 블레이드", JOptionPane.ERROR_MESSAGE);
 					return;
 				} else {
-					DSAudio aurablade = DSAudio.getInstance();
-					aurablade.playAuraBlade();
-					SkillEffectLabel2.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
-							.createImage("resource/images/effects/player/skill2_Aura_Blade_resize.gif")));
-					skilldamage = (playeratk * 3) - monsterdef; // 스킬데미지 = 스킬계수*3 - 몹 방어력
-					if (skilldamage <= 0) {
-						skilldamage = 1; // 최소데미지는 무조건 1
-						current_user_mp -= requiredMp;
-						System.out.println("[info] 남은 마나 : " + current_user_mp);
-						current_monster_hp -= skilldamage;
+					if (current_user_mp < requiredMp) {
+						message = new JLabel("<html><p style='font-family:맑은 고딕;'>마나가 부족합니다.</p></html>");
+						JOptionPane.showMessageDialog(null, message, "오러 블레이드", JOptionPane.ERROR_MESSAGE);
+						return;
 					} else {
-						int mindam = skilldamage / 2;
-						int maxdam = skilldamage;
-						System.out.println("오러 블레이드 최소 데미지 : " + mindam + " 최대 데미지 : " + maxdam);
-						if (mindam == 1 || maxdam == 1) {
-							skilldamage = 1;
+						DSAudio aurablade = DSAudio.getInstance();
+						aurablade.playAuraBlade();
+						SkillEffectLabel2.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
+								.createImage("resource/images/effects/player/skill2_Aura_Blade_resize.gif")));
+						skilldamage = (playeratk * 3) - monsterdef; // 스킬데미지 = 스킬계수*3 - 몹 방어력
+						if (skilldamage <= 0) {
+							skilldamage = 1; // 최소데미지는 무조건 1
 							current_user_mp -= requiredMp;
 							System.out.println("[info] 남은 마나 : " + current_user_mp);
 							current_monster_hp -= skilldamage;
 						} else {
-							skilldamage = (int) (Math.random() * maxdam) + mindam; // 최소데미지 ~ 스킬데미지 사이 랜덤 데미지
-							if (skilldamage > maxdam) {
-								skilldamage = maxdam;
+							int mindam = skilldamage / 2;
+							int maxdam = skilldamage;
+							System.out.println("오러 블레이드 최소 데미지 : " + mindam + " 최대 데미지 : " + maxdam);
+							if (mindam == 1 || maxdam == 1) {
+								skilldamage = 1;
+								current_user_mp -= requiredMp;
+								System.out.println("[info] 남은 마나 : " + current_user_mp);
+								current_monster_hp -= skilldamage;
+							} else {
+								skilldamage = (int) (Math.random() * maxdam) + mindam; // 최소데미지 ~ 스킬데미지 사이 랜덤 데미지
+								if (skilldamage > maxdam) {
+									skilldamage = maxdam;
+								}
+								current_user_mp -= requiredMp;
+								System.out.println("[info] 남은 마나 : " + current_user_mp);
+								current_monster_hp -= skilldamage;
 							}
-							current_user_mp -= requiredMp;
-							System.out.println("[info] 남은 마나 : " + current_user_mp);
-							current_monster_hp -= skilldamage;
 						}
-					}
-					writeLog("스킬 - 오러 블레이드 사용\n" + m_name + " 에게 피해를 " + skilldamage + " 입혔다.");
-					removeEffectTimer = new Timer();
-					removeEffectTask = new TimerTask() {
+						writeLog("스킬 - 오러 블레이드 사용\n" + m_name + " 에게 피해를 " + skilldamage + " 입혔다.");
+						removeEffectTimer = new Timer();
+						removeEffectTask = new TimerTask() {
 
-						@Override
-						public void run() {
-							// TODO Auto-generated method stub
-							SkillEffectLabel2.setIcon(null);
-							attack_monster();
-						}
-					};
-					removeEffectTimer.schedule(removeEffectTask, 1000);
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+								SkillEffectLabel2.setIcon(null);
+								attack_monster();
+							}
+						};
+						removeEffectTimer.schedule(removeEffectTask, 1000);
+					}
 				}
+			} else {
+				message = new JLabel("<html><p style='font-family:맑은 고딕;'>스킬 사용은 전투 중에만 가능합니다.</p></html>");
+				JOptionPane.showMessageDialog(null, message, "오러 블레이드", JOptionPane.ERROR_MESSAGE);
+				return;
 			}
-		} else {
-			message = new JLabel("<html><p style='font-family:맑은 고딕;'>스킬 사용은 전투 중에만 가능합니다.</p></html>");
-			JOptionPane.showMessageDialog(null, message, "오러 블레이드", JOptionPane.ERROR_MESSAGE);
-			return;
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
 		}
+		
 	}
 
 	static void skill_DemonicSword() {
@@ -1362,66 +1370,70 @@ public class GameScreen extends JFrame {
 		int skilldamage = 0;
 		Timer removeEffectTimer;
 		TimerTask removeEffectTask;
-
-		if (battle) {
-			if (c_lv < requiredLv) {
-				message = new JLabel("<html><p style='font-family:맑은 고딕;'>레벨이 부족합니다.</p></html>");
-				JOptionPane.showMessageDialog(null, message, "데모닉 소드", JOptionPane.ERROR_MESSAGE);
-				return;
-			} else {
-				if (current_user_mp < requiredMp) {
-					message = new JLabel("<html><p style='font-family:맑은 고딕;'>마나가 부족합니다.</p></html>");
+		try {
+			if (battle) {
+				if (c_lv < requiredLv) {
+					message = new JLabel("<html><p style='font-family:맑은 고딕;'>레벨이 부족합니다.</p></html>");
 					JOptionPane.showMessageDialog(null, message, "데모닉 소드", JOptionPane.ERROR_MESSAGE);
 					return;
 				} else {
-					DSAudio demonic = DSAudio.getInstance();
-					demonic.playDemonicSword();
-					SkillEffectLabel3.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
-							.createImage("resource/images/effects/player/skill3_Demonic_Swords_resize.gif")));
-					skilldamage = (playeratk * 4) - monsterdef; // 스킬데미지 = 스킬계수*6 - 몹 방어력
-					if (skilldamage <= 0) {
-						skilldamage = 1; // 최소데미지는 무조건 1
-						current_user_mp -= requiredMp;
-						System.out.println("[info] 남은 마나 : " + current_user_mp);
-						current_monster_hp -= skilldamage;
+					if (current_user_mp < requiredMp) {
+						message = new JLabel("<html><p style='font-family:맑은 고딕;'>마나가 부족합니다.</p></html>");
+						JOptionPane.showMessageDialog(null, message, "데모닉 소드", JOptionPane.ERROR_MESSAGE);
+						return;
 					} else {
-						int mindam = skilldamage / 2;
-						int maxdam = skilldamage;
-						System.out.println("데모닉 소드 최소 데미지 : " + mindam + " 최대 데미지 : " + maxdam);
-						if (mindam == 1 || maxdam == 1) {
-							skilldamage = 1;
+						DSAudio demonic = DSAudio.getInstance();
+						demonic.playDemonicSword();
+						SkillEffectLabel3.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
+								.createImage("resource/images/effects/player/skill3_Demonic_Swords_resize.gif")));
+						skilldamage = (playeratk * 4) - monsterdef; // 스킬데미지 = 스킬계수*6 - 몹 방어력
+						if (skilldamage <= 0) {
+							skilldamage = 1; // 최소데미지는 무조건 1
 							current_user_mp -= requiredMp;
 							System.out.println("[info] 남은 마나 : " + current_user_mp);
 							current_monster_hp -= skilldamage;
 						} else {
-							skilldamage = (int) (Math.random() * maxdam) + mindam; // 최소데미지 ~ 스킬데미지 사이 랜덤 데미지
-							if (skilldamage > maxdam) {
-								skilldamage = maxdam;
+							int mindam = skilldamage / 2;
+							int maxdam = skilldamage;
+							System.out.println("데모닉 소드 최소 데미지 : " + mindam + " 최대 데미지 : " + maxdam);
+							if (mindam == 1 || maxdam == 1) {
+								skilldamage = 1;
+								current_user_mp -= requiredMp;
+								System.out.println("[info] 남은 마나 : " + current_user_mp);
+								current_monster_hp -= skilldamage;
+							} else {
+								skilldamage = (int) (Math.random() * maxdam) + mindam; // 최소데미지 ~ 스킬데미지 사이 랜덤 데미지
+								if (skilldamage > maxdam) {
+									skilldamage = maxdam;
+								}
+								current_user_mp -= requiredMp;
+								System.out.println("[info] 남은 마나 : " + current_user_mp);
+								current_monster_hp -= skilldamage;
 							}
-							current_user_mp -= requiredMp;
-							System.out.println("[info] 남은 마나 : " + current_user_mp);
-							current_monster_hp -= skilldamage;
 						}
-					}
-					writeLog("스킬 - 데모닉 소드 사용\n" + m_name + " 에게 피해를 " + skilldamage + " 입혔다.");
-					removeEffectTimer = new Timer();
-					removeEffectTask = new TimerTask() {
+						writeLog("스킬 - 데모닉 소드 사용\n" + m_name + " 에게 피해를 " + skilldamage + " 입혔다.");
+						removeEffectTimer = new Timer();
+						removeEffectTask = new TimerTask() {
 
-						@Override
-						public void run() {
-							// TODO Auto-generated method stub
-							SkillEffectLabel3.setIcon(null);
-							attack_monster();
-						}
-					};
-					removeEffectTimer.schedule(removeEffectTask, 1200);
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+								SkillEffectLabel3.setIcon(null);
+								attack_monster();
+							}
+						};
+						removeEffectTimer.schedule(removeEffectTask, 1200);
+					}
 				}
+			} else {
+				message = new JLabel("<html><p style='font-family:맑은 고딕;'>스킬 사용은 전투 중에만 가능합니다.</p></html>");
+				JOptionPane.showMessageDialog(null, message, "데모닉 소드", JOptionPane.ERROR_MESSAGE);
+				return;
 			}
-		} else {
-			message = new JLabel("<html><p style='font-family:맑은 고딕;'>스킬 사용은 전투 중에만 가능합니다.</p></html>");
-			JOptionPane.showMessageDialog(null, message, "데모닉 소드", JOptionPane.ERROR_MESSAGE);
-			return;
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
 		}
+		
 	}
 
 	static void skill_DimensionBreaker() {
@@ -1430,60 +1442,63 @@ public class GameScreen extends JFrame {
 		int skilldamage = 0;
 		Timer removeEffectTimer;
 		TimerTask removeEffectTask;
-
-		if (battle) {
-			if (c_lv < requiredLv) {
-				message = new JLabel("<html><p style='font-family:맑은 고딕;'>레벨이 부족합니다.</p></html>");
-				JOptionPane.showMessageDialog(null, message, "디멘션 브레이커", JOptionPane.ERROR_MESSAGE);
-				return;
-			} else {
-				if (current_user_mp < requiredMp) {
-					message = new JLabel("<html><p style='font-family:맑은 고딕;'>마나가 부족합니다.</p></html>");
+		try {
+			if (battle) {
+				if (c_lv < requiredLv) {
+					message = new JLabel("<html><p style='font-family:맑은 고딕;'>레벨이 부족합니다.</p></html>");
 					JOptionPane.showMessageDialog(null, message, "디멘션 브레이커", JOptionPane.ERROR_MESSAGE);
 					return;
 				} else {
-					showUltimateSkill();
-					skilldamage = (playeratk * 8) - monsterdef; // 스킬데미지 = 스킬계수*8 - 몹 방어력
-					if (skilldamage <= 0) {
-						skilldamage = 1; // 최소데미지는 무조건 1
-						current_user_mp -= requiredMp;
-						System.out.println("[info] 남은 마나 : " + current_user_mp);
-						current_monster_hp -= skilldamage;
+					if (current_user_mp < requiredMp) {
+						message = new JLabel("<html><p style='font-family:맑은 고딕;'>마나가 부족합니다.</p></html>");
+						JOptionPane.showMessageDialog(null, message, "디멘션 브레이커", JOptionPane.ERROR_MESSAGE);
+						return;
 					} else {
-						int mindam = skilldamage / 2;
-						int maxdam = skilldamage;
-						System.out.println("디멘션 브레이커 최소 데미지 : " + mindam + " 최대 데미지 : " + maxdam);
-						if (mindam == 1 || maxdam == 1) {
-							skilldamage = 1;
+						showUltimateSkill();
+						skilldamage = (playeratk * 8) - monsterdef; // 스킬데미지 = 스킬계수*8 - 몹 방어력
+						if (skilldamage <= 0) {
+							skilldamage = 1; // 최소데미지는 무조건 1
 							current_user_mp -= requiredMp;
 							System.out.println("[info] 남은 마나 : " + current_user_mp);
 							current_monster_hp -= skilldamage;
 						} else {
-							skilldamage = (int) (Math.random() * maxdam) + mindam; // 최소데미지 ~ 스킬데미지 사이 랜덤 데미지
-							if (skilldamage > maxdam) {
-								skilldamage = maxdam;
+							int mindam = skilldamage / 2;
+							int maxdam = skilldamage;
+							System.out.println("디멘션 브레이커 최소 데미지 : " + mindam + " 최대 데미지 : " + maxdam);
+							if (mindam == 1 || maxdam == 1) {
+								skilldamage = 1;
+								current_user_mp -= requiredMp;
+								System.out.println("[info] 남은 마나 : " + current_user_mp);
+								current_monster_hp -= skilldamage;
+							} else {
+								skilldamage = (int) (Math.random() * maxdam) + mindam; // 최소데미지 ~ 스킬데미지 사이 랜덤 데미지
+								if (skilldamage > maxdam) {
+									skilldamage = maxdam;
+								}
+								current_user_mp -= requiredMp;
+								System.out.println("[info] 남은 마나 : " + current_user_mp);
+								current_monster_hp -= skilldamage;
 							}
-							current_user_mp -= requiredMp;
-							System.out.println("[info] 남은 마나 : " + current_user_mp);
-							current_monster_hp -= skilldamage;
 						}
+						writeLog("스킬 - 디멘션 브레이커 사용\n" + m_name + " 에게 피해를 " + skilldamage + " 입혔다.");
+						removeEffectTimer = new Timer();
+						removeEffectTask = new TimerTask() {
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+								attack_monster();
+							}
+						};
+						removeEffectTimer.schedule(removeEffectTask, 7000);
 					}
-					writeLog("스킬 - 디멘션 브레이커 사용\n" + m_name + " 에게 피해를 " + skilldamage + " 입혔다.");
-					removeEffectTimer = new Timer();
-					removeEffectTask = new TimerTask() {
-						@Override
-						public void run() {
-							// TODO Auto-generated method stub
-							attack_monster();
-						}
-					};
-					removeEffectTimer.schedule(removeEffectTask, 7000);
 				}
+			} else {
+				message = new JLabel("<html><p style='font-family:맑은 고딕;'>스킬 사용은 전투 중에만 가능합니다.</p></html>");
+				JOptionPane.showMessageDialog(null, message, "디멘션 브레이커", JOptionPane.ERROR_MESSAGE);
+				return;
 			}
-		} else {
-			message = new JLabel("<html><p style='font-family:맑은 고딕;'>스킬 사용은 전투 중에만 가능합니다.</p></html>");
-			JOptionPane.showMessageDialog(null, message, "디멘션 브레이커", JOptionPane.ERROR_MESSAGE);
-			return;
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
 		}
 	}
 
