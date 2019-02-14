@@ -1880,6 +1880,7 @@ public class GameScreen extends JFrame {
 			if(ultimate) {
 				try {
 					Thread.sleep(4800);
+					ultimate = false;
 					GameScreenimgLabel.setIcon(new ImageIcon(BOSSORIGINAL));
 				}catch(InterruptedException i) {
 					System.out.println(i.getMessage());
