@@ -919,6 +919,10 @@ public class GameScreen extends JFrame {
 
 	// 몬스터 공격(평타)
 	public static void attack_monster() {
+		if(current_monster_hp <= 0) {
+			return;
+		}
+		
 		DSAudio monsterhit = DSAudio.getInstance();
 		if (!battle) {
 			System.out.println("[info] 전투 중이 아닙니다.");
