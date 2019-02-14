@@ -6,9 +6,6 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -1154,35 +1151,43 @@ public class GameScreen extends JFrame {
 
 	// 몹 상태 확인 Thread 실행 메소드
 	public void checkmonsterstatus() {
-		m_check = new Thread(new Runnable() {
+		m_check = new Thread(new Runnable() 
+		{
 			@Override
-			public void run() {
-				// TODO Auto-generated method stub
+			public void run() 
+			{
 				System.out.println("[info] m_check 쓰레드 실행");
-				while (!Thread.currentThread().isInterrupted()) {
-					try {
+				while (!Thread.currentThread().isInterrupted()) 
+				{
+					try 
+					{
 						Thread.sleep(300);
 						System.out.println("[info] 몹 체력 상태 체크..");
 						MonsterHpbar.setValue(current_monster_hp);
 						MonsterHpbar.setString(current_monster_hp + " / " + m_hp);
 						// 페이즈 2 돌입
-						if (battle == true && bossphase2 == true) {
+						if (battle == true && bossphase2 == true) 
+						{
 							System.out.println("[Info] 보스전 페이즈 2 진행중..");
-							if (current_monster_hp >= 1200 && current_monster_hp <= 2400) { // 보스 체력이 60% 이하일 때 스킬 공격 1회
-																							// 사용
-								if (!skillused) {
-									useDragonSkill();
+							if (current_monster_hp >= 1200 && current_monster_hp <= 2400) // 보스 체력이 60% 이하일 때 스킬 공격 1회 사용
+							{ 
+								if (!skillused)
+								{
+									useDragonSkill(); // 여기서 skillused = true;
 								}
 							}
 
-							if (current_monster_hp >= 1 && current_monster_hp <= 1199) { // 보스 체력이 30% 이하일 떄 스킬 공격 1회 사용
-								if (skillused) {
+							if (current_monster_hp >= 1 && current_monster_hp <= 1199) // 보스 체력이 30% 이하일 떄 스킬 공격 1회 사용
+							{ 
+								if (skillused) 
+								{
 									useDragonSkill();
-									skillused = false;
+									skillused = false; // skillused = false
 								}
 							}
 
-							if (current_monster_hp <= 0) {
+							if (current_monster_hp <= 0) 
+							{
 								bossfight = false;
 								bossphase2 = false;
 								battle = false;
@@ -1212,32 +1217,41 @@ public class GameScreen extends JFrame {
 								System.exit(0);
 							}
 						}
-						if (battle) { // 전투 발생 시
+						if (battle) // 전투 발생 시 
+						{ 
 							// 몹이 죽으면 경험치 & 아이템 획득(전투 종료)
-							if (current_monster_hp <= 0 && battle == true) {
+							if (current_monster_hp <= 0 && battle == true) 
+							{
 								monsterattackLabel.setIcon(null);
 								playerbeingattackedLabel.setIcon(null);
 								playerattackLabel.setIcon(null);
-								if (bossfight) {
+								if (bossfight) 
+								{
 									System.out.println("[Info] 보스전 페이즈 1 종료");
 									writeLog("\n" + m_name + "(이/가) 쓰러졌다.");
 									bossphase2 = true;
 									createBossMonster(1); // 2페이즈 돌입
-								} else {
+								} 
+								else 
+								{
 									writeLog(m_name + "(이/가) 쓰러졌다.");
 									writeLog("경험치가 " + m_exp + " 올랐습니다.");
-									if (c_lv == 30) {
+									if (c_lv == 30) 
+									{
 										m_exp = 0; // 만렙일 시 경험치 획득 X
 									}
 									c_exp += m_exp; // 현재 경험치에 몹 경험치를 더함(경험치 획득)
 									addInventory(dropitem); // 몹이 드랍한 아이템 인벤토리에 추가
-									for (int i = 0; i < dropitem.length; i++) {
+									for (int i = 0; i < dropitem.length; i++) 
+									{
 										writeLog(dropitem[i] + " (을/를) 얻었다.");
 									}
 									battle = false; // 전투 종료
-									if (buff) { // 버프가 걸려있는 경우 전투 종료 후 버프를 해제 해야함
+									if (buff) // 버프가 걸려있는 경우 전투 종료 후 버프를 해제 해야함
+									{ 
 										buff = false; // 버프 상태 해제(전투 종료)
-										if (c_lv != prevlv) { // 현재 레벨과 버프받기전 레벨이 같지 않은 경우(즉, 버프 받고 레벨업 한 경우)
+										if (c_lv != prevlv) // 현재 레벨과 버프받기전 레벨이 같지 않은 경우(즉, 버프 받고 레벨업 한 경우)
+										{ 
 											writeLog("\n요정에게서 받은 버프가 사라졌다.");
 											c_str -= (prevlv * 5); // 버프 받은 수치만큼 - 해줘서 원래 능력치로 돌아감
 											c_dex -= (prevlv * 5); // 민첩 수치
@@ -1247,14 +1261,15 @@ public class GameScreen extends JFrame {
 										c_str -= (c_lv * 5); // 버프 받은 수치만큼 - 해줘서 원래 능력치로 돌아감
 										c_dex -= (c_lv * 5); // 민첩 수치
 										c_int -= (c_lv * 5); // 지능 수치
-										System.out.println(
-												"[info] 버프 받기 전 능력치 : " + c_str + " / " + c_dex + " / " + c_int);
+										System.out.println("[info] 버프 받기 전 능력치 : " + c_str + " / " + c_dex + " / " + c_int);
 									}
 									MonsterPanel.setVisible(false); // 몹패널 visible을 false
 								}
 							}
 						}
-					} catch (Exception e) {
+					} 
+					catch (Exception e) 
+					{
 						System.out.println("[Error] m_check 쓰레드 에러");
 					}
 				}
@@ -1264,7 +1279,8 @@ public class GameScreen extends JFrame {
 	}
 
 	// 페이즈 2 보스 스킬 사용 메소드
-	void useDragonSkill() {
+	void useDragonSkill() 
+	{
 		skillused = true;
 		GameScreenimgLabel.setOpaque(true);
 		playerattackLabel.setIcon(null);
@@ -1280,10 +1296,11 @@ public class GameScreen extends JFrame {
 		current_user_hp -= 700;
 		writeLog("'" + c_name + "' 의 체력이 700 감소했다.");
 		Timer resetbackground = new Timer();
-		TimerTask bgresettask = new TimerTask() {
+		TimerTask bgresettask = new TimerTask() 
+		{
 			@Override
-			public void run() {
-				// TODO Auto-generated method stub
+			public void run() 
+			{
 				CharacterPanel.setLocation(775, 78);
 				GameScreenimgLabel.setIcon(new ImageIcon(BOSSORIGINAL));
 				MonsterPanel.setVisible(true);
@@ -1300,40 +1317,55 @@ public class GameScreen extends JFrame {
 		int skilldamage = 0;
 		Timer removeEffectTimer;
 		TimerTask removeEffectTask;
-		try {
-			if (battle) {
-				if (c_lv < requiredLv) {
+		try 
+		{
+			if (battle) 
+			{
+				if (c_lv < requiredLv) 
+				{
 					message = new JLabel("<html><p style='font-family:맑은 고딕;'>레벨이 부족합니다.</p></html>");
 					JOptionPane.showMessageDialog(null, message, "드래곤 슬래셔", JOptionPane.ERROR_MESSAGE);
 					return;
-				} else {
-					if (current_user_mp < requiredMp) {
+				} 
+				else 
+				{
+					if (current_user_mp < requiredMp) 
+					{
 						message = new JLabel("<html><p style='font-family:맑은 고딕;'>마나가 부족합니다.</p></html>");
 						JOptionPane.showMessageDialog(null, message, "드래곤 슬래셔", JOptionPane.ERROR_MESSAGE);
 						return;
-					} else {
+					} 
+					else 
+					{
 						DSAudio dragonsound = DSAudio.getInstance();
 						dragonsound.playDragonSlasher();
 						SkillEffectLabel1.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
 								.createImage("resource/images/effects/player/skill1_Dragon_Slasher_resize.gif")));
 						skilldamage = (playeratk * 2) - monsterdef; // 스킬데미지 = 스킬계수*2 - 몹 방어력
-						if (skilldamage <= 0) {
+						if (skilldamage <= 0) 
+						{
 							skilldamage = 1; // 최소데미지는 무조건 1
 							current_user_mp -= requiredMp;
 							System.out.println("[info] 남은 마나 : " + current_user_mp);
 							current_monster_hp -= skilldamage;
-						} else {
+						} 
+						else 
+						{
 							int mindam = skilldamage / 2;
 							int maxdam = skilldamage;
 							System.out.println("드래곤 슬래셔 최소 데미지 : " + mindam + " 최대 데미지 : " + maxdam);
-							if (mindam == 1 || maxdam == 1) {
+							if (mindam == 1 || maxdam == 1) 
+							{
 								skilldamage = 1;
 								current_user_mp -= requiredMp;
 								System.out.println("[info] 남은 마나 : " + current_user_mp);
 								current_monster_hp -= skilldamage;
-							} else {
+							} 
+							else 
+							{
 								skilldamage = (int) (Math.random() * maxdam) + mindam; // 최소데미지 ~ 스킬데미지 사이 랜덤 데미지
-								if (skilldamage > maxdam) {
+								if (skilldamage > maxdam) 
+								{
 									skilldamage = maxdam;
 								}
 								current_user_mp -= requiredMp;
@@ -1344,10 +1376,11 @@ public class GameScreen extends JFrame {
 
 						writeLog("\n스킬 - 드래곤 슬래셔 사용\n" + m_name + " 에게 피해를 " + skilldamage + " 입혔다.");
 						removeEffectTimer = new Timer();
-						removeEffectTask = new TimerTask() {
+						removeEffectTask = new TimerTask() 
+						{
 							@Override
-							public void run() {
-								// TODO Auto-generated method stub
+							public void run() 
+							{
 								SkillEffectLabel1.setIcon(null);
 								attack_monster();
 							}
@@ -1355,12 +1388,16 @@ public class GameScreen extends JFrame {
 						removeEffectTimer.schedule(removeEffectTask, 1000);
 					}
 				}
-			} else {
+			} 
+			else 
+			{
 				message = new JLabel("<html><p style='font-family:맑은 고딕;'>스킬 사용은 전투 중에만 가능합니다.</p></html>");
 				JOptionPane.showMessageDialog(null, message, "드래곤 슬래셔", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-		} catch (Exception e) {
+		} 
+		catch (Exception e) 
+		{
 			System.out.println(e.getMessage());
 		}
 	}
@@ -1514,44 +1551,58 @@ public class GameScreen extends JFrame {
 	}
 
 	static void skill_DimensionBreaker() {
-		ultimate = true;
 		int requiredLv = 27;
 		int requiredMp = 400;
 		int skilldamage = 0;
 		Timer removeEffectTimer;
 		TimerTask removeEffectTask;
-		try {
-			if (battle) {
-				if (c_lv < requiredLv) {
+		try 
+		{
+			if (battle) 
+			{
+				if (c_lv < requiredLv) 
+				{
 					message = new JLabel("<html><p style='font-family:맑은 고딕;'>레벨이 부족합니다.</p></html>");
 					JOptionPane.showMessageDialog(null, message, "디멘션 브레이커", JOptionPane.ERROR_MESSAGE);
 					return;
-				} else {
-					if (current_user_mp < requiredMp) {
+				} 
+				else 
+				{
+					if (current_user_mp < requiredMp) 
+					{
 						message = new JLabel("<html><p style='font-family:맑은 고딕;'>마나가 부족합니다.</p></html>");
 						JOptionPane.showMessageDialog(null, message, "디멘션 브레이커", JOptionPane.ERROR_MESSAGE);
 						return;
-					} else {
+					} 
+					else 
+					{
 						ultimate = true;
 						showUltimateSkill();
 						skilldamage = (playeratk * 8) - monsterdef; // 스킬데미지 = 스킬계수*8 - 몹 방어력
-						if (skilldamage <= 0) {
+						if (skilldamage <= 0) 
+						{
 							skilldamage = 1; // 최소데미지는 무조건 1
 							current_user_mp -= requiredMp;
 							System.out.println("[info] 남은 마나 : " + current_user_mp);
 							current_monster_hp -= skilldamage;
-						} else {
+						} 
+						else 
+						{
 							int mindam = skilldamage / 2;
 							int maxdam = skilldamage;
 							System.out.println("디멘션 브레이커 최소 데미지 : " + mindam + " 최대 데미지 : " + maxdam);
-							if (mindam == 1 || maxdam == 1) {
+							if (mindam == 1 || maxdam == 1) 
+							{
 								skilldamage = 1;
 								current_user_mp -= requiredMp;
 								System.out.println("[info] 남은 마나 : " + current_user_mp);
 								current_monster_hp -= skilldamage;
-							} else {
+							} 
+							else 
+							{
 								skilldamage = (int) (Math.random() * maxdam) + mindam; // 최소데미지 ~ 스킬데미지 사이 랜덤 데미지
-								if (skilldamage > maxdam) {
+								if (skilldamage > maxdam) 
+								{
 									skilldamage = maxdam;
 								}
 								current_user_mp -= requiredMp;
@@ -1561,22 +1612,27 @@ public class GameScreen extends JFrame {
 						}
 						writeLog("스킬 - 디멘션 브레이커 사용\n" + m_name + " 에게 피해를 " + skilldamage + " 입혔다.");
 						removeEffectTimer = new Timer();
-						removeEffectTask = new TimerTask() {
+						removeEffectTask = new TimerTask() 
+						{
 							@Override
-							public void run() {
-								// TODO Auto-generated method stub
+							public void run() 
+							{
 								attack_monster();
 							}
 						};
 						removeEffectTimer.schedule(removeEffectTask, 7000);
 					}
 				}
-			} else {
+			} 
+			else 
+			{
 				message = new JLabel("<html><p style='font-family:맑은 고딕;'>스킬 사용은 전투 중에만 가능합니다.</p></html>");
 				JOptionPane.showMessageDialog(null, message, "디멘션 브레이커", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-		} catch (Exception e) {
+		} 
+		catch (Exception e) 
+		{
 			System.out.println(e.getMessage());
 		}
 	}
@@ -1613,7 +1669,6 @@ public class GameScreen extends JFrame {
 				GameScreenimgLabel.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
 						.createImage("resource/images/effects/player/skill4_Dimension_Breaker_sub_resize.gif")));
 				changeImg2.schedule(changeImgTask2, 2100); // 2.1초 뒤 원래 화면으로 돌아가기
-
 			}
 		};
 		changeImg1.schedule(changeImgTask1, 4200); // 첫 번째 궁극기 스킬 이펙트 실행 후 4.2초 뒤 두번째 스킬 이펙트 실행(첫 번째 스킬 이펙트 길이가 4초라서..)
