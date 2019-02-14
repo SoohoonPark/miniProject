@@ -109,6 +109,7 @@ public class GameScreen extends JFrame {
 	private static Boolean skillused = false; // 보스 스킬이 한번만 사용될 수 있도록 제한하는 변수
 
 	private Boolean buff = false; // 플레이어 버프 상황(걸려있는지 아닌지)
+	private static Boolean ultimate = false;
 	private Thread p_check, m_check; // 플레이어, 몹 상태 확인 Thread
 	private LinkedList<DSMonsters> lowmonsters = null; // 초급몹정보가 저장돼있는 LinkedList
 	private LinkedList<DSMonsters> middlemonsters = null; // 중급몹정보가 저장돼있는 LinkedList
@@ -147,9 +148,9 @@ public class GameScreen extends JFrame {
 	private static LinkedList<DSItems> inven = new LinkedList<DSItems>(); // 플레이어 인벤토리 내용물
 	private static int current_user_hp, current_user_mp; // 현재 플레이어 체력 & 마나
 
-//	public static void main(String[] args) {
-//		new GameScreen("춘식이", 30, "모험가", 1000, 1000, 1000, 1400, 880);
-//	}
+	public static void main(String[] args) {
+		new GameScreen("춘식이", 30, "모험가", 1000, 1000, 1000, 1400, 880);
+	}
 
 	/** 메소드 영역 **/
 	public GameScreen(String name, int l, String job, int s, int d, int i, int hp, int mp) {
@@ -193,7 +194,7 @@ public class GameScreen extends JFrame {
 
 
 		addInventory(new String[] { "단검", "체력 물약", "마나 물약", "체력 물약", "마나 물약" }); // 기본 템																													// 지급
-//		addInventory(new String[] { "기간틱 액스", "미스릴 투구", "미스릴 갑옷", "미스릴 장갑", "미스릴 신발" }); // 테스팅용
+//		addInventory(new String[] { "토마호크", "미스릴 투구", "미스릴 아머", "미스릴 건틀릿", "미스릴 부츠" }); // 시연용
 
 		createGameScreen();
 		checkplayerstatus();
@@ -1455,6 +1456,7 @@ public class GameScreen extends JFrame {
 						JOptionPane.showMessageDialog(null, message, "디멘션 브레이커", JOptionPane.ERROR_MESSAGE);
 						return;
 					} else {
+						ultimate = true;
 						showUltimateSkill();
 						skilldamage = (playeratk * 8) - monsterdef; // 스킬데미지 = 스킬계수*8 - 몹 방어력
 						if (skilldamage <= 0) {
@@ -1875,7 +1877,16 @@ public class GameScreen extends JFrame {
 			playerMpbar.setLocation(10, 75);
 			skilleffectpanel.setLocation(300, 70);
 			characterLabel.setIcon(new ImageIcon(PLAYERKNIGHT_BOSS));
-			GameScreenimgLabel.setIcon(new ImageIcon(BOSSORIGINAL));
+			if(ultimate) {
+				try {
+					Thread.sleep(4800);
+					GameScreenimgLabel.setIcon(new ImageIcon(BOSSORIGINAL));
+				}catch(InterruptedException i) {
+					System.out.println(i.getMessage());
+				}	
+			}else {
+				GameScreenimgLabel.setIcon(new ImageIcon(BOSSORIGINAL));
+			}
 			break;
 		}
 	}
